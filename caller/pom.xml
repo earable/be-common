@@ -15,7 +15,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>ai.earable.platform.be-data-importer-service</groupId>
+            <groupId>ai.earable.platform.be-common</groupId>
             <artifactId>exception</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

@@ -1,4 +1,4 @@
-package ai.earable.platform.common.exception.exception;
+package ai.earable.platform.common.exception;
 
 import lombok.*;
 

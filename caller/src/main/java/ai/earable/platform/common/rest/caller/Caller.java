@@ -1,7 +1,7 @@
 package ai.earable.platform.common.rest.caller;
 
-import ai.earable.platform.dis.exception.EarableErrorCode;
-import ai.earable.platform.dis.exception.EarableException;
+import ai.earable.platform.common.exception.EarableErrorCode;
+import ai.earable.platform.common.exception.EarableException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.converters.uni.UniReactorConverters;
