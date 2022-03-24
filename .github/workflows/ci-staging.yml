@@ -1,0 +1,53 @@
+name: Test, Build & Deploy Staging
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+
+  unit-test-staging:
+    runs-on: [ self-hosted, linux, x64, earable-backend ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        export APP_NAME="data-importer-service"
+        export GITHUB_SHORT_SHA="$(echo $GITHUB_SHA | cut -c1-8)"
+        export APP_IMAGE_NAME="$GITLAB_REGISTRY/$APP_NAME:$GITHUB_REF_NAME-$GITHUB_SHORT_SHA"
+        docker build -t $APP_IMAGE_NAME -f Dockerfile.test .
+  build-docker-staging:
+    needs: unit-test-staging
+    runs-on: [ self-hosted, linux, x64, earable-backend ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: |
+        export APP_NAME="data-importer-service"
+        export GITHUB_SHORT_SHA="$(echo $GITHUB_SHA | cut -c1-8)"
+        export APP_IMAGE_NAME="$GITLAB_REGISTRY/$APP_NAME:$GITHUB_REF_NAME-$GITHUB_SHORT_SHA"
+        docker build -t $APP_IMAGE_NAME .
+        docker push $APP_IMAGE_NAME
+  deploy-k8s-staging:
+    needs: build-docker-staging
+    runs-on: [ self-hosted, linux, x64, earable-backend ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Sync Commit to K8s Gitops
+      run: |
+        export APP_NAME="data-importer-service"
+        export GITHUB_SHORT_SHA="$(echo $GITHUB_SHA | cut -c1-8)"
+        export VERSION="v1.0"
+        curl --compressed -sS -H 'Connection: keep-alive' -u "${WEBHOOKD_BASIC_AUTH}" "${WEBHOOKD_URL}?application=${APP_NAME}&branch=${GITHUB_REF_NAME}&commit=${GITHUB_SHORT_SHA}&version=${VERSION}"  &> /dev/stdout | tee -a /tmp/status
+  post-test-staging:
+    needs: deploy-k8s-staging
+    runs-on: [ self-hosted, linux, x64, earable-backend ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Sync Commit to K8s Gitops
+      run: |
+        sleep 30
+        export HEALTHCHECK_URL="https://api.eardev.xyz/data-importer-service/health"
+        curl --compressed -sS -H 'Connection: keep-alive' "${HEALTHCHECK_URL}" &> /dev/stdout | tee -a /tmp/status
