@@ -1,9 +1,11 @@
-package ai.earable.platform.dis.data.dto;
+package ai.earable.platform.common.data.timeseries.dto;
 
-import ai.earable.platform.dis.data.model.MatrixData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by BinhNH on 3/17/22
@@ -11,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MatrixDataResponse {
+public class KeyValueResponse {
     private String status;
-    private MatrixData data;
+    private List<Map<String, String>> data;
 }

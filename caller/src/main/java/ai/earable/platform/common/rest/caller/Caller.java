@@ -1,4 +1,4 @@
-package ai.earable.platform.dis.rest.caller;
+package ai.earable.platform.common.rest.caller;
 
 import ai.earable.platform.dis.exception.EarableErrorCode;
 import ai.earable.platform.dis.exception.EarableException;

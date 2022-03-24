@@ -1,4 +1,4 @@
-package ai.earable.platform.dis.exception;
+package ai.earable.platform.common.exception.exception;
 
 import lombok.Getter;
 

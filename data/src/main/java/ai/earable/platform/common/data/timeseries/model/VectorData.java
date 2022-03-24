@@ -1,4 +1,4 @@
-package ai.earable.platform.dis.data.model;
+package ai.earable.platform.common.data.timeseries.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

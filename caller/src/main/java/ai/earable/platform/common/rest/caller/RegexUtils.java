@@ -1,4 +1,4 @@
-package ai.earable.platform.dis.rest.caller;
+package ai.earable.platform.common.rest.caller;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

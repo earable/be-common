@@ -1,6 +1,6 @@
-package ai.earable.platform.dis.data.dto;
+package ai.earable.platform.common.data.timeseries.dto;
 
-import ai.earable.platform.dis.data.model.VectorData;
+import ai.earable.platform.common.data.timeseries.model.VectorData;
 
 /**
  * Created by BinhNH on 3/17/22

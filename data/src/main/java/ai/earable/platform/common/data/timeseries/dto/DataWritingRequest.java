@@ -1,6 +1,6 @@
-package ai.earable.platform.dis.data.dto;
+package ai.earable.platform.common.data.timeseries.dto;
 
-import ai.earable.platform.dis.data.model.MonitoredData;
+import ai.earable.platform.common.data.timeseries.model.MonitoredData;
 import lombok.*;
 
 import java.util.List;
