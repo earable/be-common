@@ -14,8 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DataJobCriteria {
-    private List<String> metrics;
-    private List<String> expressions;
+    private List<StatisticMetric> statisticMetrics;
     private int collectionPeriod;
     private int reportingPeriod;
     private Date reportingBoundary;
