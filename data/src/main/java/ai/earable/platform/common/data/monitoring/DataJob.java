@@ -25,6 +25,63 @@ public class DataJob {
     private DataJobCriteria criteria;
     private List<ReportInfo> reports; //TODO: Handle limiting number of report links here.
 
+    public DataJob(String id, String featureName, List<String> userIds, List<String> profileIds, DataJobCriteria criteria, List<ReportInfo> reports) {
+        this.id = id;
+        this.featureName = featureName;
+        this.userIds = userIds;
+        this.profileIds = profileIds;
+        this.criteria = criteria;
+        this.reports = reports;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFeatureName() {
+        return featureName;
+    }
+
+    public void setFeatureName(String featureName) {
+        this.featureName = featureName;
+    }
+
+    public List<String> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<String> userIds) {
+        this.userIds = userIds;
+    }
+
+    public List<String> getProfileIds() {
+        return profileIds;
+    }
+
+    public void setProfileIds(List<String> profileIds) {
+        this.profileIds = profileIds;
+    }
+
+    public DataJobCriteria getCriteria() {
+        return criteria;
+    }
+
+    public void setCriteria(DataJobCriteria criteria) {
+        this.criteria = criteria;
+    }
+
+    public List<ReportInfo> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<ReportInfo> reports) {
+        this.reports = reports;
+    }
+
     public static class ReportInfo {
         private URI href;
         private Date readyTime;
