@@ -3,6 +3,7 @@ package ai.earable.platform.common.rest.caller;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,5 +22,10 @@ public final class JsonUtil {
 
     public static <T> T convertJsonToObject(String json, Class<T> outputType) throws JsonProcessingException {
         return MAPPER.readValue(json, outputType);
+    }
+
+    public static String convertToJson(Object object) throws JsonProcessingException {
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        return ow.writeValueAsString(object);
     }
 }
