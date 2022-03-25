@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateDataJobRequest {
     private String featureName;
-    private List<String> userIds;
+    private String userId;
     private List<String> profileIds;
     private DataJobCriteria criteria;
     private FilterPolicy filterPolicy;
