@@ -21,7 +21,7 @@ public class DataJob {
     @JsonProperty("_id")
     private String id;
     private String featureName;
-    private String userIds;
+    private String userId;
     private List<String> profileIds;
     private DataJobCriteria criteria;
     private List<ReportInfo> reports; //TODO: Handle limiting number of report links here.
