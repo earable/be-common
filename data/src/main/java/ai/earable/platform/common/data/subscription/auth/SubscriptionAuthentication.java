@@ -1,8 +1,6 @@
 package ai.earable.platform.common.data.subscription.auth;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.net.URI;
 
@@ -11,6 +9,8 @@ import java.net.URI;
  */
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class SubscriptionAuthentication {
     private AuthType authType;
