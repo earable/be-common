@@ -17,6 +17,10 @@ public enum EarableErrorCode {
     MONITORED_DATA_LIST_NULL_OR_EMPTY ("Can't write without or null data!"),
     MONITORED_DATA_VALUE_LIST_NULL_OR_EMPTY ("Can't write without or null data!"),
 
+    DES_FUNCTION_INVALID ("Your function is invalid!"),
+
+    INPUT_INVALID ("Your input can't null or blank!"),
+
     INTERNAL_SERVER_ERROR ("Something went wrong!");
 
     private final String errorDetail;
