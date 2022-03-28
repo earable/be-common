@@ -5,6 +5,7 @@ import ai.earable.platform.common.exception.EarableException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.converters.uni.UniReactorConverters;
+import io.vertx.mutiny.core.MultiMap;
 import io.vertx.mutiny.core.buffer.Buffer;
 import io.vertx.mutiny.ext.web.client.HttpRequest;
 import io.vertx.mutiny.ext.web.client.HttpResponse;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.Map;
 
 @Slf4j
 public final class Caller {
@@ -34,15 +36,33 @@ public final class Caller {
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
     }
 
-    public static <V> Mono<V> get(WebClient webClient, URI uriTemplate, Class<V> responseType,
-                                  String paramName, String paramValue){
-        return get(webClient, uriTemplate, responseType, paramName, paramValue, DEFAULT_TIME_OUT);
+    public static <V> Mono<V> get(WebClient webClient, String uriTemplate, Map<String, String> queryParams,
+                                  Class<V> responseType, String... pathParams){
+        return get(webClient, uriTemplate, queryParams, responseType, DEFAULT_TIME_OUT, pathParams);
     }
 
-    public static <V> Mono<V> get(WebClient webClient, URI uriTemplate, Class<V> responseType,
-                                  String paramName, String paramValue, long timeout){
-        HttpRequest<V> request = webClient.getAbs(uriTemplate.toString())
-            .addQueryParam(paramName, paramValue)
+    private static URI setPathParams(String template, String... pathParams){
+        UriBuilder builder = UriBuilder.fromUri(template);
+        return builder.build(pathParams);
+    }
+
+    private static HttpRequest<Buffer> setQueryParams(HttpRequest<Buffer> request, Map<String, String> queryParams){
+        if(queryParams != null && queryParams.size() > 0){
+            queryParams.forEach((key, value) -> {
+                if(key != null && !key.trim().equals(""))
+                    if(value != null && !value.trim().equals(""))
+                        request.addQueryParam(key, value);
+            });
+        }
+        return request;
+    }
+
+    public static <V> Mono<V> get(WebClient webClient, String uriTemplate, Map<String, String> queryParams,
+                                  Class<V> responseType, long timeout, String... pathParams){
+        String absUri = setPathParams(uriTemplate, pathParams).toString();
+        MultiMap multiMap = MultiMap.caseInsensitiveMultiMap().addAll(queryParams);
+        HttpRequest<Buffer> requestBuffer = webClient.getAbs(absUri);
+        HttpRequest<V> request = setQueryParams(requestBuffer, queryParams).putHeaders(multiMap)
             .timeout(timeout).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.send().flatMap(Caller::responseToBody).convert().with(UniReactorConverters.toMono())
