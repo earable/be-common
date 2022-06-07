@@ -67,7 +67,11 @@ public class JwtUtils {
         return INSTANCE;
     }
 
-    public Claims decode(String jwt) {
-        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwt).getBody();
+    public Claims decode(String jwt) throws JWTParseException {
+        try {
+            return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwt).getBody();
+        } catch (Exception e) {
+            throw new JWTParseException("Token is invalid!");
+        }
     }
 }
