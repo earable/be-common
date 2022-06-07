@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
@@ -18,7 +18,7 @@ public class JwtUtils {
     private Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private static final JwtUtils INSTANCE = new JwtUtils();
 
-    private static PrivateKey privateKey;
+    private static PublicKey publicKey;
 
     private JwtUtils() {
         logger.info("Loading authentication public key");
@@ -46,9 +46,9 @@ public class JwtUtils {
                     .replaceAll(System.lineSeparator(), "")
                     .replace("-----END RSA PRIVATE KEY-----", "");
 
-            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(keyString));
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            privateKey = keyFactory.generatePrivate(spec);
+            publicKey = keyFactory.generatePublic(spec);
             logger.info("Loaded public key: [{}]", publicKeyFilePath);
         } catch (IOException e) {
             logger.error("File [{}] does not exist!", publicKeyFilePath);
@@ -68,6 +68,6 @@ public class JwtUtils {
     }
 
     public Claims decode(String jwt) {
-        return Jwts.parser().setSigningKey(privateKey).parseClaimsJws(jwt).getBody();
+        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwt).getBody();
     }
 }
