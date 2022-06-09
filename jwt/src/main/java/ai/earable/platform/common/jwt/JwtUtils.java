@@ -42,9 +42,9 @@ public class JwtUtils {
 
             String keyString = new String(keyBytes);
             keyString = keyString
-                    .replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                    .replace("-----BEGIN PUBLIC KEY-----", "")
                     .replaceAll(System.lineSeparator(), "")
-                    .replace("-----END RSA PRIVATE KEY-----", "");
+                    .replace("-----END PUBLIC KEY-----", "");
 
             X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
