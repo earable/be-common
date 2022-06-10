@@ -18,5 +18,6 @@
         <module>exception</module>
         <module>caller</module>
         <module>data</module>
+        <module>jwt</module>
     </modules>
 </project>
