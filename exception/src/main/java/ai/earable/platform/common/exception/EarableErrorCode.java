@@ -19,6 +19,8 @@ public enum EarableErrorCode {
 
     DES_FUNCTION_INVALID ("Your function is invalid!"),
 
+    DES_DURATION_INVALID ("Your duration is invalid"),
+
     INPUT_INVALID ("Your input can't null or blank!"),
 
     INTERNAL_SERVER_ERROR ("Something went wrong!");
