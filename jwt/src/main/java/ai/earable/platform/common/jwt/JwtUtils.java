@@ -2,8 +2,7 @@ package ai.earable.platform.common.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.security.KeyFactory;
@@ -14,14 +13,14 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Properties;
 
+@Slf4j
 public class JwtUtils {
-    private Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private static final JwtUtils INSTANCE = new JwtUtils();
 
     private static PublicKey publicKey;
 
     private JwtUtils() {
-        logger.info("Loading authentication public key");
+        log.info("Loading authentication public key");
         final Properties properties = new Properties();
         String publicKeyFilePath = "";
         try (final InputStream stream =
@@ -30,7 +29,7 @@ public class JwtUtils {
             publicKeyFilePath = (String) properties.get("earable.auth.public-key-file-path");
 
             if (publicKeyFilePath == null) {
-                logger.error("Missing configuration [earable.auth.public-key-file-path]");
+                log.error("Missing configuration [earable.auth.public-key-file-path]");
                 throw new RuntimeException("Missing configuration [earable.auth.public-key-file-path]");
             }
 
@@ -49,13 +48,13 @@ public class JwtUtils {
             X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             publicKey = keyFactory.generatePublic(spec);
-            logger.info("Loaded public key: [{}]", publicKeyFilePath);
+            log.info("Loaded public key: [{}]", publicKeyFilePath);
         } catch (IOException e) {
-            logger.error("File [{}] does not exist!", publicKeyFilePath);
+            log.error("File [{}] does not exist!", publicKeyFilePath);
             throw new RuntimeException(e);
         } catch (InvalidKeySpecException | IllegalArgumentException e) {
-            logger.error("Invalid Public Key Spec: [{}]", publicKeyFilePath);
-            logger.error("Please check the file at configuration property [earable.auth.public-key-file-path] - [{}]",
+            log.error("Invalid Public Key Spec: [{}]", publicKeyFilePath);
+            log.error("Please check the file at configuration property [earable.auth.public-key-file-path] - [{}]",
                     publicKeyFilePath);
             throw new RuntimeException(e);
         } catch (NoSuchAlgorithmException e) {

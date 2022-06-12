@@ -1,7 +1,8 @@
-package ai.earable.platform.common.rest.caller;
+package ai.earable.platform.common.caller.quarkus;
 
 import ai.earable.platform.common.exception.EarableErrorCode;
 import ai.earable.platform.common.exception.EarableException;
+import ai.earable.platform.common.utils.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.converters.uni.UniReactorConverters;
@@ -20,8 +21,11 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.Map;
 
+/**
+ * Created by BinhNH on 3/18/22
+ */
 @Slf4j
-public final class Caller {
+public final class VertxCaller {
     private static final long DEFAULT_TIME_OUT = 10000; //TODO: Move to config map
 
     public static <V> Mono<V> get(WebClient webClient, URI uriTemplate, Class<V> responseType){
@@ -32,7 +36,7 @@ public final class Caller {
         HttpRequest<V> request = webClient.getAbs(uriTemplate.toString())
             .timeout(timeout).expect(responsePredicate())
             .as(bodyCodec(responseType));
-        return request.send().flatMap(Caller::responseToBody).convert().with(UniReactorConverters.toMono())
+        return request.send().flatMap(VertxCaller::responseToBody).convert().with(UniReactorConverters.toMono())
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
     }
 
@@ -65,7 +69,7 @@ public final class Caller {
         HttpRequest<V> request = setQueryParams(requestBuffer, queryParams).putHeaders(multiMap)
             .timeout(timeout).expect(responsePredicate())
             .as(bodyCodec(responseType));
-        return request.send().flatMap(Caller::responseToBody).convert().with(UniReactorConverters.toMono())
+        return request.send().flatMap(VertxCaller::responseToBody).convert().with(UniReactorConverters.toMono())
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
     }
 
@@ -75,7 +79,7 @@ public final class Caller {
             .timeout(DEFAULT_TIME_OUT).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.sendBuffer(convertToBuffer(requestBody, requestType))
-                .flatMap(Caller::responseToBody)
+                .flatMap(VertxCaller::responseToBody)
                 .convert().with(UniReactorConverters.toMono())
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
     }
@@ -105,7 +109,7 @@ public final class Caller {
         try {
             return Buffer.buffer(JsonUtil.convertObjectToBytes(requestBody));
         } catch (JsonProcessingException e) {
-            throw new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR,
+            throw new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(),
                 "Failed to convert requestBody to buffer with message "+e.getLocalizedMessage());
         }
     }
@@ -118,8 +122,8 @@ public final class Caller {
         V v = response.body();
         log.error("Rest api calling failed with error-code {} and error body: {}", response.statusCode(), v);
         if(v != null &&  v.toString() != null && !v.toString().isEmpty()){
-            return new EarableException(response.statusCode(), earableErrorCode, response.bodyAsString());
+            return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.bodyAsString());
         }
-        return new EarableException(response.statusCode(), earableErrorCode, response.statusMessage());
+        return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.statusMessage());
     }
 }

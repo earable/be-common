@@ -1,12 +1,13 @@
-package ai.earable.platform.common.rest.caller;
+package ai.earable.platform.common.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+/**
+ * Created by BinhNH on 3/18/22
+ */
 public final class JsonUtil {
     private static final ObjectMapper MAPPER;
 
