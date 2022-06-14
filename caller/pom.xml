@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-reactive</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>ai.earable.platform.be-common</groupId>
             <artifactId>exception</artifactId>
             <version>${project.parent.version}</version>
