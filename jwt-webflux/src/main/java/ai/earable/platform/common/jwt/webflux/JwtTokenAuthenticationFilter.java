@@ -1,4 +1,4 @@
-package ai.earable.platform.common.jwt;
+package ai.earable.platform.common.jwt.webflux;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;

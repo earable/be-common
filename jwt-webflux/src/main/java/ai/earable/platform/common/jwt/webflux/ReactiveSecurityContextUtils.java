@@ -1,4 +1,4 @@
-package ai.earable.platform.common.jwt;
+package ai.earable.platform.common.jwt.webflux;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package ai.earable.platform.common.jwt;
+package ai.earable.platform.common.jwt.webflux;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

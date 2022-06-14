@@ -1,4 +1,4 @@
-package ai.earable.platform.common.jwt;
+package ai.earable.platform.common.jwt.webflux;
 
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
