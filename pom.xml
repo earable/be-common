@@ -19,7 +19,7 @@
         <module>caller-quarkus</module>
         <module>caller-webflux</module>
         <module>data</module>
-        <module>jwt</module>
+        <module>jwt-webflux</module>
         <module>utils</module>
     </modules>
 </project>
