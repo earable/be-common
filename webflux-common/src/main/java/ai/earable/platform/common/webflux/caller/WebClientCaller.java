@@ -113,11 +113,7 @@ public class WebClientCaller implements Caller{
         return webClient.method(method)
                 .uri(calledUri, params)
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders -> {
-                    headers.forEach((s, s2) -> {
-                        httpHeaders.set(s, s2);
-                    });
-                })
+                .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
     }
 
