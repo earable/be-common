@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
  * Created by BinhNH on 6/14/22
  */
 @Component
-@RequestScope
+//@RequestScope
 public class ReactiveSecurityContextUtils {
     @Autowired
     protected JwtUtils jwtUtils;
