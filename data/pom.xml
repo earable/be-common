@@ -15,8 +15,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-cassandra-reactive</artifactId>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-cassandra</artifactId>
         </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
