@@ -14,23 +14,13 @@
     <orderEntry type="library" name="exception-3.0" level="project" />
     <orderEntry type="module" module-name="utils" />
     <orderEntry type="module" module-name="data" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-cassandra-reactive:2.6.5" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.6.5" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.5" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.5" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.6.5" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.11" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.11" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-to-slf4j:2.17.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.17.1" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:jul-to-slf4j:1.7.36" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.17" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.17" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.3.17" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.17" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-cassandra:3.3.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.17" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.17" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.17" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.17" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.17" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.3.17" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.17" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.6.3" level="project" />
     <orderEntry type="library" name="Maven: com.datastax.oss:java-driver-core:4.13.0" level="project" />
