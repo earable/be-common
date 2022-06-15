@@ -13,6 +13,7 @@
     <orderEntry type="library" name="utils-3.0" level="project" />
     <orderEntry type="library" name="exception-3.0" level="project" />
     <orderEntry type="module" module-name="utils" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
     <orderEntry type="module" module-name="data" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-cassandra:3.3.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.17" level="project" />

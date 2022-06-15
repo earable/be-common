@@ -30,6 +30,9 @@ public enum EarableErrorCode {
     PARAM_REQUIRED ("PARAM_REQUIRED"),
     PARAM_INVALID ("PARAM_INVALID"),
 
+    UUID_INVALID ("UUID_INVALID"),
+    URL_INVALID ("URL_INVALID"),
+
     INTERNAL_SERVER_ERROR ("INTERNAL_SERVER_ERROR");
 
     private final String errorDetail;
