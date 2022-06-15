@@ -55,6 +55,16 @@ public class WebClientCaller implements Caller{
     }
 
     @Override
+    public <V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params) {
+        return webClient
+                .method(method)
+                .uri(calledUri, params)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+    }
+
+    @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType) {
         return webClient.method(method)
                 .uri(calledUri)
