@@ -17,11 +17,7 @@ public class ReactiveSecurityContextUtils {
     protected JwtUtils jwtUtils;
 
     public Mono<String> getUserId(){
-        return ReactiveSecurityContextHolder.getContext().map(securityContext -> {
-            String token = (String) securityContext.getAuthentication().getCredentials();
-            Claims claims = jwtUtils.getAllClaimsFromToken(token);
-            return claims.get("user_id").toString(); //TODO: Handle error cases
-        });
+        return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("user_id").toString()); //TODO: Handle error cases
     }
 
     public Mono<String> getToken(){

@@ -50,12 +50,10 @@ public class WebClientCaller implements Caller{
                 .uri(calledUriTemplate, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> {
-                    headers.forEach((s, s2) -> {
-                        httpHeaders.set(s, s2);
-                    });
+                    headers.forEach(httpHeaders::set);
                 })
                 .exchangeToMono(clientResponse ->
-                        convertToMonoResponse(clientResponse, responseType));
+                    convertToMonoResponse(clientResponse, responseType));
     }
 
     @Override
