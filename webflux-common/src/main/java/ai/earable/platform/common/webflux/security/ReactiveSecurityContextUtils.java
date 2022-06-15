@@ -23,4 +23,10 @@ public class ReactiveSecurityContextUtils {
             return claims.get("user_id").toString(); //TODO: Handle error cases
         });
     }
+
+    public Mono<String> getToken(){
+        return ReactiveSecurityContextHolder.getContext().map(securityContext -> {
+            return (String) securityContext.getAuthentication().getCredentials(); //TODO: Handle error cases
+        });
+    }
 }
