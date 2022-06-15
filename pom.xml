@@ -15,11 +15,9 @@
     </parent>
 
     <modules>
-        <module>exception</module>
         <module>caller-quarkus</module>
-        <module>caller-webflux</module>
+        <module>webflux-common</module>
         <module>data</module>
-        <module>jwt-webflux</module>
         <module>utils</module>
     </modules>
 </project>
