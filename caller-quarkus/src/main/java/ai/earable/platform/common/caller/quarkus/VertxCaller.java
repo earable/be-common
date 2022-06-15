@@ -1,7 +1,7 @@
 package ai.earable.platform.common.caller.quarkus;
 
-import ai.earable.platform.common.exception.EarableErrorCode;
-import ai.earable.platform.common.exception.EarableException;
+import ai.earable.platform.common.data.exception.EarableErrorCode;
+import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.utils.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.smallrye.mutiny.Uni;
@@ -109,7 +109,7 @@ public final class VertxCaller {
         try {
             return Buffer.buffer(JsonUtil.convertObjectToBytes(requestBody));
         } catch (JsonProcessingException e) {
-            throw new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(),
+            throw new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR,
                 "Failed to convert requestBody to buffer with message "+e.getLocalizedMessage());
         }
     }
@@ -122,8 +122,8 @@ public final class VertxCaller {
         V v = response.body();
         log.error("Rest api calling failed with error-code {} and error body: {}", response.statusCode(), v);
         if(v != null &&  v.toString() != null && !v.toString().isEmpty()){
-            return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.bodyAsString());
+            return new EarableException(response.statusCode(), earableErrorCode, response.bodyAsString());
         }
-        return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.statusMessage());
+        return new EarableException(response.statusCode(), earableErrorCode, response.statusMessage());
     }
 }
