@@ -65,6 +65,17 @@ public class WebClientCaller implements Caller{
     }
 
     @Override
+    public <V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params) {
+        return webClient
+                .method(method)
+                .uri(calledUri, params)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .retrieve()
+                .bodyToFlux(responseType);
+    }
+
+    @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType) {
         return webClient.method(method)
                 .uri(calledUri)

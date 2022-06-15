@@ -22,4 +22,5 @@ public interface Caller {
     <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, MultiValueMap<String, String> multiValueMap, String... params);
 
     <V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params);
+    <V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params);
 }
