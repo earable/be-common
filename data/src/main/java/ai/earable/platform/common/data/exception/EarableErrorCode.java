@@ -39,6 +39,11 @@ public enum EarableErrorCode {
     FEATURE_NAME_NULL_OR_NOT_ACTIVE("FEATURE_NAME_NULL_OR_NOT_ACTIVE"),
     PROFILE_ID_NOT_NULL_OR_BLANK("PROFILE_ID_NOT_NULL_OR_BLANK"),
 
+
+    //============== DMS ================
+
+    ALERT_NAME_WAS_EXISTED ("ALERT_NAME_WAS_EXISTED"),
+
     INTERNAL_SERVER_ERROR ("INTERNAL_SERVER_ERROR");
 
     private final String errorDetail;
