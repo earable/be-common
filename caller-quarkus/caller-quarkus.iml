@@ -13,7 +13,7 @@
     <orderEntry type="library" name="utils-3.0" level="project" />
     <orderEntry type="library" name="exception-3.0" level="project" />
     <orderEntry type="module" module-name="utils" />
-    <orderEntry type="module" module-name="exception" />
+    <orderEntry type="module" module-name="data" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy-reactive-common:2.7.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus.resteasy.reactive:resteasy-reactive-common:2.7.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-annotation:1.10.0" level="project" />
