@@ -27,7 +27,7 @@ public class EarableExceptionMapper {
                 : e.getDetails();
         ErrorDetails errorDetails = ErrorDetails.builder()
                 .httpStatusCode(e.getHttpStatusCode())
-                .earableErrorCode(e.getEarableErrorCode().name())
+                .earableErrorCode( e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())
                 .details(detail).build();
         log.error("Return error to client with details {}", errorDetails.toString());
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
