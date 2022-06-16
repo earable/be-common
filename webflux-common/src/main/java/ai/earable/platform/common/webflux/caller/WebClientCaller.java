@@ -45,6 +45,18 @@ public class WebClientCaller implements Caller{
     }
 
     @Override
+    public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, Map<String, String> headers, String... params) {
+        return webClient.method(HttpMethod.GET)
+                .uri(calledUriTemplate, params)
+                .accept(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders -> {
+                    headers.forEach(httpHeaders::set);
+                })
+                .exchangeToMono(clientResponse ->
+                    convertToMonoResponse(clientResponse, responseType));
+    }
+
+    @Override
     public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, MultiValueMap<String, String> multiValueMap, String... params) {
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(calledUriTemplate).queryParams(multiValueMap).encode().toUriString();
         return webClient
