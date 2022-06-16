@@ -79,7 +79,7 @@ public class JwtUtils {
             return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
         }
         catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e){
-            throw new EarableException(HttpStatus.UNAUTHORIZED.value(), EarableErrorCode.UNAUTHORIZED);
+            throw new EarableException(HttpStatus.UNAUTHORIZED.value(), EarableErrorCode.UNAUTHORIZED.toString(), e.getLocalizedMessage());
         }
     }
 
