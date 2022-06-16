@@ -23,10 +23,12 @@ public class EarableExceptionMapper {
 
     @ExceptionHandler(EarableException.class)
     public ResponseEntity handleEarableException(EarableException e) {
+        String detail = e.getEarableErrorCode() != null ? messageUtils.getMessage(e.getEarableErrorCode().name(), e.getParam())
+                : e.getDetails();
         ErrorDetails errorDetails = ErrorDetails.builder()
                 .httpStatusCode(e.getHttpStatusCode())
                 .earableErrorCode(e.getEarableErrorCode().name())
-                .details(messageUtils.getMessage(e.getEarableErrorCode().name(),e.getParam())).build();
+                .details(detail).build();
         log.error("Return error to client with details {}", errorDetails.toString());
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);
