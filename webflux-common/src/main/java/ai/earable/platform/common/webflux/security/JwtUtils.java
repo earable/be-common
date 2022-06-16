@@ -1,14 +1,17 @@
 package ai.earable.platform.common.webflux.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import ai.earable.platform.common.data.exception.EarableErrorCode;
+import ai.earable.platform.common.data.exception.EarableException;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import java.io.*;
 import java.security.KeyFactory;
@@ -72,7 +75,12 @@ public class JwtUtils {
     }
 
     public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
+        try {
+            return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
+        }
+        catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e){
+            throw new EarableException(HttpStatus.UNAUTHORIZED.value(), EarableErrorCode.UNAUTHORIZED);
+        }
     }
 
     public boolean validateToken(String token) {
