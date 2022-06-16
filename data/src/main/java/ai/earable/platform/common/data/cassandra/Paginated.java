@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class Paginated {
-    public static final Integer DEFAULT_LIMIT = 10;
+    public static final Integer DEFAULT_LIMIT = 1000;
     private Integer limit;
     private String pagingState;
 
@@ -24,8 +24,8 @@ public class Paginated {
     }
 
     public void validate() {
-        if (this.getLimit() < 1 || this.getLimit() > 100) {
-            throw new EarableException(400, EarableErrorCode.PARAM_INVALID, "timezone");
+        if (null != limit && (this.getLimit() < 1 || this.getLimit() > 100)) {
+            throw new EarableException(400, EarableErrorCode.PARAM_INVALID, "limit");
         }
     }
 }
