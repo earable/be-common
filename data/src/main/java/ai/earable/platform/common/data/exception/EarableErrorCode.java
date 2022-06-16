@@ -44,6 +44,7 @@ public enum EarableErrorCode {
 
     ALERT_NAME_WAS_EXISTED ("ALERT_NAME_WAS_EXISTED"),
 
+    UNAUTHORIZED ("UNAUTHORIZED"),
     INTERNAL_SERVER_ERROR ("INTERNAL_SERVER_ERROR");
 
     private final String errorDetail;
