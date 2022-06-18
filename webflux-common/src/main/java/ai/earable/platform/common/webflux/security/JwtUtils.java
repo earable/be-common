@@ -51,7 +51,16 @@ public class JwtUtils {
             dis.readFully(keyBytes);
             dis.close();
 
-            String keyString = new String(keyBytes);
+            String keyString = "-----BEGIN PUBLIC KEY-----\n" +
+                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzArPToC9ArYIv9A5Gpbj\n" +
+                "CJRbuUA8wUC+y9xw2tuRAuOI8qVtEcndK/ni82Oqjb9kK8x/8rxQ9q5EKfwbSbg5\n" +
+                "dJZpiIKjvCyZqTyo3MsyVicLggUDVBO0JPkeTrTnS21wtbp5ytQhYw9XVEhLKp+v\n" +
+                "rD8n5UFr4SXwEuFEaCLg7BTu8WS975Q1tUwjsBDNFK93UB4Zkn0O2oVQD3Rw9pe6\n" +
+                "zsUePfwC4af8cCHgxrVAe8CY4Y7uxEzDogZbBJKAecPygHEt1+/a7tKUp9k/UN+2\n" +
+                "Bmebx+IPnTMy95EbxNYF+9kYQM7chKfiF8UOofhqMDdWHdwU2kAOzXKAJZoInW0H\n" +
+                "KwIDAQAB\n" +
+                "-----END PUBLIC KEY-----";
+            
             keyString = keyString
                     .replace("-----BEGIN PUBLIC KEY-----", "")
                     .replaceAll(System.lineSeparator(), "")
