@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import java.io.*;
 import java.security.KeyFactory;
@@ -77,9 +76,9 @@ public class JwtUtils {
     public Claims getAllClaimsFromToken(String token) {
         try {
             return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
-        }
-        catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e){
-            throw new EarableException(HttpStatus.UNAUTHORIZED.value(), EarableErrorCode.UNAUTHORIZED.toString(), e.getLocalizedMessage());
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+            log.error(e.getLocalizedMessage());
+            throw new EarableException(HttpStatus.UNAUTHORIZED.value(), EarableErrorCode.UNAUTHORIZED, null);
         }
     }
 
@@ -100,7 +99,7 @@ public class JwtUtils {
         Claims claims = getAllClaimsFromToken(token);
         Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
         Collection<? extends GrantedAuthority> authorities = authoritiesClaim == null ? AuthorityUtils.NO_AUTHORITIES
-            : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
+                : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

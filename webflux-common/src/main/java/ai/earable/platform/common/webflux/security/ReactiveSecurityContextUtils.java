@@ -1,10 +1,8 @@
 package ai.earable.platform.common.webflux.security;
 
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 import reactor.core.publisher.Mono;
 
 /**
