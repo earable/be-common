@@ -86,6 +86,7 @@ public class EarableExceptionMapper {
                 .earableErrorCode( e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())
                 .details(detail).build();
         log.error("Return error to client with details {}", errorDetails.toString());
+        e.getLocalizedMessage();
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);
     }
@@ -98,6 +99,7 @@ public class EarableExceptionMapper {
                 .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())
                 .details(EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail()).build();
         log.error("Return error to client with details {}", errorDetails.toString());
+        e.getLocalizedMessage();
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);
     }
