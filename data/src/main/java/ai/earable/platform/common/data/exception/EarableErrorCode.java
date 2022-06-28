@@ -44,6 +44,8 @@ public enum EarableErrorCode {
     PROFILE_HAVE_NOT_SCHEDULE("PROFILE_HAVE_NOT_SCHEDULE"),
     SCHEDULE_IS_OVERLAPPING("SCHEDULE_IS_OVERLAPPING"),
 
+    PUT_OBJECT_TO_S3_FAILED("PUT_OBJECT_TO_S3_FAILED"),
+
 
     //============== DMS ================
 
