@@ -27,7 +27,7 @@ import java.util.Properties;
 @Slf4j
 public class JwtUtils {
     private static final String AUTHORITIES_KEY = "role"; //Need to map to IMS
-    private final PublicKey publicKey;
+    private PublicKey publicKey = null;
 
     //TODO: Clean this method
     public JwtUtils() {
@@ -37,6 +37,14 @@ public class JwtUtils {
         try (final InputStream stream = this.getClass()
                 .getClassLoader().getResourceAsStream("application.properties")) {
             properties.load(stream);
+
+            boolean ignoreAuth = Boolean.valueOf(String.valueOf(properties.get("earable.auth.ignore")));
+
+            if (ignoreAuth) {
+                log.info("Ignore authentication");
+                return;
+            }
+
             publicKeyFilePath = (String) properties.get("earable.auth.public-key-file-path");
 
             if (publicKeyFilePath == null) {
