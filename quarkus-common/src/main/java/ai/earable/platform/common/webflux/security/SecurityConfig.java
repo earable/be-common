@@ -1,7 +1,5 @@
 package ai.earable.platform.common.webflux.security;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
@@ -23,10 +21,8 @@ import reactor.core.publisher.Mono;
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
 
-    @Value("${earable.auth.whitelist.path:}")
-    private String[] AUTH_WHITELIST;
-
-    private static final String[] SWAGGER_WHITELIST = {
+    //TODO: Move to config
+    private static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v2
             "/v2/api-docs",
             "/swagger-resources",
@@ -38,13 +34,11 @@ public class SecurityConfig {
             // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/private/**", //TODO: NhuNH explains this path
     };
 
     @Bean
     public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http, JwtUtils jwtUtils,
                                                        ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        String[] whiteList = ArrayUtils.addAll(SWAGGER_WHITELIST, AUTH_WHITELIST);
         return http.exceptionHandling()
                 .authenticationEntryPoint(
                     (swe, e) -> { //TODO: Wrap to earable errors details
@@ -63,7 +57,7 @@ public class SecurityConfig {
                 .authenticationManager(reactiveAuthenticationManager)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .pathMatchers(whiteList).permitAll()
+                .pathMatchers(AUTH_WHITELIST).permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .addFilterAt(new JwtTokenAuthenticationFilter(jwtUtils), SecurityWebFiltersOrder.HTTP_BASIC)
