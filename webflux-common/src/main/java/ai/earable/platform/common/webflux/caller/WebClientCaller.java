@@ -115,6 +115,16 @@ public class WebClientCaller implements Caller{
     }
 
     @Override
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, T requestBody, Class<T> requestType, Class<V> responseType) {
+        return webClient.method(method)
+                .uri(calledUri)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .body(Mono.just(requestBody), requestType)
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+    }
+
+    @Override
     public <V> Flux<V> getFlux(HttpMethod method, String calledUri,  Class<V> responseType) {
         return webClient.method(method)
                 .uri(calledUri)
