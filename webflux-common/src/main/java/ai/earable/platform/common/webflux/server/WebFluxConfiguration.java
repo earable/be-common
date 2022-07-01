@@ -34,6 +34,9 @@ public class WebFluxConfiguration {
     @Value(value = "${earable.nio-event-loop.webclient}")
     private int webClientEventLoop;
 
+    @Value(value = "${earable.reactor.scheduler:4}")
+    private int reactorScheduler;
+
     @Bean
     public ReactiveWebServerFactory reactiveWebServerFactory(){
         NioEventLoopGroup nioEventLoopGroup = init(httpServerEventLoop);
@@ -53,7 +56,7 @@ public class WebFluxConfiguration {
 
     @Bean
     public Scheduler scheduler(){
-        return Schedulers.fromExecutorService(Executors.newFixedThreadPool(8));//TODO: Config outside
+        return Schedulers.fromExecutorService(Executors.newFixedThreadPool(reactorScheduler));
     }
 
     @Bean
