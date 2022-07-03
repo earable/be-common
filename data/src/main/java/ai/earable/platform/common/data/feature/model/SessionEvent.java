@@ -5,5 +5,6 @@ package ai.earable.platform.common.data.feature.model;
  */
 public enum SessionEvent {
     STARTED,
-    STOPPED
+    STOPPED,
+    ENDED
 }
