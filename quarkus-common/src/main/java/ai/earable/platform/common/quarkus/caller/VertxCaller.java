@@ -1,4 +1,4 @@
-package ai.earable.platform.common.caller.quarkus;
+package ai.earable.platform.common.quarkus.caller;
 
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Slf4j
 public final class VertxCaller {
-    private static final long DEFAULT_TIME_OUT = 10000; //TODO: Move to config map
+    private static final long DEFAULT_TIME_OUT = 30000; //TODO: Move to config map
 
     public static <V> Mono<V> get(WebClient webClient, URI uriTemplate, Class<V> responseType){
         return get(webClient, uriTemplate, responseType, DEFAULT_TIME_OUT);
