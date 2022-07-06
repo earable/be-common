@@ -1,0 +1,12 @@
+version: '2'
+services:
+  redis:
+    image: redis:6.0.3-alpine
+    ports:
+      - "6379:6379"
+    restart: always     # "unless-stopped" or "always"
+    ## UNCOMMENT THESE LINES IF WE USE CUSTOM REDIS CONFIG ##
+
+    volumes:
+      - ./data/Redis:/data
+    command: ["redis-server"]
