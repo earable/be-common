@@ -1,6 +1,7 @@
 package ai.earable.platform.common.webflux.caller;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +16,7 @@ public interface Caller {
     <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType, String... params);
     <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, MultiValueMap<String, T> multiValueMap, Class<V> responseType, String... params);
     <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, String token, T requestBody, Class<T> requestType, Class<V> responseType);
+    <V> Mono<V> requestToMono(HttpMethod method, String calledUri, Map<String, String> headers, MultipartBodyBuilder requestBody, Class<V> responseType);
 
     <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType);
     <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType, String... params);
