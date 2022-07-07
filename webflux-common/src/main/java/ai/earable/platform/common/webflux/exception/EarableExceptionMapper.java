@@ -37,7 +37,7 @@ public class EarableExceptionMapper {
 
     @ExceptionHandler({ServerWebInputException.class})
     public ResponseEntity handleServerWebInputException(ServerWebInputException error) {
-        log.trace("handleServerWebInputException error stack trace", error);
+        log.error("handleServerWebInputException error stack trace", error);
         List<String> errMessages = new ArrayList<>();
         // handle for invalid request body
         if (error instanceof WebExchangeBindException && !((WebExchangeBindException) error).getAllErrors().isEmpty()) {
@@ -78,7 +78,7 @@ public class EarableExceptionMapper {
 
     @ExceptionHandler(EarableException.class)
     public ResponseEntity handleEarableException(EarableException e) {
-        log.trace("handleEarableException error stack trace", e);
+        log.error("handleEarableException error stack trace", e);
         String detail = e.getEarableErrorCode() != null ? messageUtils.getMessage(e.getEarableErrorCode().name(), e.getParam())
                 : e.getDetails();
         ErrorDetails errorDetails = ErrorDetails.builder()
@@ -93,7 +93,7 @@ public class EarableExceptionMapper {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleCommonException(Exception e) {
-        log.trace("handleCommonException error stack trace", e);
+        log.error("handleCommonException error stack trace", e);
         ErrorDetails errorDetails = ErrorDetails.builder()
                 .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())

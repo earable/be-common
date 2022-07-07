@@ -105,9 +105,7 @@ public class WebClientCaller implements Caller{
                                      Class<V> responseType) {
         return webClient.method(method)
                 .uri(calledUri)
-                .headers(httpHeaders -> {
-                    headers.forEach(httpHeaders::set);
-                })
+                .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
     }
