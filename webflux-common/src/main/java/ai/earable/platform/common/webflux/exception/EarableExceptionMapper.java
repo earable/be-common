@@ -37,14 +37,14 @@ public class EarableExceptionMapper {
 
     @ExceptionHandler({ServerWebInputException.class})
     public ResponseEntity handleServerWebInputException(ServerWebInputException error) {
-        log.error("handleServerWebInputException error stack trace", error);
+        log.trace("handleServerWebInputException error stack trace", error);
         List<String> errMessages = new ArrayList<>();
         // handle for invalid request body
         if (error instanceof WebExchangeBindException && !((WebExchangeBindException) error).getAllErrors().isEmpty()) {
             errMessages = ((WebExchangeBindException) error).getAllErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
             ErrorDetails errorDetails = ErrorDetails.builder().httpStatusCode(HttpStatus.BAD_REQUEST.value())
                     .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).build();
             log.error("Return error to client with details {}", errorDetails.toString());
