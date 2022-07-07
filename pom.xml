@@ -15,8 +15,8 @@
     </parent>
 
     <modules>
-        <module>caller-quarkus</module>
         <module>webflux-common</module>
+        <module>quarkus-common</module>
         <module>data</module>
         <module>utils</module>
     </modules>

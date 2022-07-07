@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ai.earable.platform.be-common</groupId>
-    <artifactId>caller-quarkus</artifactId>
+    <artifactId>quarkus-common</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -16,33 +16,35 @@
     <dependencies>
         <dependency>
             <groupId>ai.earable.platform.be-common</groupId>
-            <artifactId>utils</artifactId>
+            <artifactId>data</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>ai.earable.platform.be-common</groupId>
-            <artifactId>data</artifactId>
+            <artifactId>utils</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- Dependencies about quarkus reactive http server-->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-reactive-common</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-core</artifactId>
-        </dependency>
-
+        <!-- For smallrye webclient-->
         <dependency>
             <groupId>io.smallrye.reactive</groupId>
             <artifactId>smallrye-mutiny-vertx-web-client</artifactId>
+        </dependency>
+
+        <!-- For smallrye jwt-->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt</artifactId>
         </dependency>
 
         <dependency>
@@ -58,9 +60,10 @@
             <groupId>io.smallrye.reactive</groupId>
             <artifactId>mutiny-reactor</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>io.smallrye.reactive</groupId>
-            <artifactId>mutiny-reactor</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
         </dependency>
 
         <dependency>
