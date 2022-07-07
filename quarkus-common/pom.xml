@@ -41,6 +41,12 @@
             <artifactId>smallrye-mutiny-vertx-web-client</artifactId>
         </dependency>
 
+        <!-- For smallrye jwt-->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
