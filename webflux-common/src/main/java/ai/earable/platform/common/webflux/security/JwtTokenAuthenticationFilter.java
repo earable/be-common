@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 /**
  * Created by BinhNH on 6/13/22
  */
+@Component
 public class JwtTokenAuthenticationFilter implements WebFilter {
 
     public static final String HEADER_PREFIX = "Bearer ";
