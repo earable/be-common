@@ -106,7 +106,8 @@ public class JwtUtils {
         String tokenId = claims.get("token_id", String.class);
         String userId = claims.get("user_id", String.class);
         // check token is exist on redis
-        return ObjectUtils.isNotEmpty(userId) ? redisTemplate.opsForValue().get(userId).equals(tokenId) : false;
+        String savedTokenId = redisTemplate.opsForValue().get(userId);
+        return ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(savedTokenId) && savedTokenId.equals(tokenId);
     }
 
     private boolean isTokenExpired(String token) {
