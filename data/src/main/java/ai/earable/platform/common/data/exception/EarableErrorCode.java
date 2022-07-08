@@ -48,6 +48,7 @@ public enum EarableErrorCode {
     SCHEDULE_NOT_FOUND("SCHEDULE_NOT_FOUND"),
 
     PUT_OBJECT_TO_S3_FAILED("PUT_OBJECT_TO_S3_FAILED"),
+    MAX_SIZE_UPLOAD_TO_S3("MAX_SIZE_UPLOAD_TO_S3"),
 
 
     //============== DMS ================
