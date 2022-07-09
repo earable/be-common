@@ -22,7 +22,15 @@ public class Session implements Serializable {
     private String deviceId;
     private SessionMode mode;
     private String sessionSettingId;
-    private long clientTimestamp;
-    private String timezone;
     private Map<String, String> metadata;
+
+    /**
+     * The clientTimestamp at the moment of session started in client timezone
+     */
+    private long clientTimestamp;
+
+    /**
+     * The client timezone at the moment of session started
+     */
+    private String timezone;
 }
