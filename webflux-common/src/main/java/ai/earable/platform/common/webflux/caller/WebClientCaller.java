@@ -25,7 +25,12 @@ import java.util.Map;
 @Service
 @Slf4j
 public class WebClientCaller implements Caller{
-    @Autowired WebClient webClient;
+    private final WebClient webClient;
+
+    @Autowired
+    public WebClientCaller(WebClient webClient){
+        this.webClient = webClient;
+    }
 
     @Override
     public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType) {

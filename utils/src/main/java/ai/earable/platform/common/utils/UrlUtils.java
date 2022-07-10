@@ -1,5 +1,6 @@
 package ai.earable.platform.common.utils;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -9,6 +10,10 @@ import java.nio.charset.StandardCharsets;
 public final class UrlUtils {
     public static String encode(String input){
         return URLEncoder.encode(input, StandardCharsets.UTF_8);
+    }
+
+    public static String decode(String input){
+        return URLDecoder.decode(input, StandardCharsets.UTF_8);
     }
 
     public static void main(String[] args) {
