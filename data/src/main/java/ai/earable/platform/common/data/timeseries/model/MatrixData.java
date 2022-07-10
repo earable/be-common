@@ -17,7 +17,6 @@ public class MatrixData {
      */
     private String resultType;
 
-
     /**
      * List of result follow time-series format returned from VictoriaMetricDB
      */
