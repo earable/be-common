@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Data
 @Builder
@@ -33,4 +34,6 @@ public class Session implements Serializable {
      * The client timezone at the moment of session started
      */
     private String timezone;
+
+
 }
