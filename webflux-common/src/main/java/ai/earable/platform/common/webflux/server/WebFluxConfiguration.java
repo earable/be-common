@@ -56,7 +56,7 @@ public class WebFluxConfiguration {
 
     @Bean
     public Scheduler scheduler(){
-        return Schedulers.fromExecutorService(Executors.newFixedThreadPool(reactorScheduler));
+        return Schedulers.boundedElastic();
     }
 
     @Bean

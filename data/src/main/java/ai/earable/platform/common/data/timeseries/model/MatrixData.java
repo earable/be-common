@@ -17,10 +17,8 @@ public class MatrixData {
      */
     private String resultType;
 
-
     /**
      * List of result follow time-series format returned from VictoriaMetricDB
      */
-    @JsonProperty("result")
-    private List<MatrixResult> results;
+    private List<MatrixResult> result;
 }
