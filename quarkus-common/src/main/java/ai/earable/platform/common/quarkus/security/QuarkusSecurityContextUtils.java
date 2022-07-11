@@ -4,49 +4,49 @@ import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import reactor.core.publisher.Mono;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  * Created by BinhNH on 6/14/22
  */
-@Component
 @RequestScoped
 @Slf4j
 public class QuarkusSecurityContextUtils {
-    @Autowired
+    @Inject
     protected JsonWebToken jsonWebToken;
 
-    private static final String HEADER_PREFIX = "Bearer ";
+    @Inject
+    protected SecurityContext securityContext;
 
-    public Mono<String> getUserId(){
+    public String getUserId(){
+        String errorMessage = "Not found userId in token!";
         try{
-            if(jsonWebToken.getClaim("user_id") != null)
-                return jsonWebToken.getClaim("user_id");
-            log.error("Not found userId in token!");
-            return Mono.error(new EarableException(401, EarableErrorCode.UNAUTHORIZED));
+            String userId = jsonWebToken.getClaim("user_id");
+            if(userId != null)
+                return userId;
+            log.error(errorMessage);
+            throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.toString(), errorMessage);
         }
         catch (Exception ex){
-            log.error("Not found userId in token!");
-            return Mono.error(new EarableException(401, EarableErrorCode.UNAUTHORIZED));
+            log.error(errorMessage);
+            throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.toString(), errorMessage);
         }
     }
 
-    public Mono<String> getToken(){
-        if(jsonWebToken.getRawToken() != null){
-            return Mono.just(resolveToken(jsonWebToken.getRawToken()));
+    public String getToken(){
+        String token = jsonWebToken.getRawToken();
+        if(token != null){
+            return token;
         }
-        return Mono.error(new EarableException(401, EarableErrorCode.UNAUTHORIZED));
+        String errorMessage = "Can't get token!";
+        log.error(errorMessage);
+        throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.toString(), errorMessage);
     }
 
-    private String resolveToken(String rawToken) {
-        if (StringUtils.hasText(rawToken) && rawToken.startsWith(HEADER_PREFIX)) {
-            return rawToken.substring(7);
-        }
-        return rawToken;
+    public String getUserInfo(){
+        return securityContext.getUserPrincipal().getName();
     }
 }
