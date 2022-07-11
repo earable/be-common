@@ -28,11 +28,11 @@ public class QuarkusSecurityContextUtils {
             if(userId != null)
                 return userId;
             log.error(errorMessage);
-            throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.toString(), errorMessage);
+            throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.getErrorDetail(), errorMessage);
         }
         catch (Exception ex){
             log.error(errorMessage);
-            throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.toString(), errorMessage);
+            throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.getErrorDetail(), errorMessage);
         }
     }
 
@@ -43,10 +43,16 @@ public class QuarkusSecurityContextUtils {
         }
         String errorMessage = "Can't get token!";
         log.error(errorMessage);
-        throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.toString(), errorMessage);
+        throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.getErrorDetail(), errorMessage);
     }
 
     public String getUserInfo(){
-        return securityContext.getUserPrincipal().getName();
+        String info = securityContext.getUserPrincipal().getName();
+        if(info != null){
+            return info;
+        }
+        String errorMessage = "Can't get user information in token!";
+        log.error(errorMessage);
+        throw new EarableException(401, EarableErrorCode.UNAUTHORIZED.getErrorDetail(), errorMessage);
     }
 }
