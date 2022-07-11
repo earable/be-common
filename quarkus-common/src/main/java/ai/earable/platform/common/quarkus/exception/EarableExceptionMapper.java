@@ -15,11 +15,12 @@ import javax.ws.rs.ext.Provider;
 public class EarableExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<EarableException> {
     @Override
     public Response toResponse(EarableException e) {
+        String errorDetail = e.getDetails() == null ?  "Something went wrong?" : e.getDetails();
         ErrorDetails errorDetails = ErrorDetails.builder()
             .httpStatusCode(e.getHttpStatusCode())
-            .earableErrorCode(e.getEarableErrorCode().name())
-            .details(e.getDetails()).build();
-        log.error("Return error to client with details {}", errorDetails.toString());
+            .earableErrorCode(e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())
+            .details(errorDetail).build();
+        log.error("Return error to client with details {}", errorDetail);
         return Response.status(errorDetails.getHttpStatusCode())
                 .entity(errorDetails).build();
     }

@@ -22,21 +22,21 @@ public class Test {
         WebClient webClient = configuration.webClient();
 
         Caller caller = new WebClientCaller(webClient);
-//        String query = "(lifetime(SLEEP_STAGES{sessionId=\"5F6138353B8A_1649821060000\"}[2d]) - duration_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d],30s) + (tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d]) - tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 0 AND SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 4)[2d]))) / 3600";
-//        MatrixDataResponse matrixDataResponse = queryRange(caller, query, 1649828540, 1649828540).block();
-//        System.out.println("----------------");
-
-        final String baseUrl = "http://localhost:80/dms/api/v3/notifications/session-event";
-
-        caller.requestToMono(HttpMethod.POST, baseUrl, initFrom(), SessionOperationNotification.class, Void.class)
-            .onErrorResume(throwable -> {
-                log.error("[SESSION_ENDED] - Sending notification about session {} ended to DMS failed with message {}",
-                        "sessionId", throwable.getLocalizedMessage());
-                return Mono.error(new EarableException(HttpStatus.BAD_REQUEST.value(),
-                        EarableErrorCode.INTERNAL_SERVER_ERROR.toString(), throwable.getLocalizedMessage()));
-            }).doOnSuccess(s ->
-                    log.debug("[SESSION_ENDED] - Sending notification about session {} ended to DMS successfully", "sessionId")).block();
+        String query = "(lifetime(SLEEP_STAGES{sessionId=\"5F6138353B8A_1649821060000\"}[2d]) - duration_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d],30s) + (tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d]) - tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 0 AND SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 4)[2d]))) / 3600";
+        MatrixDataResponse matrixDataResponse = queryRange(caller, query, 1649828540, 1649828540).block();
         System.out.println("----------------");
+
+//        final String baseUrl = "http://localhost:80/dms/api/v3/notifications/session-event";
+//
+//        caller.requestToMono(HttpMethod.POST, baseUrl, initFrom(), SessionOperationNotification.class, Void.class)
+//            .onErrorResume(throwable -> {
+//                log.error("[SESSION_ENDED] - Sending notification about session {} ended to DMS failed with message {}",
+//                        "sessionId", throwable.getLocalizedMessage());
+//                return Mono.error(new EarableException(HttpStatus.BAD_REQUEST.value(),
+//                        EarableErrorCode.INTERNAL_SERVER_ERROR.toString(), throwable.getLocalizedMessage()));
+//            }).doOnSuccess(s ->
+//                    log.debug("[SESSION_ENDED] - Sending notification about session {} ended to DMS successfully", "sessionId")).block();
+//        System.out.println("----------------");
     }
 
     private static SessionOperationNotification initFrom(){
