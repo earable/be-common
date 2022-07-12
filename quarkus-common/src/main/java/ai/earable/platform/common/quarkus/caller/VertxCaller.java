@@ -122,8 +122,8 @@ public final class VertxCaller {
         V v = response.body();
         log.error("Rest api calling failed with error-code {} and error body: {}", response.statusCode(), v);
         if(v != null &&  v.toString() != null && !v.toString().isEmpty()){
-            return new EarableException(response.statusCode(), earableErrorCode, response.bodyAsString());
+            return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.bodyAsString());
         }
-        return new EarableException(response.statusCode(), earableErrorCode, response.statusMessage());
+        return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.statusMessage());
     }
 }

@@ -18,5 +18,6 @@ public final class UrlUtils {
 
     public static void main(String[] args) {
         System.out.println(encode("(lifetime(SLEEP_STAGES{sessionId=\"5F6138353B8A_1649821060000\"}[2d]) - duration_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d],30s) + (tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d]) - tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 0 AND SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 4)[2d]))) / 3600"));
+        System.out.println(encode("SLEEP_STAGES{weekOfYear=\"15\",metric_group=~\"SLEEP|NAP\"}[180d]"));
     }
 }
