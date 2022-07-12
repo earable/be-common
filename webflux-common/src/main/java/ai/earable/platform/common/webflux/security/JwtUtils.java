@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +34,12 @@ public class JwtUtils {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    @Value("#{new Boolean('${earable.auth.ignore:true}')}")
+    private boolean ignoreAuth;
+
+    @Value("#{new Boolean('${earable.token.caching.enable:true}')}")
+    private boolean enableCacheToken;
+
     private static final String AUTHORITIES_KEY = "role"; //Need to map to IMS
     private PublicKey publicKey = null;
 
@@ -44,8 +51,6 @@ public class JwtUtils {
         try (final InputStream stream = this.getClass()
                 .getClassLoader().getResourceAsStream("application.properties")) {
             properties.load(stream);
-
-            boolean ignoreAuth = Boolean.valueOf(String.valueOf(properties.get("earable.auth.ignore")));
 
             if (ignoreAuth) {
                 log.info("Ignore authentication");
@@ -98,7 +103,7 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token) {
-        return !isTokenExpired(token) && isTokenExistOnRedis(token);
+        return !isTokenExpired(token) && (!enableCacheToken || isTokenExistOnRedis(token));
     }
 
     private boolean isTokenExistOnRedis(String token) {
