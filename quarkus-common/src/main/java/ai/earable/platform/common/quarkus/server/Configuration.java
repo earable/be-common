@@ -4,6 +4,7 @@ import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
 import io.vertx.mutiny.ext.web.client.WebClient;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -15,13 +16,16 @@ import javax.inject.Singleton;
 @ApplicationScoped
 @Slf4j
 public class Configuration {
+    @ConfigProperty(name = "earable.nio-event-loop.webclient", defaultValue="8")
+    protected int webClientPoolSize;
+
     @Inject
     protected  io.vertx.core.Vertx globalVertx;
 
     @Singleton
     public WebClient getWebClient(){ //TODO: Move config to properties file and configMap
         WebClientOptions webClientOptions = new WebClientOptions()
-            .setMaxPoolSize(4) //IO threads handle sending and receiving
+            .setMaxPoolSize(webClientPoolSize) //IO threads handle sending and receiving
             .setConnectTimeout(1) //Maximum time to wait connection available
             .setIdleTimeout(100) // Maximum time before release connection if no data is received.
             .setKeepAlive(true)
