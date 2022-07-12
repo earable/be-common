@@ -34,7 +34,7 @@ public class JwtUtils {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Value("#{new Boolean('${earable.auth.ignore:true}')}")
+    @Value("#{new Boolean('${earable.auth.ignore:false}')}")
     private boolean ignoreAuth;
 
     @Value("#{new Boolean('${earable.token.caching.enable:true}')}")
