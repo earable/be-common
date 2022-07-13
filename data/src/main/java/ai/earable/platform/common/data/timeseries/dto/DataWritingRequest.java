@@ -19,6 +19,10 @@ public class DataWritingRequest {
     private String profileId;
     private String deviceId;
     private String sessionId;
+    private String year;
+    private String monthOfYear;
+    private String weekOfYear;
+    private String dayOfYear;
 
     /**
      * List of metrics, tags and data value.
