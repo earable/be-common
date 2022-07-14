@@ -14,7 +14,7 @@ public class MonitoredDataValue {
     /**
      * The double value of this data metric
      */
-    private double value;
+    private String value;
 
     /**
      * The timestamp of above value.

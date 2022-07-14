@@ -17,7 +17,8 @@ public final class UrlUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(encode("(lifetime(SLEEP_STAGES{sessionId=\"5F6138353B8A_1649821060000\"}[2d]) - duration_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d],30s) + (tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d]) - tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 0 AND SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 4)[2d]))) / 3600"));
-        System.out.println(encode("SLEEP_STAGES{weekOfYear=\"15\",metric_group=~\"SLEEP|NAP\"}[180d]"));
+        String expr = "sum without (sessionId)((lifetime(SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"}[2d]) - duration_over_time((SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"} == 0)[2d],30s) + (tlast_over_time((SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"} == 0)[2d]) - tlast_over_time((SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"} > 0)[2d]))) / 3600)";
+        System.out.println(encode(expr.replace("__sessionId__", "6089203057A6_1657702437000")));
+        System.out.println(encode("tfirst_over_time((SLEEP_STAGES{sessionId=\"6089203057A6_1657702437000\"} == 1)[2d])"));
     }
 }
