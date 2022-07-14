@@ -5,6 +5,7 @@ import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.feature.dto.SessionOperationNotification;
 import ai.earable.platform.common.data.feature.model.SessionEvent;
 import ai.earable.platform.common.data.timeseries.dto.MatrixDataResponse;
+import ai.earable.platform.common.data.timeseries.dto.VectorDataResponse;
 import ai.earable.platform.common.utils.UrlUtils;
 import ai.earable.platform.common.webflux.server.WebFluxConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 @Slf4j
 public class Test {
     public static void main(String[] args) {
@@ -22,9 +25,10 @@ public class Test {
         WebClient webClient = configuration.webClient();
 
         Caller caller = new WebClientCaller(webClient);
-        String query = "(lifetime(SLEEP_STAGES{sessionId=\"5F6138353B8A_1649821060000\"}[2d]) - duration_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d],30s) + (tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d]) - tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 0 AND SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 4)[2d]))) / 3600";
-        MatrixDataResponse matrixDataResponse = queryRange(caller, query, 1649828540, 1649828540).block();
-        System.out.println("----------------");
+
+//        String query = "(lifetime(SLEEP_STAGES{sessionId=\"5F6138353B8A_1649821060000\"}[2d]) - duration_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d],30s) + (tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} == 4)[2d]) - tlast_over_time((SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 0 AND SLEEP_STAGES{sessionId =\"5F6138353B8A_1649821060000\"} != 4)[2d]))) / 3600";
+//        MatrixDataResponse matrixDataResponse = queryRange(caller, query, 1649828540, 1649828540).block();
+//        System.out.println("----------------");
 
 //        final String baseUrl = "http://localhost:80/dms/api/v3/notifications/session-event";
 //
@@ -37,6 +41,18 @@ public class Test {
 //            }).doOnSuccess(s ->
 //                    log.debug("[SESSION_ENDED] - Sending notification about session {} ended to DMS successfully", "sessionId")).block();
 //        System.out.println("----------------");
+
+
+        String totalTimeSessionQuery = "lifetime({__name__=\"SLEEP_STAGES\",sessionId=\"...\"}[5d])".replace("...", "6089203057A6_1657702437000");
+        QueryStatistic queryStatistic = QueryStatistic.builder()
+                .queryName("total_time_session")
+                .query(totalTimeSessionQuery).build();
+
+        query(caller, "6089203057A6_1657702437000", queryStatistic.getQuery())
+            .flatMap(matrixDataResponse -> {
+                Map<String, String> commonTags = matrixDataResponse.getData().getResult().get(0).getMetric();
+                return Mono.empty();
+            }).block();
     }
 
     private static SessionOperationNotification initFrom(){
@@ -77,5 +93,14 @@ public class Test {
                     return Mono.error(new EarableException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                             EarableErrorCode.INTERNAL_SERVER_ERROR));
                 });
+    }
+
+    public static Mono<VectorDataResponse> query(Caller caller, String sessionId, String query) {
+        String readPath = "https://api.eardev.xyz/des/api/v3/read/session/{sessionId}/query";
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("query", UrlUtils.encode(query));
+        return caller.getMono(readPath, VectorDataResponse.class, multiValueMap, sessionId) //TODO: Using tokenFromFms
+                .onErrorResume(throwable -> Mono.error(new EarableException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        EarableErrorCode.INTERNAL_SERVER_ERROR, throwable.getLocalizedMessage())));
     }
 }

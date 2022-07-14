@@ -3,6 +3,8 @@ package ai.earable.platform.common.data.feature.dto;
 import ai.earable.platform.common.data.feature.model.SessionEvent;
 import lombok.*;
 
+import java.util.Map;
+
 /**
  * Created by BinhNH on 3/28/2022
  */
@@ -55,4 +57,9 @@ public class SessionOperationNotification {
      * report.
      */
     private int dayOfYear;
+
+    /**
+     * The metadata contains list of metric & value summarized after session ended by mobile
+     */
+    private Map<String, String> metadata;
 }

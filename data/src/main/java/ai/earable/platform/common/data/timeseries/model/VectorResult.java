@@ -15,5 +15,5 @@ import java.util.Map;
 @NoArgsConstructor
 public class VectorResult {
     private Map<String, String> metric;
-    private List<Double> value;
+    private List<String> value;
 }

@@ -24,5 +24,5 @@ public class MatrixResult {
      * index 0: timestamp
      * index 1: value
      */
-    private List<List<String>> values;
+    private List<List<String>> value;
 }
