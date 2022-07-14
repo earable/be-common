@@ -1,6 +1,7 @@
 package ai.earable.platform.common.webflux.security;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,9 @@ public class SecurityConfig {
 
     @Value("${earable.auth.whitelist.path:}")
     private String[] AUTH_WHITELIST;
+
+    @Autowired
+    private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
     private static final String[] SWAGGER_WHITELIST = {
             // -- Swagger UI v2
@@ -66,7 +70,7 @@ public class SecurityConfig {
                 .pathMatchers(whiteList).permitAll()
                 .anyExchange().authenticated()
                 .and()
-                .addFilterAt(new JwtTokenAuthenticationFilter(jwtUtils), SecurityWebFiltersOrder.HTTP_BASIC)
+                .addFilterAt(jwtTokenAuthenticationFilter, SecurityWebFiltersOrder.HTTP_BASIC)
                 .build();
     }
 
