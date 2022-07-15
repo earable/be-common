@@ -11,6 +11,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorResourceFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -37,6 +38,9 @@ public class WebFluxConfiguration {
     @Value(value = "${earable.reactor.scheduler:4}")
     private int reactorScheduler;
 
+    @Value(value = "${earable.webclient.codec.max-in-memory.size:20}")
+    private int webClientMaxInMemorySize;
+
     @Bean
     public ReactiveWebServerFactory reactiveWebServerFactory(){
         NioEventLoopGroup nioEventLoopGroup = init(httpServerEventLoop);
@@ -48,10 +52,18 @@ public class WebFluxConfiguration {
 
     @Bean
     public WebClient webClient(){
+        // in Mb
+        final int size = webClientMaxInMemorySize * 1024 * 1024;
+        final ExchangeStrategies strategies = ExchangeStrategies.builder()
+                .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
+                .build();
         NioEventLoopGroup nioEventLoopGroup = init(webClientEventLoop);
         ReactorResourceFactory reactorResourceFactory = initReactorResourceFactory(nioEventLoopGroup);
         ReactorClientHttpConnector reactorClientHttpConnector = new ReactorClientHttpConnector(reactorResourceFactory, httpClient -> httpClient);
-        return WebClient.builder().clientConnector(reactorClientHttpConnector).build();
+        return WebClient.builder()
+                .exchangeStrategies(strategies)
+                .clientConnector(reactorClientHttpConnector)
+                .build();
     }
 
     @Bean

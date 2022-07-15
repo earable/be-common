@@ -3,8 +3,8 @@ package ai.earable.platform.common.webflux.caller;
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.exception.ErrorDetails;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -24,13 +24,9 @@ import java.util.Map;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class WebClientCaller implements Caller{
     private final WebClient webClient;
-
-    @Autowired
-    public WebClientCaller(WebClient webClient){
-        this.webClient = webClient;
-    }
 
     @Override
     public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType) {
