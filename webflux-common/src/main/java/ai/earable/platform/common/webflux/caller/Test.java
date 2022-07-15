@@ -15,6 +15,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 public class Test {
     public static void main(String[] args) {
@@ -51,10 +54,22 @@ public class Test {
 //                return Mono.empty();
 //            }).block();
 
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("recoveryScore", "98");
         SessionOperationNotification notification = SessionOperationNotification.builder()
+            .featureName("SLEEP")
+            .userId("c2d46e49-9840-46de-89c6-b862d2c998f0")
+            .profileId("c2d46e49-9840-46de-89c6-b862d2c998f0")
             .sessionId("6275203547A6_1657861465000")
+            .year(2022)
+            .monthOfYear(7)
+            .weekOfYear(29)
+            .dayOfYear(196)
+            .clientTimestamp(1657861465000L)
+            .timezone("Asia/Ho_Chi_Minh")
+            .metadata(metadata)
             .event(SessionEvent.ENDED).build();
-         caller.requestToMono(HttpMethod.POST, "http://localhost:80/dms/api/v3/notifications/session-event", notification, SessionOperationNotification.class, Void.class)
+         caller.requestToMono(HttpMethod.POST, "https://api.eardev.xyz/dms/api/v3/notifications/session-event", notification, SessionOperationNotification.class, Void.class)
                 .onErrorResume(throwable -> {
                     log.error("[SESSION_ENDED] - Sending notification about session {} ended to DMS failed with message {}",
                             "6275203547A6_1657861465000", throwable.getLocalizedMessage());
