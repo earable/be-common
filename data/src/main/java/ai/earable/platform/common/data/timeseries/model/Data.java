@@ -10,14 +10,14 @@ import java.util.List;
  */
 @Getter
 @NoArgsConstructor
-public class MatrixData {
+public class Data {
     /**
      * The type of result (“matrix” or “vector”)
      */
-    private String resultType;
+    private ResultType resultType;
 
     /**
      * List of result follow time-series format returned from VictoriaMetricDB
      */
-    private List<MatrixResult> result;
+    private List<Result> result;
 }
