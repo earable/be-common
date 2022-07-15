@@ -4,8 +4,7 @@ import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.feature.dto.SessionOperationNotification;
 import ai.earable.platform.common.data.feature.model.SessionEvent;
-import ai.earable.platform.common.data.timeseries.dto.MatrixDataResponse;
-import ai.earable.platform.common.data.timeseries.dto.VectorDataResponse;
+import ai.earable.platform.common.data.timeseries.dto.TimeseriesDataResponse;
 import ai.earable.platform.common.utils.UrlUtils;
 import ai.earable.platform.common.webflux.server.WebFluxConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Slf4j
 public class Test {
@@ -43,16 +40,29 @@ public class Test {
 //        System.out.println("----------------");
 
 
-        String totalTimeSessionQuery = "lifetime({__name__=\"SLEEP_STAGES\",sessionId=\"...\"}[5d])".replace("...", "6089203057A6_1657702437000");
-        QueryStatistic queryStatistic = QueryStatistic.builder()
-                .queryName("total_time_session")
-                .query(totalTimeSessionQuery).build();
+//        String totalTimeSessionQuery = "lifetime({__name__=\"SLEEP_STAGES\",sessionId=\"...\"}[5d])".replace("...", "6089203057A6_1657702437000");
+//        QueryStatistic queryStatistic = QueryStatistic.builder()
+//                .queryName("total_time_session")
+//                .query(totalTimeSessionQuery).build();
+//
+//        query(caller, "6089203057A6_1657702437000", queryStatistic.getQuery())
+//            .flatMap(matrixDataResponse -> {
+//                Map<String, String> commonTags = matrixDataResponse.getData().getResult().get(0).getMetric();
+//                return Mono.empty();
+//            }).block();
 
-        query(caller, "6089203057A6_1657702437000", queryStatistic.getQuery())
-            .flatMap(matrixDataResponse -> {
-                Map<String, String> commonTags = matrixDataResponse.getData().getResult().get(0).getMetric();
-                return Mono.empty();
-            }).block();
+        SessionOperationNotification notification = SessionOperationNotification.builder()
+            .sessionId("6275203547A6_1657861465000")
+            .event(SessionEvent.ENDED).build();
+         caller.requestToMono(HttpMethod.POST, "http://localhost:80/dms/api/v3/notifications/session-event", notification, SessionOperationNotification.class, Void.class)
+                .onErrorResume(throwable -> {
+                    log.error("[SESSION_ENDED] - Sending notification about session {} ended to DMS failed with message {}",
+                            "6275203547A6_1657861465000", throwable.getLocalizedMessage());
+                    return Mono.error(new EarableException(HttpStatus.BAD_REQUEST.value(),
+                            EarableErrorCode.INTERNAL_SERVER_ERROR.toString(), throwable.getLocalizedMessage()));
+                }).doOnSuccess(s ->
+                        log.debug("[SESSION_ENDED] - Sending notification about session {} ended to DMS successfully", "6275203547A6_1657861465000"))
+                .block();
     }
 
     private static SessionOperationNotification initFrom(){
@@ -71,7 +81,7 @@ public class Test {
                 .event(SessionEvent.ENDED).build();
     }
 
-    public static Mono<MatrixDataResponse> queryRange(Caller caller, String query, long start, long end) {
+    public static Mono<TimeseriesDataResponse> queryRange(Caller caller, String query, long start, long end) {
 //        String readPath = "https://api.eardev.xyz/des/api/v3/read/query_range";
         String readPath = "http://localhost:80/des/api/v3/read/query_range";
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
@@ -79,11 +89,11 @@ public class Test {
         multiValueMap.add("start", start+"");
         multiValueMap.add("end", end+"");
 
-        return caller.getMono(readPath, MatrixDataResponse.class, multiValueMap)
-                .filter(matrixDataResponse -> {
-                    boolean filter = matrixDataResponse != null
-                            && matrixDataResponse.getData().getResult() != null
-                            && matrixDataResponse.getData().getResult().size() > 0;
+        return caller.getMono(readPath, TimeseriesDataResponse.class, multiValueMap)
+                .filter(timeseriesDataResponse -> {
+                    boolean filter = timeseriesDataResponse != null
+                            && timeseriesDataResponse.getData().getResult() != null
+                            && timeseriesDataResponse.getData().getResult().size() > 0;
                     if (!filter)
                         log.error("[PERFORMANCE_REPORT] - Can't read data of query {} from start {} to end {}", query, start, end);
                     return filter;
@@ -95,11 +105,11 @@ public class Test {
                 });
     }
 
-    public static Mono<VectorDataResponse> query(Caller caller, String sessionId, String query) {
+    public static Mono<TimeseriesDataResponse> query(Caller caller, String sessionId, String query) {
         String readPath = "https://api.eardev.xyz/des/api/v3/read/session/{sessionId}/query";
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("query", UrlUtils.encode(query));
-        return caller.getMono(readPath, VectorDataResponse.class, multiValueMap, sessionId) //TODO: Using tokenFromFms
+        return caller.getMono(readPath, TimeseriesDataResponse.class, multiValueMap, sessionId) //TODO: Using tokenFromFms
                 .onErrorResume(throwable -> Mono.error(new EarableException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         EarableErrorCode.INTERNAL_SERVER_ERROR, throwable.getLocalizedMessage())));
     }

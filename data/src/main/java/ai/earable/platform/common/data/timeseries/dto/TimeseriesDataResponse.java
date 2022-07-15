@@ -1,6 +1,6 @@
 package ai.earable.platform.common.data.timeseries.dto;
 
-import ai.earable.platform.common.data.timeseries.model.VectorData;
+import ai.earable.platform.common.data.timeseries.model.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,15 +14,19 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VectorDataResponse {
+public class TimeseriesDataResponse {
     private String status;
-    private VectorData data;
+    private Data data;
 
     public Map<String, String> getTags(){
         return data.getResult().get(0).getMetric();
     }
 
-    public List<String> getValue(){
+    public List<String> getVectorValue(){
         return data.getResult().get(0).getValue();
+    }
+
+    public List<List<String>> getMatrixValues(){
+        return data.getResult().get(0).getValues();
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
  */
 @Getter
 @NoArgsConstructor
-public class MatrixResult {
+public class Result {
     /**
      * The information about:
      * metric name
@@ -21,8 +21,17 @@ public class MatrixResult {
 
     /**
      * Series of values of this metric
+     * Using in case of matrix data
      * index 0: timestamp
      * index 1: value
      */
-    private List<List<String>> value;
+    private List<List<String>> values;
+
+    /**
+     * Value of this metric
+     * Using in case of vector data
+     * index 0: timestamp
+     * index 1: value
+     */
+    private List<String> value;
 }
