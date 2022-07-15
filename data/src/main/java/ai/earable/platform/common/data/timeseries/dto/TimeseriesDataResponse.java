@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.timeseries.dto;
 
 import ai.earable.platform.common.data.timeseries.model.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,17 +20,17 @@ public class TimeseriesDataResponse {
     private String status;
     private Data data;
 
-    @JsonIgnore
+    @JsonIgnoreProperties
     public Map<String, String> getTags(){
         return data.getResult().get(0).getMetric();
     }
 
-    @JsonIgnore
+    @JsonIgnoreProperties
     public List<String> getVectorValue(){
         return data.getResult().get(0).getValue();
     }
 
-    @JsonIgnore
+    @JsonIgnoreProperties
     public List<List<String>> getMatrixValues(){
         return data.getResult().get(0).getValues();
     }
