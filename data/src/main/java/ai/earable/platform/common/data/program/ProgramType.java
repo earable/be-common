@@ -1,4 +1,4 @@
-package ai.earable.platform.common.data.adminbackend;
+package ai.earable.platform.common.data.program;
 
 public enum ProgramType {
     CONTEST,

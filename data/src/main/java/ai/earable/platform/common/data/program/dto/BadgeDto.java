@@ -1,6 +1,6 @@
-package ai.earable.platform.common.data.adminbackend.dto;
+package ai.earable.platform.common.data.program.dto;
 
-import ai.earable.platform.common.data.adminbackend.BenefitType;
+import ai.earable.platform.common.data.program.BenefitType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,8 @@
-package ai.earable.platform.common.data.adminbackend.dto;
+package ai.earable.platform.common.data.program.dto;
 
-import ai.earable.platform.common.data.adminbackend.ProgramType;
-import ai.earable.platform.common.data.adminbackend.Status;
-import ai.earable.platform.common.data.adminbackend.Type;
+import ai.earable.platform.common.data.program.ProgramType;
+import ai.earable.platform.common.data.program.ProgramStatus;
+import ai.earable.platform.common.data.program.ProgramRepeatType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +20,10 @@ import java.util.UUID;
 public class ProgramDetailDto {
     private UUID id;
     private String name;
-    private Type type;
-    private Status status;
+    private ProgramRepeatType programRepeatType;
+    private ProgramStatus programStatus;
     private String banner;
-    List<BadgeDto> badge;
+    private List<BadgeDto> badge;
     private Integer requiredPoint;
     private ProgramType programType;
 }
