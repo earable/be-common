@@ -184,4 +184,14 @@ public class WebClientCaller implements Caller{
         return new EarableException(errorDetails.getHttpStatusCode(),
                 EarableErrorCode.valueOf(errorDetails.getEarableErrorCode()), errorDetails.getDetails());
     }
+
+    @Override
+    public <V> Mono<ClientResponse> requestToClientResponse(HttpMethod method, String calledUri, String bearerToken, String... params) {
+        return webClient
+                .method(method)
+                .uri(calledUri, params)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .exchange();
+    }
 }
