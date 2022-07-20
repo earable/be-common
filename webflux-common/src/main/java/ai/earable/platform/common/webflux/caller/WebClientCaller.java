@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -193,5 +194,15 @@ public class WebClientCaller implements Caller{
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .exchange();
+    }
+
+    @Override
+    public <T, V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, List<T> requestBody, Class<V> responseType) {
+        return webClient.method(method)
+                .uri(calledUri)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .bodyValue(requestBody)
+                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
     }
 }
