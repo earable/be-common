@@ -13,8 +13,8 @@ import java.util.Map;
  * Created by BinhNH on 21/07/2022
  */
 public interface SpringCaller extends Caller {
-    <V> Mono<V> requestToMono(HttpMethod method, String calledUri, Map<String, String> headers, MultipartBodyBuilder requestBody, Class<V> responseType);
-    <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, MultiValueMap<String, String> multiValueMap, String... params);
-    <V> Mono<ClientResponse> requestToClientResponse(HttpMethod method, String calledUri, String bearerToken, String... params);
-    <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, MultiValueMap<String, T> multiValueMap, Class<V> responseType, String... params);
+    <V> Mono<V> requestToMono(HttpMethod method, String uri, Map<String, String> headers, MultipartBodyBuilder requestBody, Class<V> responseType);
+    <V> Mono<V> getMono(String uri, Class<V> responseType, MultiValueMap<String, String> multiValueMap, String... params);
+    <V> Mono<ClientResponse> requestToClientResponse(HttpMethod method, String uri, String bearerToken, String... params);
+    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, MultiValueMap<String, T> multiValueMap, Class<V> responseType, String... params);
 }

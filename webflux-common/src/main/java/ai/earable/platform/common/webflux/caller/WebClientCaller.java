@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -27,63 +28,69 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class WebClientCaller implements SpringCaller {
+    private static final long DEFAULT_TIME_OUT = 30000; //TODO: Move to config map
     private final WebClient webClient;
 
     @Override
-    public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType) {
+    public <V> Mono<V> getMono(String uri, Class<V> responseType) {
+        return getMono(uri, responseType, DEFAULT_TIME_OUT);
+    }
+
+    @Override
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout) {
         return webClient.method(org.springframework.http.HttpMethod.GET)
-                .uri(calledUriTemplate)
+                .uri(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(timeout));
+    }
+
+    @Override
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, String... params) {
+        return webClient.method(org.springframework.http.HttpMethod.GET)
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse ->
                     convertToMonoResponse(clientResponse, responseType));
     }
 
     @Override
-    public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, String... params) {
+    public <V> Mono<V> getMono(String uri, Map<String, String> headers, Class<V> responseType, long timeout, String... pathParams) {
         return webClient.method(org.springframework.http.HttpMethod.GET)
-                .uri(calledUriTemplate, params)
+                .uri(uri, pathParams)
                 .accept(MediaType.APPLICATION_JSON)
-                .exchangeToMono(clientResponse ->
+                .headers(httpHeaders -> headers.forEach(httpHeaders::set))
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(timeout));
+    }
+
+    @Override
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, String... params) {
+        return getMono(uri, headers, responseType, DEFAULT_TIME_OUT, params);
+    }
+
+    @Override
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, MultiValueMap<String, String> multiValueMap, String... params) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(multiValueMap).encode().toUriString();
+        return webClient.get().uri(urlTemplate, params)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchangeToMono(clientResponse -> 
                     convertToMonoResponse(clientResponse, responseType));
     }
 
     @Override
-    public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, Map<String, String> headers, String... params) {
-        return webClient.method(org.springframework.http.HttpMethod.GET)
-                .uri(calledUriTemplate, params)
-                .accept(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders -> {
-                    headers.forEach(httpHeaders::set);
-                })
-                .exchangeToMono(clientResponse ->
-                    convertToMonoResponse(clientResponse, responseType));
-    }
-
-    @Override
-    public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, MultiValueMap<String, String> multiValueMap, String... params) {
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(calledUriTemplate).queryParams(multiValueMap).encode().toUriString();
-        return webClient
-                .get()
-                .uri(urlTemplate, params)
-                .accept(MediaType.APPLICATION_JSON)
-                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
-    }
-
-    @Override
-    public <V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params) {
-        return webClient
-                .method(wrap(method))
-                .uri(calledUri, params)
+    public <V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params) {
+        return webClient.method(wrap(method))
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
     }
 
     @Override
-    public <V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params) {
-        return webClient
-                .method(wrap(method))
-                .uri(calledUri, params)
+    public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params) {
+        return webClient.method(wrap(method))
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .retrieve()
@@ -91,9 +98,9 @@ public class WebClientCaller implements SpringCaller {
     }
 
     @Override
-    public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType) {
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType) {
         return webClient.method(wrap(method))
-                .uri(calledUri)
+                .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
@@ -101,39 +108,39 @@ public class WebClientCaller implements SpringCaller {
 
     @Override
     public <V> Mono<V> requestToMono(HttpMethod method,
-                                     String calledUri,
+                                     String uri,
                                      Map<String, String> headers,
                                      MultipartBodyBuilder multipartBodyBuilder,
                                      Class<V> responseType) {
         return webClient.method(wrap(method))
-                .uri(calledUri)
+                .uri(uri)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
     }
 
     @Override
-    public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType, String... params) {
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
-                .uri(calledUri, params)
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
     }
 
     @Override
-    public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, MultiValueMap<String, T> bodyMap, Class<V> responseType, String... params) {
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, MultiValueMap<String, T> bodyMap, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
-                .uri(calledUri)
+                .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(bodyMap))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
     }
 
     @Override
-    public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, T requestBody, Class<T> requestType, Class<V> responseType) {
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, T requestBody, Class<T> requestType, Class<V> responseType) {
         return webClient.method(wrap(method))
-                .uri(calledUri)
+                .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .body(Mono.just(requestBody), requestType)
@@ -141,26 +148,26 @@ public class WebClientCaller implements SpringCaller {
     }
 
     @Override
-    public <V> Flux<V> getFlux(HttpMethod method, String calledUri,  Class<V> responseType) {
+    public <V> Flux<V> getFlux(HttpMethod method, String uri,  Class<V> responseType) {
         return webClient.method(wrap(method))
-                .uri(calledUri)
+                .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
     }
 
     @Override
-    public <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType, String... params) {
+    public <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
-                .uri(calledUri, params)
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
     }
 
     @Override
-    public <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType,
+    public <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType,
                                Map<String, String> headers, String... params) {
         return webClient.method(wrap(method))
-                .uri(calledUri, params)
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
@@ -187,19 +194,19 @@ public class WebClientCaller implements SpringCaller {
     }
 
     @Override
-    public <V> Mono<ClientResponse> requestToClientResponse(HttpMethod method, String calledUri, String bearerToken, String... params) {
+    public <V> Mono<ClientResponse> requestToClientResponse(HttpMethod method, String uri, String bearerToken, String... params) {
         return webClient
                 .method(wrap(method))
-                .uri(calledUri, params)
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .exchange();
     }
 
     @Override
-    public <T, V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, List<T> requestBody, Class<V> responseType) {
+    public <T, V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, List<T> requestBody, Class<V> responseType) {
         return webClient.method(wrap(method))
-                .uri(calledUri)
+                .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .bodyValue(requestBody)

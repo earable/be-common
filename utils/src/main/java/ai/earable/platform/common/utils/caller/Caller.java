@@ -11,17 +11,20 @@ import java.util.Map;
  * Created by BinhNH on 3/30/2022
  */
 public interface Caller {
-    <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType);
-    <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType, String... params);
-    <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, String token, T requestBody, Class<T> requestType, Class<V> responseType);
-    <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType);
-    <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType, String... params);
-    <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType, Map<String, String> headers, String... params);
-    <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType);
-    <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, String... params);
-    <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, Map<String, String> headers, String... params);
+    <V> Mono<V> getMono(String uri, Class<V> responseType);
+    <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout);
+    <V> Mono<V> getMono(String uri, Class<V> responseType, String... params);
+    <V> Mono<V> getMono(String uri, Map<String, String> headers, Class<V> responseType, long timeout, String... pathParams);
+    <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, String... params);
 
-    <V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params);
-    <V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params);
-    <T, V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String token, List<T> requestBody, Class<V> responseType);
+    <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType);
+    <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, String... params);
+    <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, Map<String, String> headers, String... params);
+
+    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType);
+    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType, String... params);
+    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String token, T requestBody, Class<T> requestType, Class<V> responseType);
+    <V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params);
+    <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params);
+    <T, V> Flux<V> requestToFlux(HttpMethod method, String uri, String token, List<T> requestBody, Class<V> responseType);
 }
