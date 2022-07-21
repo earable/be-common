@@ -3,9 +3,9 @@ package ai.earable.platform.common.webflux.caller;
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.exception.ErrorDetails;
+import ai.earable.platform.common.data.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
@@ -26,12 +26,12 @@ import java.util.Map;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class WebClientCaller implements Caller{
+public class WebClientCaller implements SpringCaller {
     private final WebClient webClient;
 
     @Override
     public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType) {
-        return webClient.method(HttpMethod.GET)
+        return webClient.method(org.springframework.http.HttpMethod.GET)
                 .uri(calledUriTemplate)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse ->
@@ -40,7 +40,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, String... params) {
-        return webClient.method(HttpMethod.GET)
+        return webClient.method(org.springframework.http.HttpMethod.GET)
                 .uri(calledUriTemplate, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse ->
@@ -49,7 +49,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <V> Mono<V> getMono(String calledUriTemplate, Class<V> responseType, Map<String, String> headers, String... params) {
-        return webClient.method(HttpMethod.GET)
+        return webClient.method(org.springframework.http.HttpMethod.GET)
                 .uri(calledUriTemplate, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> {
@@ -72,7 +72,7 @@ public class WebClientCaller implements Caller{
     @Override
     public <V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params) {
         return webClient
-                .method(method)
+                .method(wrap(method))
                 .uri(calledUri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
@@ -82,7 +82,7 @@ public class WebClientCaller implements Caller{
     @Override
     public <V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, Class<V> responseType, String... params) {
         return webClient
-                .method(method)
+                .method(wrap(method))
                 .uri(calledUri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
@@ -92,7 +92,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
@@ -105,7 +105,7 @@ public class WebClientCaller implements Caller{
                                      Map<String, String> headers,
                                      MultipartBodyBuilder multipartBodyBuilder,
                                      Class<V> responseType) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
@@ -114,7 +114,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, T requestBody, Class<T> requestType, Class<V> responseType, String... params) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
@@ -123,7 +123,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, MultiValueMap<String, T> multiValueMap, Class<V> responseType, String... params) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(multiValueMap))
@@ -132,7 +132,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String calledUri, String bearerToken, T requestBody, Class<T> requestType, Class<V> responseType) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
@@ -142,7 +142,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <V> Flux<V> getFlux(HttpMethod method, String calledUri,  Class<V> responseType) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
@@ -150,7 +150,7 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType, String... params) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
@@ -159,7 +159,7 @@ public class WebClientCaller implements Caller{
     @Override
     public <V> Flux<V> getFlux(HttpMethod method, String calledUri, Class<V> responseType,
                                Map<String, String> headers, String... params) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
@@ -189,7 +189,7 @@ public class WebClientCaller implements Caller{
     @Override
     public <V> Mono<ClientResponse> requestToClientResponse(HttpMethod method, String calledUri, String bearerToken, String... params) {
         return webClient
-                .method(method)
+                .method(wrap(method))
                 .uri(calledUri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
@@ -198,11 +198,24 @@ public class WebClientCaller implements Caller{
 
     @Override
     public <T, V> Flux<V> requestToFlux(HttpMethod method, String calledUri, String bearerToken, List<T> requestBody, Class<V> responseType) {
-        return webClient.method(method)
+        return webClient.method(wrap(method))
                 .uri(calledUri)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .bodyValue(requestBody)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
+    }
+
+    private org.springframework.http.HttpMethod wrap(HttpMethod httpMethod){
+        switch (httpMethod) {
+            case HEAD: return org.springframework.http.HttpMethod.HEAD;
+            case POST: return org.springframework.http.HttpMethod.POST;
+            case PUT: return org.springframework.http.HttpMethod.PUT;
+            case PATCH: return org.springframework.http.HttpMethod.PATCH;
+            case DELETE: return org.springframework.http.HttpMethod.DELETE;
+            case OPTIONS: return org.springframework.http.HttpMethod.OPTIONS;
+            case TRACE: return org.springframework.http.HttpMethod.TRACE;
+            default: return org.springframework.http.HttpMethod.GET;
+        }
     }
 }
