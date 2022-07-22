@@ -23,6 +23,7 @@ import reactor.core.publisher.Mono;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
@@ -172,12 +173,18 @@ public class VertxCaller implements Caller {
         String message = String.format("Rest api calling failed with error-code {} and error body: {}", response.statusCode(), v);
         log.error(message);
         if(v != null &&  v.toString() != null && !v.toString().isEmpty()){
-            if(v instanceof ErrorDetails) {
-                ErrorDetails errorDetails = (ErrorDetails) v;
-                return new EarableException(errorDetails.getHttpStatusCode(), errorDetails.getEarableErrorCode(), errorDetails.getDetails());
+            if(response.getHeader("content-type") != null && response.getHeader("content-type").equals(MediaType.APPLICATION_JSON)){
+                ErrorDetails errorDetails;
+                try {
+                    errorDetails = response.bodyAsJson(ErrorDetails.class);
+                    return new EarableException(errorDetails.getHttpStatusCode(), errorDetails.getEarableErrorCode(), errorDetails.getDetails());
+                }
+                catch(Exception ex){
+                    log.warn("Something went wrong when cast body to ErrorDetails with message {}", ex.getLocalizedMessage());
+                }
             }
-            return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), message);
+            return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), response.bodyAsString());
         }
-        return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), message);
+        return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), response.statusMessage());
     }
 }

@@ -83,11 +83,9 @@ public class QuarkusFmsCaller implements FmsCaller {
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token);
         return caller.getMono(path, String.class, headers, featureName)
-                .onErrorResume(throwable -> {
+                .doOnError(throwable -> {
                     String errorMess = String.format("[FMS_CALLER] - Validate featureName failed with message %s", throwable.getLocalizedMessage());
                     log.error(errorMess);
-                    return Mono.error(new EarableException(Response.Status.BAD_REQUEST.getStatusCode(),
-                            EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), errorMess));
                 }).doOnSuccess(s -> log.trace("[CONFIGURATION SERVICE] -> Call Feature Service successfully"));
     }
 }
