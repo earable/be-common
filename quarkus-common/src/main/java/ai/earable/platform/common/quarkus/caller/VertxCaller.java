@@ -2,6 +2,7 @@ package ai.earable.platform.common.quarkus.caller;
 
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
+import ai.earable.platform.common.data.exception.ErrorDetails;
 import ai.earable.platform.common.data.http.HttpMethod;
 import ai.earable.platform.common.utils.JsonUtil;
 import ai.earable.platform.common.utils.caller.Caller;
@@ -167,15 +168,16 @@ public class VertxCaller implements Caller {
     }
 
     private <V> EarableException convertToMyException(HttpResponse<V> response){
-        return convertToMyException(response, EarableErrorCode.INTERNAL_SERVER_ERROR);
-    }
-
-    private <V> EarableException convertToMyException(HttpResponse<V> response, EarableErrorCode earableErrorCode){
         V v = response.body();
-        log.error("Rest api calling failed with error-code {} and error body: {}", response.statusCode(), v);
+        String message = String.format("Rest api calling failed with error-code {} and error body: {}", response.statusCode(), v);
+        log.error(message);
         if(v != null &&  v.toString() != null && !v.toString().isEmpty()){
-            return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.bodyAsString());
+            if(v instanceof ErrorDetails) {
+                ErrorDetails errorDetails = (ErrorDetails) v;
+                return new EarableException(errorDetails.getHttpStatusCode(), errorDetails.getEarableErrorCode(), errorDetails.getDetails());
+            }
+            return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), message);
         }
-        return new EarableException(response.statusCode(), earableErrorCode.getErrorDetail(), response.statusMessage());
+        return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), message);
     }
 }
