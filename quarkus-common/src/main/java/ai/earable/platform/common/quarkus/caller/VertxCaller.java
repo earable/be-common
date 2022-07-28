@@ -53,7 +53,7 @@ public class VertxCaller implements Caller {
     }
 
     @Override
-    public <V> Mono<V> getMono(String uri, Class<V> responseType, String... params) {
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, String... pathParams) {
         return Mono.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
 
@@ -67,12 +67,12 @@ public class VertxCaller implements Caller {
     }
 
     @Override
-    public <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, String... params) {
+    public <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, String... pathParams) {
         return Flux.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
 
     @Override
-    public <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, Map<String, String> headers, String... params) {
+    public <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, Map<String, String> headers, String... pathParams) {
         return Flux.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
 
@@ -98,7 +98,7 @@ public class VertxCaller implements Caller {
     }
 
     @Override
-    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType, String... params) {
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType, String... pathParams) {
         return Mono.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
 
@@ -108,12 +108,12 @@ public class VertxCaller implements Caller {
     }
 
     @Override
-    public <V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params) {
+    public <V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... pathParams) {
         return Mono.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
 
     @Override
-    public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params) {
+    public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... pathParams) {
         return Flux.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
 

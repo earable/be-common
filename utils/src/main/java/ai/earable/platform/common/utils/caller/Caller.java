@@ -13,18 +13,18 @@ import java.util.Map;
 public interface Caller {
     <V> Mono<V> getMono(String uri, Class<V> responseType);
     <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout);
-    <V> Mono<V> getMono(String uri, Class<V> responseType, String... params);
+    <V> Mono<V> getMono(String uri, Class<V> responseType, String... pathParams);
     <V> Mono<V> getMono(String uri, Map<String, String> headers, Class<V> responseType, long timeout, String... pathParams);
-    <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, String... params);
+    <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, String... pathParams);
 
     <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType);
-    <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, String... params);
-    <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, Map<String, String> headers, String... params);
+    <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, String... pathParams);
+    <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType, Map<String, String> headers, String... pathParams);
 
     <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType);
-    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType, String... params);
-    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String token, T requestBody, Class<T> requestType, Class<V> responseType);
-    <V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params);
-    <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params);
-    <T, V> Flux<V> requestToFlux(HttpMethod method, String uri, String token, List<T> requestBody, Class<V> responseType);
+    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType, String... pathParams);
+    <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, T requestBody, Class<T> requestType, Class<V> responseType);
+    <V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... pathParams);
+    <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... pathParams);
+    <T, V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, List<T> requestBody, Class<V> responseType);
 }

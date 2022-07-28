@@ -70,8 +70,8 @@ public class WebClientCaller implements SpringCaller {
     }
 
     @Override
-    public <V> Mono<V> getMono(String uri, Class<V> responseType, MultiValueMap<String, String> multiValueMap, String... params) {
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(multiValueMap).encode().toUriString();
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, MultiValueMap<String, String> queryParams, String... params) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(queryParams).encode().toUriString();
         return webClient.get().uri(urlTemplate, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse -> 
@@ -129,12 +129,22 @@ public class WebClientCaller implements SpringCaller {
     }
 
     @Override
-    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, MultiValueMap<String, T> bodyMap, Class<V> responseType, String... params) {
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, MultiValueMap<String, T> multipartData, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromMultipartData(bodyMap))
+                .body(BodyInserters.fromMultipartData(multipartData))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+    }
+
+    @Override
+    public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, MultiValueMap<String, String> queryParams, Class<V> responseType) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(queryParams).encode().toUriString();
+        return webClient.method(wrap(method))
+                .uri(urlTemplate)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
     }
 
     @Override
