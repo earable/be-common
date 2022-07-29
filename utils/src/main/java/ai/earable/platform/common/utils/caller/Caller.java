@@ -12,9 +12,7 @@ import java.util.Map;
  */
 public interface Caller {
     <V> Mono<V> getMono(String uri, Class<V> responseType);
-    <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout);
     <V> Mono<V> getMono(String uri, Class<V> responseType, String... pathParams);
-    <V> Mono<V> getMono(String uri, Map<String, String> headers, Class<V> responseType, long timeout, String... pathParams);
     <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, String... pathParams);
 
     <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType);

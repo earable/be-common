@@ -6,6 +6,7 @@ import ai.earable.platform.common.data.exception.ErrorDetails;
 import ai.earable.platform.common.data.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
@@ -28,16 +29,17 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class WebClientCaller implements SpringCaller {
-    private static final long DEFAULT_TIME_OUT = 30000; //TODO: Move to config map
+    @Value(value = "${earable.internal.caller.timeout:15}")
+    private int defaultTimeout;
+    
     private final WebClient webClient;
 
     @Override
     public <V> Mono<V> getMono(String uri, Class<V> responseType) {
-        return getMono(uri, responseType, DEFAULT_TIME_OUT);
+        return getMono(uri, responseType, defaultTimeout);
     }
 
-    @Override
-    public <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout) {
+    private <V> Mono<V> getMono(String uri, Class<V> responseType, int timeout) {
         return webClient.method(org.springframework.http.HttpMethod.GET)
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
@@ -50,12 +52,12 @@ public class WebClientCaller implements SpringCaller {
         return webClient.method(org.springframework.http.HttpMethod.GET)
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
-                .exchangeToMono(clientResponse ->
-                    convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
-    @Override
-    public <V> Mono<V> getMono(String uri, Map<String, String> headers, Class<V> responseType, long timeout, String... pathParams) {
+    private <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers,
+                                int timeout, String... pathParams) {
         return webClient.method(org.springframework.http.HttpMethod.GET)
                 .uri(uri, pathParams)
                 .accept(MediaType.APPLICATION_JSON)
@@ -66,16 +68,17 @@ public class WebClientCaller implements SpringCaller {
 
     @Override
     public <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, String... params) {
-        return getMono(uri, headers, responseType, DEFAULT_TIME_OUT, params);
+        return getMono(uri, responseType, headers, defaultTimeout, params);
     }
 
     @Override
     public <V> Mono<V> getMono(String uri, Class<V> responseType, MultiValueMap<String, String> queryParams, String... params) {
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(queryParams).encode().toUriString();
-        return webClient.get().uri(urlTemplate, params)
+        return webClient.get()
+                .uri(urlTemplate, params)
                 .accept(MediaType.APPLICATION_JSON)
-                .exchangeToMono(clientResponse -> 
-                    convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -84,7 +87,8 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
-                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -94,7 +98,8 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .retrieve()
-                .bodyToFlux(responseType);
+                .bodyToFlux(responseType)
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -103,20 +108,19 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
-                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
-    public <V> Mono<V> requestToMono(HttpMethod method,
-                                     String uri,
-                                     Map<String, String> headers,
-                                     MultipartBodyBuilder multipartBodyBuilder,
-                                     Class<V> responseType) {
+    public <V> Mono<V> requestToMono(HttpMethod method, String uri, Map<String, String> headers,
+                                     MultipartBodyBuilder multipartBodyBuilder, Class<V> responseType) {
         return webClient.method(wrap(method))
                 .uri(uri)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
-                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -125,7 +129,8 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
-                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -134,27 +139,32 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(multipartData))
-                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
-    public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, MultiValueMap<String, String> queryParams, Class<V> responseType) {
+    public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken,
+                                     MultiValueMap<String, String> queryParams, Class<V> responseType) {
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(queryParams).encode().toUriString();
         return webClient.method(wrap(method))
                 .uri(urlTemplate)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
-                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
+                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
-    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, T requestBody, Class<T> requestType, Class<V> responseType) {
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, T requestBody,
+                                        Class<T> requestType, Class<V> responseType) {
         return webClient.method(wrap(method))
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .body(Mono.just(requestBody), requestType)
-                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType));
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -162,7 +172,8 @@ public class WebClientCaller implements SpringCaller {
         return webClient.method(wrap(method))
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
-                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
+                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -170,7 +181,8 @@ public class WebClientCaller implements SpringCaller {
         return webClient.method(wrap(method))
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
-                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
+                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     @Override
@@ -180,7 +192,8 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
-                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
+                .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     private <V> Mono<V> convertToMonoResponse(ClientResponse clientResponse, Class<V> result){

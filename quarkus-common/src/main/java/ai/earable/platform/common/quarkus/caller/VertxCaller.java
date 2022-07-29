@@ -18,6 +18,7 @@ import io.vertx.mutiny.ext.web.client.predicate.ErrorConverter;
 import io.vertx.mutiny.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.mutiny.ext.web.codec.BodyCodec;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -35,16 +36,17 @@ import java.util.Map;
 @ApplicationScoped
 @Slf4j
 public class VertxCaller implements Caller {
-    private static final long DEFAULT_TIME_OUT = 30000; //TODO: Move to config map
+    @ConfigProperty(name = "earable.internal.caller.timeout", defaultValue="15")
+    private int defaultTimeout;
 
     @Inject
     protected WebClient webClient;
 
     public <V> Mono<V> getMono(String uri, Class<V> responseType){
-        return getMono(uri, responseType, DEFAULT_TIME_OUT);
+        return getMono(uri, responseType, defaultTimeout);
     }
 
-    public <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout){
+    private <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout){
         HttpRequest<V> request = webClient.getAbs(uri)
             .timeout(timeout).expect(responsePredicate())
             .as(bodyCodec(responseType));
@@ -58,7 +60,7 @@ public class VertxCaller implements Caller {
     }
 
     public <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> queryParams, String... pathParams){
-        return getMono(uri, queryParams, responseType, DEFAULT_TIME_OUT, pathParams);
+        return getMono(uri, queryParams, responseType, defaultTimeout, pathParams);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class VertxCaller implements Caller {
         return Flux.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
 
-    public <V> Mono<V> getMono(String uri, Map<String, String> queryParams, Class<V> responseType, long timeout, String... pathParams){
+    private <V> Mono<V> getMono(String uri, Map<String, String> queryParams, Class<V> responseType, long timeout, String... pathParams){
         String absUri = setPathParams(uri, pathParams).toString();
         MultiMap multiMap = MultiMap.caseInsensitiveMultiMap().addAll(queryParams);
         HttpRequest<Buffer> requestBuffer = webClient.getAbs(absUri);
@@ -89,7 +91,7 @@ public class VertxCaller implements Caller {
 
     public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType){
         HttpRequest<V> request = webClient.postAbs(uri)
-            .timeout(DEFAULT_TIME_OUT).expect(responsePredicate())
+            .timeout(defaultTimeout).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.sendBuffer(convertToBuffer(requestBody, requestType))
                 .flatMap(this::responseToBody)
