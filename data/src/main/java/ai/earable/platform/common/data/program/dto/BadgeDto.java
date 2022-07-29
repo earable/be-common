@@ -19,5 +19,5 @@ public class BadgeDto {
     private String icon;
     private Double benefitValue;
     private BenefitType benefitType;
-    private LocalDate createAt;
+    private Long createAt;
 }
