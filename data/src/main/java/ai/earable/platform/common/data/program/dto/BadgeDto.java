@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BadgeDto {
-    private  String badgeId;
+    private String badgeId;
     private String title;
     private String description;
     private String icon;
