@@ -17,8 +17,14 @@ public final class UrlUtils {
     }
 
     public static void main(String[] args) {
-        String expr = "sum without (sessionId)((lifetime(SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"}[2d]) - duration_over_time((SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"} == 0)[2d],30s) + (tlast_over_time((SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"} == 0)[2d]) - tlast_over_time((SLEEP_STAGES{dayOfYear=\"194\",featureName=\"NAP\"} > 0)[2d]))) / 3600)";
-        System.out.println(encode(expr.replace("__sessionId__", "6089203057A6_1657702437000")));
-        System.out.println(encode("lifetime({__name__=\"SLEEP_STAGES\",sessionId=\"6275203547A6_1657861465000\"}[2d])"));
+        String expr = "(sum without (sessionId,dayOfYear,featureName) ((lifetime(SLEEP_STAGES{profileId=\"...\",weekOfYear=\"...\"} [__weekWindow__]) - duration_over_time((SLEEP_STAGES{profileId=\"...\",weekOfYear=\"...\"} == 0)[__weekWindow__],30s) + (tlast_over_time((SLEEP_STAGES{profileId=\"...\",weekOfYear=\"...\"} == 0)[__weekWindow__]) - tlast_over_time((SLEEP_STAGES{profileId=\"...\",weekOfYear=\"...\"} > 0)[__weekWindow__]))) / 3600) / count(SLEEP_STAGES{profileId=\"...\",weekOfYear=\"...\"} [__weekWindow__]))";
+
+        expr = expr.replaceAll("profileId=\"...\"", "profileId=\"316e0ecb-2c8e-437c-8f27-3ffe7c27b47f\"")
+            .replaceAll("dayOfYear=\"...\"", "dayOfYear=\"194\"")
+            .replaceAll("featureName=\"...\"", "featureName=\"NAP\"")
+            .replaceAll("__dayWindow__", "10d")
+                .replaceAll("__weekWindow__", "20d")
+                .replaceAll("weekOfYear=\"...\"", "weekOfYear=\"29\"");
+        System.out.println(encode(expr));
     }
 }
