@@ -1,4 +1,4 @@
-package ai.earable.platform.common.quarkus.db;
+package ai.earable.platform.common.webflux.db;
 
 import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
