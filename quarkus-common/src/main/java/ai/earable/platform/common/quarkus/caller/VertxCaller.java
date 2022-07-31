@@ -91,7 +91,7 @@ public class VertxCaller implements Caller {
 
     public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, T requestBody, Class<T> requestType, Class<V> responseType){
         HttpRequest<V> request = webClient.postAbs(uri)
-            .timeout(defaultTimeout).expect(responsePredicate())
+            .timeout(defaultTimeout* 1000L).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.sendBuffer(convertToBuffer(requestBody, requestType))
                 .flatMap(this::responseToBody)
