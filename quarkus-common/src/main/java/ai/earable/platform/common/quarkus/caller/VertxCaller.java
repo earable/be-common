@@ -48,7 +48,7 @@ public class VertxCaller implements Caller {
 
     private <V> Mono<V> getMono(String uri, Class<V> responseType, long timeout){
         HttpRequest<V> request = webClient.getAbs(uri)
-            .timeout(timeout).expect(responsePredicate())
+            .timeout(timeout*1000L).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.send().flatMap(this::responseToBody).convert().with(UniReactorConverters.toMono())
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
@@ -83,7 +83,7 @@ public class VertxCaller implements Caller {
         MultiMap multiMap = MultiMap.caseInsensitiveMultiMap().addAll(queryParams);
         HttpRequest<Buffer> requestBuffer = webClient.getAbs(absUri);
         HttpRequest<V> request = setQueryParams(requestBuffer, queryParams).putHeaders(multiMap)
-            .timeout(timeout).expect(responsePredicate())
+            .timeout(timeout*1000L).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.send().flatMap(this::responseToBody).convert().with(UniReactorConverters.toMono())
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
