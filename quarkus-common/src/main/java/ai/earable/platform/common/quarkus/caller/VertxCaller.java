@@ -21,12 +21,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +41,12 @@ import java.util.Map;
 public class VertxCaller implements Caller {
     @ConfigProperty(name = "earable.internal.caller.timeout", defaultValue="15")
     private int defaultTimeout;
+
+    @ConfigProperty(name = "earable.internal.caller.retry.times", defaultValue="3")
+    private int defaultRetryTimes;
+
+    @ConfigProperty(name = "earable.internal.caller.retry.delay", defaultValue="1")
+    private int defaultRetryDelay;
 
     @Inject
     protected WebClient webClient;
@@ -51,6 +60,7 @@ public class VertxCaller implements Caller {
             .timeout(timeout*1000L).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.send().flatMap(this::responseToBody).convert().with(UniReactorConverters.toMono())
+                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay))
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
     }
 
@@ -86,6 +96,7 @@ public class VertxCaller implements Caller {
             .timeout(timeout*1000L).expect(responsePredicate())
             .as(bodyCodec(responseType));
         return request.send().flatMap(this::responseToBody).convert().with(UniReactorConverters.toMono())
+                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay))
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
     }
 
@@ -96,6 +107,7 @@ public class VertxCaller implements Caller {
         return request.sendBuffer(convertToBuffer(requestBody, requestType))
                 .flatMap(this::responseToBody)
                 .convert().with(UniReactorConverters.toMono())
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay))
                 .doOnError(throwable -> log.error(throwable.getLocalizedMessage()));
     }
 
@@ -188,5 +200,14 @@ public class VertxCaller implements Caller {
             return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), response.bodyAsString());
         }
         return new EarableException(response.statusCode(), EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), response.statusMessage());
+    }
+
+    private static Retry configRetry(HttpMethod httpMethod, String uri, int numberOfRetries, int retryDelayInSecond){
+        return Retry.fixedDelay(numberOfRetries, Duration.ofSeconds(retryDelayInSecond))
+                .filter(e -> e.getLocalizedMessage().toLowerCase().contains("connection reset by peer") ||
+                    e instanceof IOException || e.getLocalizedMessage().toLowerCase().contains("connection refused"))
+                .doAfterRetry(retrySignal -> log.warn("Retry {} request to {} in {}/{} because of {}", httpMethod, uri,
+                    retrySignal.totalRetriesInARow()+1, numberOfRetries, retrySignal.failure().getLocalizedMessage()))
+                .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> retrySignal.failure()));
     }
 }

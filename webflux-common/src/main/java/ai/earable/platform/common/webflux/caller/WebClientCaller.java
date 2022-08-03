@@ -17,7 +17,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,13 @@ import java.util.Map;
 public class WebClientCaller implements SpringCaller {
     @Value(value = "${earable.internal.caller.timeout:15}")
     private int defaultTimeout;
-    
+
+    @Value(value = "${earable.internal.caller.retry.times:3}")
+    private int defaultRetryTimes;
+
+    @Value(value = "${earable.internal.caller.retry.delay:1}")
+    private int defaultRetryDelay;
+
     private final WebClient webClient;
 
     @Override
@@ -44,7 +52,9 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(timeout));
+                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay))
+                .timeout(Duration.ofSeconds(timeout))
+                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -53,7 +63,8 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     private <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers,
@@ -63,7 +74,8 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(timeout));
+                .timeout(Duration.ofSeconds(timeout))
+                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -78,7 +90,8 @@ public class WebClientCaller implements SpringCaller {
                 .uri(urlTemplate, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -88,7 +101,8 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -99,7 +113,8 @@ public class WebClientCaller implements SpringCaller {
                 .header("Authorization", bearerToken)
                 .retrieve()
                 .bodyToFlux(responseType)
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -109,7 +124,8 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -130,7 +146,8 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(requestBody), requestType)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -152,7 +169,8 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", bearerToken)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -164,7 +182,8 @@ public class WebClientCaller implements SpringCaller {
                 .header("Authorization", bearerToken)
                 .body(Mono.just(requestBody), requestType)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -173,7 +192,8 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -182,7 +202,8 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
@@ -193,7 +214,8 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> headers.forEach(httpHeaders::set))
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     private <V> Mono<V> convertToMonoResponse(ClientResponse clientResponse, Class<V> result){
@@ -247,5 +269,14 @@ public class WebClientCaller implements SpringCaller {
             case TRACE: return org.springframework.http.HttpMethod.TRACE;
             default: return org.springframework.http.HttpMethod.GET;
         }
+    }
+
+    private static Retry configRetry(HttpMethod httpMethod, String uri, int numberOfRetries, int retryDelayInSecond){
+        return Retry.fixedDelay(numberOfRetries, Duration.ofSeconds(retryDelayInSecond))
+                .filter(e -> e.getLocalizedMessage().toLowerCase().contains("connection reset by peer") ||
+                    e instanceof IOException || e.getLocalizedMessage().toLowerCase().contains("connection refused"))
+                .doAfterRetry(retrySignal -> log.warn("Retry {} request to {} in {}/{} because of {}", httpMethod, uri,
+                    retrySignal.totalRetriesInARow()+1, numberOfRetries, retrySignal.failure().getLocalizedMessage()))
+                .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> retrySignal.failure()));
     }
 }
