@@ -4,6 +4,7 @@ import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.exception.ErrorDetails;
 import ai.earable.platform.common.data.http.HttpMethod;
+import io.netty.handler.timeout.TimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,9 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -261,22 +264,32 @@ public class WebClientCaller implements SpringCaller {
     private org.springframework.http.HttpMethod wrap(HttpMethod httpMethod){
         switch (httpMethod) {
             case HEAD: return org.springframework.http.HttpMethod.HEAD;
+            case GET: return org.springframework.http.HttpMethod.GET;
             case POST: return org.springframework.http.HttpMethod.POST;
             case PUT: return org.springframework.http.HttpMethod.PUT;
             case PATCH: return org.springframework.http.HttpMethod.PATCH;
             case DELETE: return org.springframework.http.HttpMethod.DELETE;
-            case OPTIONS: return org.springframework.http.HttpMethod.OPTIONS;
             case TRACE: return org.springframework.http.HttpMethod.TRACE;
-            default: return org.springframework.http.HttpMethod.GET;
+            default: return org.springframework.http.HttpMethod.OPTIONS;
         }
     }
 
     private static Retry configRetry(HttpMethod httpMethod, String uri, int numberOfRetries, int retryDelayInSecond){
         return Retry.fixedDelay(numberOfRetries, Duration.ofSeconds(retryDelayInSecond))
-                .filter(e -> e.getLocalizedMessage().toLowerCase().contains("connection reset by peer") ||
-                    e instanceof IOException || e.getLocalizedMessage().toLowerCase().contains("connection refused"))
+                .filter(WebClientCaller::needToRetry)
                 .doAfterRetry(retrySignal -> log.warn("Retry {} request to {} in {}/{} because of {}", httpMethod, uri,
                     retrySignal.totalRetriesInARow()+1, numberOfRetries, retrySignal.failure().getLocalizedMessage()))
                 .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> retrySignal.failure()));
+    }
+
+    private static boolean needToRetry(Throwable throwable){
+        if(throwable.getCause() instanceof TimeoutException)
+            return true;
+        final String errorMess = throwable.getLocalizedMessage();
+        if(errorMess != null){
+            return errorMess.toLowerCase().contains("connection reset by peer")
+                    || errorMess.toLowerCase().contains("connection refused");
+        }
+        return false;
     }
 }

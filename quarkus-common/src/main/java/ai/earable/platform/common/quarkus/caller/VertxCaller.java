@@ -7,6 +7,7 @@ import ai.earable.platform.common.data.http.HttpMethod;
 import ai.earable.platform.common.utils.JsonUtil;
 import ai.earable.platform.common.utils.caller.Caller;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.netty.handler.timeout.TimeoutException;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.converters.uni.UniReactorConverters;
 import io.vertx.mutiny.core.MultiMap;
@@ -204,10 +205,20 @@ public class VertxCaller implements Caller {
 
     private static Retry configRetry(HttpMethod httpMethod, String uri, int numberOfRetries, int retryDelayInSecond){
         return Retry.fixedDelay(numberOfRetries, Duration.ofSeconds(retryDelayInSecond))
-                .filter(e -> e.getLocalizedMessage().toLowerCase().contains("connection reset by peer") ||
-                    e instanceof IOException || e.getLocalizedMessage().toLowerCase().contains("connection refused"))
+                .filter(VertxCaller::needToRetry)
                 .doAfterRetry(retrySignal -> log.warn("Retry {} request to {} in {}/{} because of {}", httpMethod, uri,
                     retrySignal.totalRetriesInARow()+1, numberOfRetries, retrySignal.failure().getLocalizedMessage()))
                 .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> retrySignal.failure()));
+    }
+
+    private static boolean needToRetry(Throwable throwable){
+        if(throwable.getCause() instanceof TimeoutException)
+            return true;
+        final String errorMess = throwable.getLocalizedMessage();
+        if(errorMess != null){
+            return errorMess.toLowerCase().contains("connection reset by peer")
+                    || errorMess.toLowerCase().contains("connection refused");
+        }
+        return false;
     }
 }
