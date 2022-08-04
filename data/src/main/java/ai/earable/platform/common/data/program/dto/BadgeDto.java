@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.program.dto;
 
 import ai.earable.platform.common.data.program.BenefitType;
+import ai.earable.platform.common.data.program.SessionPoint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,7 @@ public class BadgeDto {
     private String icon;
     private Double benefitValue;
     private BenefitType benefitType;
+    private Integer benefitEffectivePeriod;
+    private SessionPoint sessionPoint;
     private Long createAt;
 }
