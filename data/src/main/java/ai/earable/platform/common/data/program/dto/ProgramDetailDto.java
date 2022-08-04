@@ -22,7 +22,7 @@ public class ProgramDetailDto {
     private String name;
     private ProgramRepeatType programRepeatType;
     private ProgramStatus programStatus;
-    private String banner;
+    private String icon;
     private List<BadgeDto> badge;
     private Integer requiredPoint;
     private ProgramType programType;
