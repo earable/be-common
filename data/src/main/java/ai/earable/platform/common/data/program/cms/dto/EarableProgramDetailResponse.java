@@ -3,6 +3,9 @@ package ai.earable.platform.common.data.program.cms.dto;
 import ai.earable.platform.common.data.program.cms.enums.RepeatType;
 import ai.earable.platform.common.data.program.cms.enums.ProgramType;
 import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.cms.model.BadgeReceiverMapper;
+import ai.earable.platform.common.data.program.cms.model.EarableReward;
+import ai.earable.platform.common.data.program.cms.model.EarableTask;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +27,24 @@ public class EarableProgramDetailResponse {
     private ProgramStatus status;
     private String icon;
     private Integer requiredPoint;
+    private String information;
     private ProgramType programType;
-    private List<EarableBadgeResponse> badge;
+    private List<BadgeReceiverMapper> badgeReceiverMappers;
+    private List<EarableBadgeDetailResponse> earableBadgeDetailResponses;
+    private List<EarableReward> earableRewards;
+    private List<EarableTask> earableTasks;
     private String shortDescription;
     private Integer participant;
+    private String createBy;
+    private Long createAt;
+
+    /**
+     * Used for CONTEST only
+     */
+    private Long startDate;
+
+    /**
+     * Used for CONTEST only
+     */
+    private Long endDate;
 }

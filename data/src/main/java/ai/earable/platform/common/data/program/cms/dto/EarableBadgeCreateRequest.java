@@ -6,11 +6,9 @@ import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.program.cms.enums.BenefitType;
 import ai.earable.platform.common.data.program.cms.enums.SessionPoint;
 import lombok.*;
-import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
 @Data
 @Builder
-@UserDefinedType
 @NoArgsConstructor
 @AllArgsConstructor
 @With

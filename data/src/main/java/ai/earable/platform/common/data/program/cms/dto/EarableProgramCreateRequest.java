@@ -3,8 +3,9 @@ package ai.earable.platform.common.data.program.cms.dto;
 import ai.earable.platform.common.data.ValidationUtils;
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
+import ai.earable.platform.common.data.program.cms.enums.ProgramType;
 import ai.earable.platform.common.data.program.cms.enums.RepeatType;
-import ai.earable.platform.common.data.program.cms.model.BadgeProgram;
+import ai.earable.platform.common.data.program.cms.model.BadgeReceiverMapper;
 import ai.earable.platform.common.data.program.cms.model.EarableReward;
 import ai.earable.platform.common.data.program.cms.model.EarableTask;
 import lombok.*;
@@ -16,17 +17,31 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class EarableChallengeCreateRequest {
+public class EarableProgramCreateRequest {
     private String name;
+    private ProgramType programType;
     private RepeatType type;
     private String icon;
     private Integer duration;
     private String information;
     private String shortDescription;
     private Integer requiredPoint;
-    private List<BadgeProgram> earableBadges;
+    private List<BadgeReceiverMapper> earableBadges;
     private List<EarableReward> earableRewards;
     private List<EarableTask> earableTasks;
+
+    /**
+     * Used for CONTEST only
+     * TODO: LongNH validate this
+     */
+    private Long startDate;
+
+    /**
+     * Used for CONTEST only
+     * TODO: LongNH validate this
+     */
+    private Long endDate;
+
 
     public void validate(){
         ValidationUtils.checkBlank("name",this.name);

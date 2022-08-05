@@ -1,6 +1,5 @@
 package ai.earable.platform.common.data.program.cms.model;
 
-import ai.earable.platform.common.data.program.cms.enums.Receiver;
 import ai.earable.platform.common.data.program.cms.enums.BenefitType;
 import ai.earable.platform.common.data.program.cms.enums.SessionPoint;
 import lombok.*;
@@ -36,7 +35,6 @@ public class EarableBadge implements Serializable {
     private SessionPoint sessionPoint;
     @Column("benefit_effective_period")
     private Integer benefitEffectivePeriod;
-    private Receiver receiver;
     private Long createAt;
     private List<UUID> programId;
 }
