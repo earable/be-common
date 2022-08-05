@@ -1,7 +1,7 @@
 package ai.earable.platform.common.data.program.cms.dto;
 
-import ai.earable.platform.common.data.program.cms.enums.ProgramRepeatType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.enums.ProgramRepeatType;
+import ai.earable.platform.common.data.program.enums.ProgramStatus;
 import ai.earable.platform.common.data.program.cms.model.BadgeProgram;
 import ai.earable.platform.common.data.program.cms.model.EarableReward;
 import ai.earable.platform.common.data.program.cms.model.EarableTask;

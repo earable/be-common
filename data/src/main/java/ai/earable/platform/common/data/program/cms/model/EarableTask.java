@@ -1,8 +1,8 @@
 package ai.earable.platform.common.data.program.cms.model;
 
-import ai.earable.platform.common.data.program.cms.enums.ActivityType;
-import ai.earable.platform.common.data.program.cms.enums.FrequencyTimeType;
-import ai.earable.platform.common.data.program.cms.enums.PrepositionTime;
+import ai.earable.platform.common.data.program.enums.ActivityType;
+import ai.earable.platform.common.data.program.enums.FrequencyTimeType;
+import ai.earable.platform.common.data.program.enums.PrepositionTime;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;

@@ -3,7 +3,7 @@ package ai.earable.platform.common.data.program.cms.dto;
 import ai.earable.platform.common.data.ValidationUtils;
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
-import ai.earable.platform.common.data.program.cms.enums.ProgramRepeatType;
+import ai.earable.platform.common.data.program.enums.ProgramRepeatType;
 import ai.earable.platform.common.data.program.cms.model.BadgeProgram;
 import ai.earable.platform.common.data.program.cms.model.EarableReward;
 import ai.earable.platform.common.data.program.cms.model.EarableTask;

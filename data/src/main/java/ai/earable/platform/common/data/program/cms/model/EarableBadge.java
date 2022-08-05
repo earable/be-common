@@ -1,8 +1,8 @@
 package ai.earable.platform.common.data.program.cms.model;
 
-import ai.earable.platform.common.data.program.cms.enums.Receiver;
-import ai.earable.platform.common.data.program.cms.enums.BenefitType;
-import ai.earable.platform.common.data.program.cms.enums.SessionPoint;
+import ai.earable.platform.common.data.program.enums.Receiver;
+import ai.earable.platform.common.data.program.enums.BenefitType;
+import ai.earable.platform.common.data.program.enums.SessionPoint;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;

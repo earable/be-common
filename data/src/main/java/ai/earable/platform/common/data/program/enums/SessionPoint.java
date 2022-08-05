@@ -1,4 +1,4 @@
-package ai.earable.platform.common.data.program.cms.enums;
+package ai.earable.platform.common.data.program.enums;
 
 public enum SessionPoint {
     FOCUS,

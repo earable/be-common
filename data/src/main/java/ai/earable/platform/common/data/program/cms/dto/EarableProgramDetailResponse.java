@@ -1,8 +1,8 @@
 package ai.earable.platform.common.data.program.cms.dto;
 
-import ai.earable.platform.common.data.program.cms.enums.ProgramRepeatType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.enums.ProgramRepeatType;
+import ai.earable.platform.common.data.program.enums.ProgramType;
+import ai.earable.platform.common.data.program.enums.ProgramStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
