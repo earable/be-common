@@ -21,4 +21,6 @@ public class EarableProgramDetail {
     private ProgramStatus status;
     private ProgramType programType;
     private String shortDescription;
+    private Integer participant;
+    private String icon;
 }

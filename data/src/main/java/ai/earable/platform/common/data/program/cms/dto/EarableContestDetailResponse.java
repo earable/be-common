@@ -26,6 +26,7 @@ public class EarableContestDetailResponse {
     private String shortDescription;
     private Integer requiredPoint;
     private ProgramStatus status;
+    private Integer participant;
     private List<BadgeProgram> earableBadges;
     private List<EarableReward> earableRewards;
     private List<EarableTask> earableTasks;
