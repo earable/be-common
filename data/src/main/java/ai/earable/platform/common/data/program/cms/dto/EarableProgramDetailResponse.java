@@ -21,9 +21,11 @@ public class EarableProgramDetailResponse {
     private UUID id;
     private String name;
     private RepeatType repeatType;
-    private ProgramStatus programStatus;
+    private ProgramStatus status;
     private String icon;
-    private List<EarableBadgeResponse> badge;
     private Integer requiredPoint;
     private ProgramType programType;
+    private List<EarableBadgeResponse> badge;
+    private String shortDescription;
+    private Integer participant;
 }
