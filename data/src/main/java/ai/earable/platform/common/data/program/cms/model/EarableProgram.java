@@ -1,8 +1,8 @@
 package ai.earable.platform.common.data.program.cms.model;
 
-import ai.earable.platform.common.data.program.enums.ProgramRepeatType;
-import ai.earable.platform.common.data.program.enums.ProgramStatus;
-import ai.earable.platform.common.data.program.enums.ProgramType;
+import ai.earable.platform.common.data.program.cms.enums.RepeatType;
+import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.cms.enums.ProgramType;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
@@ -28,7 +28,7 @@ public class EarableProgram implements Serializable {
     private String name;
     private String icon;
     @Column("type")
-    private ProgramRepeatType type;
+    private RepeatType type;
     private Integer duration;
     private String information;
     @Column("short_description")

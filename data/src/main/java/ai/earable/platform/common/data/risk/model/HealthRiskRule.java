@@ -1,6 +1,6 @@
 package ai.earable.platform.common.data.risk.model;
 
-import ai.earable.platform.common.data.risk.enums.HealthRiskStatus;
+import ai.earable.platform.common.data.risk.enums.HealthRiskSeverity;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class HealthRiskRule {
-    private HealthRiskStatus status;
+    private HealthRiskSeverity status;
     @Column("advice_explanation")
     private String adviceExplanation;
     @Column("advice_content")
