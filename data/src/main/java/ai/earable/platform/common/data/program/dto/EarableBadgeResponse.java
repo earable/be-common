@@ -1,19 +1,17 @@
 package ai.earable.platform.common.data.program.dto;
 
-import ai.earable.platform.common.data.program.BenefitType;
-import ai.earable.platform.common.data.program.SessionPoint;
+import ai.earable.platform.common.data.program.enums.BenefitType;
+import ai.earable.platform.common.data.program.enums.SessionPoint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BadgeDto {
+public class EarableBadgeResponse {
     private String badgeId;
     private String title;
     private String description;

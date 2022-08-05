@@ -1,4 +1,4 @@
-package ai.earable.platform.common.utils;
+package ai.earable.platform.common.data;
 
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;

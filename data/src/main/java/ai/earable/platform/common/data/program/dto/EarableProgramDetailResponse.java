@@ -1,8 +1,8 @@
 package ai.earable.platform.common.data.program.dto;
 
-import ai.earable.platform.common.data.program.ProgramType;
-import ai.earable.platform.common.data.program.ProgramStatus;
-import ai.earable.platform.common.data.program.ProgramRepeatType;
+import ai.earable.platform.common.data.program.enums.ProgramType;
+import ai.earable.platform.common.data.program.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.enums.ProgramRepeatType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,13 +17,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class ProgramDetailDto {
+public class EarableProgramDetailResponse {
     private UUID id;
     private String name;
     private ProgramRepeatType programRepeatType;
     private ProgramStatus programStatus;
     private String icon;
-    private List<BadgeDto> badge;
+    private List<EarableBadgeResponse> badge;
     private Integer requiredPoint;
     private ProgramType programType;
 }

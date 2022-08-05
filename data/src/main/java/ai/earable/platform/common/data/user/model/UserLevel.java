@@ -1,4 +1,4 @@
-package ai.earable.platform.common.data.user;
+package ai.earable.platform.common.data.user.model;
 
 /**
  * @author nhunh
