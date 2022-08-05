@@ -3,6 +3,7 @@ package ai.earable.platform.common.data.program.cms.dto;
 import ai.earable.platform.common.data.ValidationUtils;
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
+import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
 import ai.earable.platform.common.data.program.cms.enums.ProgramType;
 import ai.earable.platform.common.data.program.cms.enums.RepeatType;
 import ai.earable.platform.common.data.program.cms.model.BadgeReceiverMapper;
@@ -26,7 +27,7 @@ public class EarableProgramCreateRequest {
     private String information;
     private String shortDescription;
     private Integer requiredPoint;
-    private List<BadgeReceiverMapper> earableBadges;
+    private List<BadgeReceiverMapper> badgeReceiverMappers;
     private List<EarableReward> earableRewards;
     private List<EarableTask> earableTasks;
 
