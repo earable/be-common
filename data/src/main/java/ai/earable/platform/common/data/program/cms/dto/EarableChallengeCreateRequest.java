@@ -3,7 +3,7 @@ package ai.earable.platform.common.data.program.cms.dto;
 import ai.earable.platform.common.data.ValidationUtils;
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
-import ai.earable.platform.common.data.program.enums.ProgramRepeatType;
+import ai.earable.platform.common.data.program.cms.enums.RepeatType;
 import ai.earable.platform.common.data.program.cms.model.BadgeProgram;
 import ai.earable.platform.common.data.program.cms.model.EarableReward;
 import ai.earable.platform.common.data.program.cms.model.EarableTask;
@@ -18,7 +18,7 @@ import java.util.List;
 @ToString
 public class EarableChallengeCreateRequest {
     private String name;
-    private ProgramRepeatType type;
+    private RepeatType type;
     private String icon;
     private Integer duration;
     private String information;
@@ -48,23 +48,23 @@ public class EarableChallengeCreateRequest {
         if (this.requiredPoint <0)
             throw new EarableException(400, EarableErrorCode.PARAM_INVALID,"requiredPoint");
 
-        if (type.equals(ProgramRepeatType.DAILY)){
+        if (type.equals(RepeatType.DAILY)){
             if (null != this.duration && this.duration>1)
                 throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"duration");
 
-        }else if(type.equals(ProgramRepeatType.WEEKLY)){
+        }else if(type.equals(RepeatType.WEEKLY)){
             if (null != this.duration && this.duration>7)
                 throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"duration");
 
-        } else if (type.equals(ProgramRepeatType.MONTHLY)) {
+        } else if (type.equals(RepeatType.MONTHLY)) {
             if (null != this.duration && this.duration>30)
                 throw new EarableException(400, EarableErrorCode.PARAM_INVALID,"duration");
 
-        } else if (type.equals(ProgramRepeatType.QUARTERLY)) {
+        } else if (type.equals(RepeatType.QUARTERLY)) {
             if (null != this.duration && this.duration>90)
                 throw new EarableException(400, EarableErrorCode.PARAM_INVALID,"duration");
 
-        } else if (type.equals(ProgramRepeatType.YEARLY)) {
+        } else if (type.equals(RepeatType.YEARLY)) {
             if (null != this.duration && this.duration>365)
                 throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"duration");
         }

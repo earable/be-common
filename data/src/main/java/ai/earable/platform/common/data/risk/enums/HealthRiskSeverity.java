@@ -1,6 +1,6 @@
 package ai.earable.platform.common.data.risk.enums;
 
-public enum HealthRiskStatus {
+public enum HealthRiskSeverity {
     NORMAL,
     WARNING,
     EMERGENCY
