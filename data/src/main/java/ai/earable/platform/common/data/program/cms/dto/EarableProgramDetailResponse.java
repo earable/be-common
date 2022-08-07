@@ -23,14 +23,15 @@ import java.util.UUID;
 public class EarableProgramDetailResponse {
     private UUID id;
     private String name;
-    private RepeatType repeatType;
+    private RepeatType type;
+    private Integer duration;
     private ProgramStatus status;
     private String icon;
     private Integer requiredPoint;
     private String information;
     private ProgramType programType;
     private List<BadgeReceiverMapper> badgeReceiverMappers;
-    private List<EarableBadgeDetailResponse> earableBadgeDetailResponses;
+    private List<EarableBadgeDetailResponse> earableBadges;
     private List<EarableReward> earableRewards;
     private List<EarableTask> earableTasks;
     private String shortDescription;

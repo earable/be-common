@@ -22,17 +22,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class UserBadge extends BaseEntity {
-    @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private UUID id;
-    @Column("user_id")
+    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     private UUID userId;
-    @Column("program_id")
-    private UUID programId;
-    @Column("badge_id")
+    @PrimaryKeyColumn(name = "badge_id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private String badgeId;
     private UserBadgeStatus status;
-    @Column("program_type")
-    private ProgramType programType;
 
     private String title;
     private String description;
