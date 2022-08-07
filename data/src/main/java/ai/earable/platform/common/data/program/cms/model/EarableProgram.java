@@ -43,7 +43,7 @@ public class EarableProgram implements Serializable {
     private Long endDate;
     private String createBy;
     private Long createAt;
-    private List<BadgeReceiverMapper> badgeReceiverMappers;
+    private List<EarableProgramBadgeInfo> earableProgramBadgeInfos;
     private List<EarableReward> earableRewards;
     private List<EarableTask> earableTasks;
 }
