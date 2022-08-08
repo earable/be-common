@@ -17,8 +17,8 @@ import org.springframework.data.cassandra.core.mapping.Column;
 public class Program {
     protected String name;
     protected String icon;
-    @Column("type")
-    protected RepeatType type;
+    @Column("repeat_type")
+    protected RepeatType repeatType;
     protected Integer duration;
     protected String information;
     @Column("short_description")
@@ -28,9 +28,9 @@ public class Program {
     protected ProgramStatus status;
     protected ProgramType programType;
     @Column("start_date")
-    protected Long startDate;
+    protected Long startDate; //Used for CONTEST only
     @Column("end_date")
-    protected Long endDate;
+    protected Long endDate; //Used for CONTEST only
     protected String createBy;
     protected Long createAt;
 }

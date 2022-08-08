@@ -1,16 +1,10 @@
 package ai.earable.platform.common.data.program.cms.dto;
 
-import ai.earable.platform.common.data.program.common.enums.RepeatType;
-import ai.earable.platform.common.data.program.common.enums.ProgramType;
-import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
-import ai.earable.platform.common.data.program.cms.model.*;
-import ai.earable.platform.common.data.program.common.model.Badge;
+import ai.earable.platform.common.data.program.cms.model.EarableProgramBadgeInfo;
+import ai.earable.platform.common.data.program.cms.model.EarableTask;
+import ai.earable.platform.common.data.program.common.model.Program;
 import ai.earable.platform.common.data.program.common.model.Reward;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,31 +14,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class EarableProgramDetailResponse {
-    private UUID id;
-    private String name;
-    private RepeatType repeatType;
-    private Integer duration;
-    private ProgramStatus status;
-    private String icon;
-    private Integer requiredPoint;
-    private String information;
-    private ProgramType programType;
-    private List<EarableBadge> earableBadges;
+public class EarableProgramDetailResponse extends Program {
+    private UUID programId;
+    private List<EarableProgramBadgeInfo> earableProgramBadgeInfos;
     private List<Reward> rewards;
     private List<EarableTask> earableTasks;
-    private String shortDescription;
     private Integer participant;
-    private String createBy;
-    private Long createAt;
-
-    /**
-     * Used for CONTEST only
-     */
-    private Long startDate;
-
-    /**
-     * Used for CONTEST only
-     */
-    private Long endDate;
 }

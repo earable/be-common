@@ -22,7 +22,7 @@ import java.util.UUID;
 @With
 public class EarableProgram extends Program {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private UUID id;
+    private UUID programId;
 
     @Column("badge_info_list")
     private List<EarableProgramBadgeInfo> earableProgramBadgeInfos;
