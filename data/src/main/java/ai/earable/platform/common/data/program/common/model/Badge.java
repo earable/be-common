@@ -16,8 +16,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Badge implements Serializable {
-    @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    protected String badgeId;
     protected String title;
     protected String description;
     protected String icon;

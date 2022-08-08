@@ -11,5 +11,6 @@ import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 @AllArgsConstructor
 @With
 public class UserProgramBadgeInfo extends Badge {
+    private String badgeId;
     private UserBadgeStatus status;
 }

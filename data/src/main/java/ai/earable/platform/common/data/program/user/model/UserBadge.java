@@ -38,10 +38,4 @@ public class UserBadge extends Badge {
     private ProgramType programType;
 
     private UserBadgeStatus status;
-
-    @Column("badge_id")
-    @Override
-    public void setBadgeId(String badgeId){
-        this.badgeId = badgeId;
-    }
 }

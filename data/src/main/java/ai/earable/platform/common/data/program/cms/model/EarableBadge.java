@@ -20,12 +20,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class EarableBadge extends Badge {
+    @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
+    private String badgeId;
+
     @Column("program_ids")
     private List<UUID> programIds;
-
-
-    @Override
-    public void setBadgeId(String badgeId){
-        this.badgeId = badgeId;
-    }
 }
