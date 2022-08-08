@@ -18,7 +18,7 @@ public class Program {
     protected String icon;
     @Column("repeat_type")
     protected RepeatType repeatType;
-    protected Integer duration;
+    protected Integer duration; //Used for CHALLENGE only
     protected String information;
     @Column("short_description")
     protected String shortDescription;
