@@ -29,6 +29,6 @@ public class Program {
     protected Long startDate; //Used for CONTEST only
     @Column("end_date")
     protected Long endDate; //Used for CONTEST only
-    protected String createBy;
-    protected Long createAt;
+    protected String createdBy;
+    protected Long createdAt;
 }
