@@ -3,6 +3,7 @@ package ai.earable.platform.common.data.program.cms.model;
 import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
 import ai.earable.platform.common.data.program.common.enums.ProgramType;
 import ai.earable.platform.common.data.program.common.enums.RepeatType;
+import ai.earable.platform.common.data.program.common.model.Reward;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
@@ -44,6 +45,6 @@ public class EarableProgram implements Serializable {
     private String createBy;
     private Long createAt;
     private List<EarableProgramBadgeInfo> earableProgramBadgeInfos;
-    private List<EarableReward> earableRewards;
+    private List<Reward> rewards;
     private List<EarableTask> earableTasks;
 }

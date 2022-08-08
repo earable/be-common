@@ -5,6 +5,7 @@ import ai.earable.platform.common.data.program.common.enums.ProgramType;
 import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
 import ai.earable.platform.common.data.program.cms.model.*;
 import ai.earable.platform.common.data.program.common.model.Badge;
+import ai.earable.platform.common.data.program.common.model.Reward;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class EarableProgramDetailResponse {
     private String information;
     private ProgramType programType;
     private List<Badge> badges;
-    private List<EarableReward> earableRewards;
+    private List<Reward> rewards;
     private List<EarableTask> earableTasks;
     private String shortDescription;
     private Integer participant;

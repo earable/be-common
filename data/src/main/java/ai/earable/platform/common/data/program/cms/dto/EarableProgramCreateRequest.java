@@ -6,7 +6,7 @@ import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.program.common.enums.ProgramType;
 import ai.earable.platform.common.data.program.common.enums.RepeatType;
 import ai.earable.platform.common.data.program.cms.model.EarableProgramBadgeInfo;
-import ai.earable.platform.common.data.program.cms.model.EarableReward;
+import ai.earable.platform.common.data.program.common.model.Reward;
 import ai.earable.platform.common.data.program.cms.model.EarableTask;
 import lombok.*;
 
@@ -27,7 +27,7 @@ public class EarableProgramCreateRequest {
     private String shortDescription;
     private Integer requiredPoint;
     private List<EarableProgramBadgeInfo> earableProgramBadgeInfos;
-    private List<EarableReward> earableRewards;
+    private List<Reward> rewards;
     private List<EarableTask> earableTasks;
 
     /**
@@ -50,7 +50,7 @@ public class EarableProgramCreateRequest {
         ValidationUtils.checkBlank("information",this.information);
         ValidationUtils.checkBlank("shortDescription",this.shortDescription);
         ValidationUtils.checkNull("requiredPoint",this.requiredPoint);
-        ValidationUtils.checkNull("earableRewards",this.earableRewards);
+        ValidationUtils.checkNull("earableRewards",this.rewards);
         //ValidationUtils.checkNull("earableTasks",this.earableTasks);
 
 //        if (this.earableTasks.stream().map(EarableTask::getId)==null) {

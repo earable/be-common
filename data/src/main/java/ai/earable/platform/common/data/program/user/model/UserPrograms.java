@@ -3,7 +3,7 @@ package ai.earable.platform.common.data.program.user.model;
 import ai.earable.platform.common.data.cassandra.BaseEntity;
 import ai.earable.platform.common.data.program.common.enums.ProgramType;
 import ai.earable.platform.common.data.program.common.enums.RepeatType;
-import ai.earable.platform.common.data.program.cms.model.EarableReward;
+import ai.earable.platform.common.data.program.common.model.Reward;
 import ai.earable.platform.common.data.program.user.enums.UserProgramState;
 import ai.earable.platform.common.data.program.user.enums.UserProgramStatus;
 import lombok.AllArgsConstructor;
@@ -43,7 +43,7 @@ public class UserPrograms extends BaseEntity {
 
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;
 
-    private List<EarableReward> rewards;
+    private List<Reward> rewards;
 
     private List<UserTask> userTasks;
 
