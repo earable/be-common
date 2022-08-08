@@ -30,7 +30,7 @@ public class EarableProgramDetailResponse {
     private Integer requiredPoint;
     private String information;
     private ProgramType programType;
-    private List<Badge> badges;
+    private List<EarableBadge> earableBadges;
     private List<Reward> rewards;
     private List<EarableTask> earableTasks;
     private String shortDescription;
