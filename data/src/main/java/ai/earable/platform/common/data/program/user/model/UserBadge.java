@@ -5,7 +5,6 @@ import ai.earable.platform.common.data.program.common.model.Badge;
 import ai.earable.platform.common.data.program.user.enums.UserBadgeStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.AccessType;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;

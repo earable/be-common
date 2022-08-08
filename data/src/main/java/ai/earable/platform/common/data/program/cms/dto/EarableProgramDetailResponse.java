@@ -24,6 +24,7 @@ public class EarableProgramDetailResponse {
     private UUID id;
     private String name;
     private RepeatType repeatType;
+    private Integer duration;
     private ProgramStatus status;
     private String icon;
     private Integer requiredPoint;
