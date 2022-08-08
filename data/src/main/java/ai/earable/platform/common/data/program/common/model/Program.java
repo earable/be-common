@@ -1,6 +1,5 @@
 package ai.earable.platform.common.data.program.common.model;
 
-import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
 import ai.earable.platform.common.data.program.common.enums.ProgramType;
 import ai.earable.platform.common.data.program.common.enums.RepeatType;
 import lombok.AllArgsConstructor;
@@ -25,7 +24,6 @@ public class Program {
     protected String shortDescription;
     @Column("required_point")
     protected Integer requiredPoint;
-    protected ProgramStatus status;
     protected ProgramType programType;
     @Column("start_date")
     protected Long startDate; //Used for CONTEST only

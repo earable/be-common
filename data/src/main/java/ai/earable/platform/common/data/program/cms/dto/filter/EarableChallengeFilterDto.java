@@ -1,7 +1,7 @@
 package ai.earable.platform.common.data.program.cms.dto.filter;
 
 import ai.earable.platform.common.data.program.common.enums.RepeatType;
-import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.cms.enums.EarableProgramStatus;
 import lombok.*;
 
 import java.util.UUID;
@@ -15,7 +15,7 @@ public class EarableChallengeFilterDto {
     private UUID id;
     private String name;
     private RepeatType type;
-    private ProgramStatus status;
+    private EarableProgramStatus status;
     private Long createFrom;
     private Long createTo;
 }

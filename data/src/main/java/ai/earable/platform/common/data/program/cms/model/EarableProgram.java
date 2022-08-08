@@ -1,5 +1,6 @@
 package ai.earable.platform.common.data.program.cms.model;
 
+import ai.earable.platform.common.data.program.cms.enums.EarableProgramStatus;
 import ai.earable.platform.common.data.program.common.model.Program;
 import ai.earable.platform.common.data.program.common.model.Reward;
 import lombok.*;
@@ -23,6 +24,9 @@ import java.util.UUID;
 public class EarableProgram extends Program {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     private UUID programId;
+
+    @Column("earable_program_status")
+    protected EarableProgramStatus earableProgramStatus;
 
     @Column("badge_info_list")
     private List<EarableProgramBadgeInfo> earableProgramBadgeInfos;
