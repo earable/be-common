@@ -4,6 +4,7 @@ import ai.earable.platform.common.data.program.cms.dto.EarableBadgeResponse;
 import ai.earable.platform.common.data.program.common.model.Program;
 import ai.earable.platform.common.data.program.user.enums.UserProgramState;
 import ai.earable.platform.common.data.program.user.enums.UserProgramStatus;
+import ai.earable.platform.common.data.program.user.model.UserProgramBadgeInfo;
 import ai.earable.platform.common.data.program.user.model.UserTask;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,6 @@ public class UserProgramsResponse extends Program {
     private Integer participants;
     private Integer currentPoint;
     private List<UserTask> userTasks;
-    private List<EarableBadgeResponse> earableBadgeResponses;
+    private List<UserProgramBadgeInfo> earableBadgeResponses;
     private UserProgramState state;
 }
