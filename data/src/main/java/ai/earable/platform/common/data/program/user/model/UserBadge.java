@@ -1,9 +1,9 @@
 package ai.earable.platform.common.data.program.user.model;
 
 import ai.earable.platform.common.data.cassandra.BaseEntity;
-import ai.earable.platform.common.data.program.cms.enums.BenefitType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramType;
-import ai.earable.platform.common.data.program.cms.enums.SessionPoint;
+import ai.earable.platform.common.data.program.common.enums.BenefitType;
+import ai.earable.platform.common.data.program.common.enums.ProgramType;
+import ai.earable.platform.common.data.program.common.enums.SessionPoint;
 import ai.earable.platform.common.data.program.user.enums.UserBadgeStatus;
 import lombok.*;
 import lombok.experimental.Accessors;

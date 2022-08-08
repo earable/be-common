@@ -1,7 +1,7 @@
 package ai.earable.platform.common.data.program.cms.dto.filter;
 
-import ai.earable.platform.common.data.program.cms.enums.RepeatType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.common.enums.RepeatType;
+import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
 import lombok.*;
 
 import java.util.UUID;

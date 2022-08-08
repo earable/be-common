@@ -1,8 +1,8 @@
 package ai.earable.platform.common.data.program.user.model;
 
 import ai.earable.platform.common.data.cassandra.BaseEntity;
-import ai.earable.platform.common.data.program.cms.enums.ProgramType;
-import ai.earable.platform.common.data.program.cms.enums.RepeatType;
+import ai.earable.platform.common.data.program.common.enums.ProgramType;
+import ai.earable.platform.common.data.program.common.enums.RepeatType;
 import ai.earable.platform.common.data.program.cms.model.EarableReward;
 import ai.earable.platform.common.data.program.user.enums.UserProgramState;
 import ai.earable.platform.common.data.program.user.enums.UserProgramStatus;
@@ -49,7 +49,7 @@ public class UserPrograms extends BaseEntity {
 
     private Integer requiredPoint;
 
-    private List<Badge> badges;
+    private List<UserProgramBadgeInfo> userProgramBadgeInfos;
 
     private List<EarableReward> rewards;
 

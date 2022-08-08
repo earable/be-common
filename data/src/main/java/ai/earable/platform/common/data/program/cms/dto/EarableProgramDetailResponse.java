@@ -1,9 +1,10 @@
 package ai.earable.platform.common.data.program.cms.dto;
 
-import ai.earable.platform.common.data.program.cms.enums.RepeatType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.common.enums.RepeatType;
+import ai.earable.platform.common.data.program.common.enums.ProgramType;
+import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
 import ai.earable.platform.common.data.program.cms.model.*;
+import ai.earable.platform.common.data.program.common.model.Badge;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

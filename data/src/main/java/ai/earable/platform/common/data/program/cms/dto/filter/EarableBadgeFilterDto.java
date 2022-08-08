@@ -1,6 +1,6 @@
 package ai.earable.platform.common.data.program.cms.dto.filter;
 
-import ai.earable.platform.common.data.program.cms.enums.BenefitType;
+import ai.earable.platform.common.data.program.common.enums.BenefitType;
 import lombok.*;
 
 @Data
