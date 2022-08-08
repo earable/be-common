@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 @With
 public class EarableProgram extends Program {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
+    @PrimaryKey
     private UUID programId;
 
     @Column("earable_program_status")
