@@ -24,7 +24,7 @@ import java.util.UUID;
 @With
 public class EarableProgram extends Program {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    @PrimaryKey
+    @PrimaryKey //Add this to avoid "Cannot obtain where clauses for entity" error of spring cassandra
     private UUID programId;
 
     @Column("earable_program_status")
