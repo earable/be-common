@@ -29,6 +29,6 @@ public class UserProgramsResponse extends Program {
     private Integer participants;
     private Integer currentPoint;
     private List<UserTask> userTasks;
-    private List<UserProgramBadgeInfo> earableBadgeResponses;
+    private List<UserProgramBadgeInfo> userProgramBadgeInfos;
     private UserProgramState state;
 }
