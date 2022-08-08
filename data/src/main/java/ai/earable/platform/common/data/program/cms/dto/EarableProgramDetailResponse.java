@@ -1,11 +1,11 @@
 package ai.earable.platform.common.data.program.cms.dto;
 
-import ai.earable.platform.common.data.program.cms.enums.RepeatType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramStatus;
-import ai.earable.platform.common.data.program.cms.model.BadgeReceiverMapper;
-import ai.earable.platform.common.data.program.cms.model.EarableReward;
-import ai.earable.platform.common.data.program.cms.model.EarableTask;
+import ai.earable.platform.common.data.program.common.enums.RepeatType;
+import ai.earable.platform.common.data.program.common.enums.ProgramType;
+import ai.earable.platform.common.data.program.common.enums.ProgramStatus;
+import ai.earable.platform.common.data.program.cms.model.*;
+import ai.earable.platform.common.data.program.common.model.Badge;
+import ai.earable.platform.common.data.program.common.model.Reward;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,16 +23,15 @@ import java.util.UUID;
 public class EarableProgramDetailResponse {
     private UUID id;
     private String name;
-    private RepeatType type;
+    private RepeatType repeatType;
     private Integer duration;
     private ProgramStatus status;
     private String icon;
     private Integer requiredPoint;
     private String information;
     private ProgramType programType;
-    private List<BadgeReceiverMapper> badgeReceiverMappers;
-    private List<EarableBadgeDetailResponse> earableBadges;
-    private List<EarableReward> earableRewards;
+    private List<Badge> badges;
+    private List<Reward> rewards;
     private List<EarableTask> earableTasks;
     private String shortDescription;
     private Integer participant;

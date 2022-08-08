@@ -1,9 +1,7 @@
 package ai.earable.platform.common.data.program.user.model;
 
-import ai.earable.platform.common.data.cassandra.BaseEntity;
-import ai.earable.platform.common.data.program.cms.enums.BenefitType;
-import ai.earable.platform.common.data.program.cms.enums.ProgramType;
-import ai.earable.platform.common.data.program.cms.enums.SessionPoint;
+import ai.earable.platform.common.data.program.common.enums.ProgramType;
+import ai.earable.platform.common.data.program.common.model.Badge;
 import ai.earable.platform.common.data.program.user.enums.UserBadgeStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -21,19 +19,21 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class UserBadge extends BaseEntity {
-    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private UUID userId;
-    @PrimaryKeyColumn(name = "badge_id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
-    private String badgeId;
-    private UserBadgeStatus status;
+public class UserBadge extends Badge {
+    @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
+    private UUID id;
 
-    private String title;
-    private String description;
-    private String icon;
-    private Double benefitValue;
-    private BenefitType benefitType;
-    private SessionPoint sessionPoint;
-    private Integer benefitEffectivePeriod;
-    private long receiveAt;
+    @Column("user_id")
+    private UUID userId;
+
+    @Column("program_id")
+    private UUID programId;
+
+    @Column("badge_id")
+    private String badgeId;
+
+    @Column("program_type")
+    private ProgramType programType;
+
+    private UserBadgeStatus status;
 }

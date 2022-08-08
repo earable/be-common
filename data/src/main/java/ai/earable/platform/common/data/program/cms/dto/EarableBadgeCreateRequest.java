@@ -3,8 +3,8 @@ package ai.earable.platform.common.data.program.cms.dto;
 import ai.earable.platform.common.data.ValidationUtils;
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
-import ai.earable.platform.common.data.program.cms.enums.BenefitType;
-import ai.earable.platform.common.data.program.cms.enums.SessionPoint;
+import ai.earable.platform.common.data.program.common.enums.BenefitType;
+import ai.earable.platform.common.data.program.common.enums.SessionPoint;
 import lombok.*;
 
 @Data
