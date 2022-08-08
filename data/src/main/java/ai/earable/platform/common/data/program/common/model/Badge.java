@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Badge extends BaseEntity implements Serializable {
+public class Badge implements Serializable {
     protected String badgeId;
     protected String title;
     protected String description;

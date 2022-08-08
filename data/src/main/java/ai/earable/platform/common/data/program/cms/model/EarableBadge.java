@@ -19,7 +19,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 @AccessType(AccessType.Type.PROPERTY)
-@With
 public class EarableBadge extends Badge {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     @Override
