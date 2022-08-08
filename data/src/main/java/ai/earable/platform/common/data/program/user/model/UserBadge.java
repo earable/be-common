@@ -20,13 +20,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class UserBadge extends Badge {
-    @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private UUID id;
-
-    @Column("user_id")
+    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     private UUID userId;
 
-    @Column("program_id")
+    @PrimaryKeyColumn(name = "program_id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private UUID programId;
 
     @Column("badge_id")
@@ -35,7 +32,7 @@ public class UserBadge extends Badge {
     @Column("program_type")
     private ProgramType programType;
 
-    private UserBadgeStatus status;
+    private UserBadgeStatus userBadgeStatus;
 
     @Column("received_at")
     protected Long receivedAt;
