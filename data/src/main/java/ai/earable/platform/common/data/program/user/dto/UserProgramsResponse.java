@@ -1,6 +1,5 @@
 package ai.earable.platform.common.data.program.user.dto;
 
-import ai.earable.platform.common.data.program.cms.dto.EarableBadgeResponse;
 import ai.earable.platform.common.data.program.common.model.Program;
 import ai.earable.platform.common.data.program.user.enums.UserProgramState;
 import ai.earable.platform.common.data.program.user.enums.UserProgramStatus;
