@@ -36,4 +36,7 @@ public class UserBadge extends Badge {
     private ProgramType programType;
 
     private UserBadgeStatus status;
+
+    @Column("received_at")
+    protected Long receivedAt;
 }
