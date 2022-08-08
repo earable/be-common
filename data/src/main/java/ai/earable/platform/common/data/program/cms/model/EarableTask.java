@@ -5,12 +5,10 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
-@Data
 @Builder
 @ToString
 @UserDefinedType
 @NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
 public class EarableTask extends Task {
 

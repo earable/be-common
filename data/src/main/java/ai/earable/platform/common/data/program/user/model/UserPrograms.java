@@ -32,21 +32,13 @@ public class UserPrograms extends BaseEntity {
     private UUID programId;
 
     private String name;
-
     private String icon;
-
     private RepeatType type;
-
     private Integer duration;
-
     private Long startDate;
-
     private Long endDate;
-
     private String information;
-
     private String shortDescription;
-
     private Integer requiredPoint;
 
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;

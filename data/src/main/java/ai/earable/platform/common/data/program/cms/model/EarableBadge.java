@@ -1,19 +1,16 @@
 package ai.earable.platform.common.data.program.cms.model;
 
-import ai.earable.platform.common.data.program.common.enums.BenefitType;
-import ai.earable.platform.common.data.program.common.enums.SessionPoint;
+import ai.earable.platform.common.data.program.common.model.Badge;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.AccessType;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Builder
 @Table(value = "badge")
 @ToString
@@ -21,20 +18,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Accessors(chain = true)
 @With
-public class EarableBadge implements Serializable {
+@AccessType(AccessType.Type.PROPERTY)
+public class EarableBadge extends Badge {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private String badgeId;
-    private String title;
-    private String description;
-    private String icon;
-    @Column("benefit_value")
-    private Double benefitValue;
-    @Column("benefit_type")
-    private BenefitType benefitType;
-    @Column("session_point")
-    private SessionPoint sessionPoint;
-    @Column("benefit_effective_period")
-    private Integer benefitEffectivePeriod;
-    private Long createAt;
+    @Override
+    public void setBadgeId(String badgeId){
+        this.badgeId = badgeId;
+    }
+
     private List<UUID> programId;
 }

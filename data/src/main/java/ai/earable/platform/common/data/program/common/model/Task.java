@@ -30,14 +30,14 @@ public class Task implements Serializable {
      * AT_AROUND or
      * AFTER
      */
-    protected String time;
+    protected Long time;
 
     /**
      * This will be use when timeOperator is:
      * BETWEEN
      */
-    protected String startTime;
-    protected String endTime;
+    protected Long startTime;
+    protected Long endTime;
 
     /**
      * This will be use when timeOperator is:
