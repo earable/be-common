@@ -5,6 +5,7 @@ import ai.earable.platform.common.data.program.user.enums.UserBadgeStatus;
 import lombok.*;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
+@Data
 @Builder
 @UserDefinedType
 @NoArgsConstructor
