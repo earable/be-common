@@ -11,13 +11,13 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.util.List;
 import java.util.UUID;
 
+@Data
 @Builder
 @Table(value = "badge")
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@With
 @AccessType(AccessType.Type.PROPERTY)
 public class EarableBadge extends Badge {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
@@ -26,5 +26,5 @@ public class EarableBadge extends Badge {
         this.badgeId = badgeId;
     }
 
-    private List<UUID> programId;
+    private List<UUID> programIds;
 }
