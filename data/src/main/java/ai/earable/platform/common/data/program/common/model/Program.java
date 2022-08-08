@@ -15,22 +15,22 @@ import org.springframework.data.cassandra.core.mapping.Column;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Program {
-    private String name;
-    private String icon;
+    protected String name;
+    protected String icon;
     @Column("type")
-    private RepeatType type;
-    private Integer duration;
-    private String information;
+    protected RepeatType type;
+    protected Integer duration;
+    protected String information;
     @Column("short_description")
-    private String shortDescription;
+    protected String shortDescription;
     @Column("required_point")
-    private Integer requiredPoint;
-    private ProgramStatus status;
-    private ProgramType programType;
+    protected Integer requiredPoint;
+    protected ProgramStatus status;
+    protected ProgramType programType;
     @Column("start_date")
-    private Long startDate;
+    protected Long startDate;
     @Column("end_date")
-    private Long endDate;
-    private String createBy;
-    private Long createAt;
+    protected Long endDate;
+    protected String createBy;
+    protected Long createAt;
 }
