@@ -4,6 +4,8 @@ import ai.earable.platform.common.data.program.common.model.Badge;
 import lombok.*;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @UserDefinedType
@@ -11,5 +13,5 @@ import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 @AllArgsConstructor
 @With
 public class UserProgramBadgeInfo extends Badge {
-    private String badgeId;
+    private UUID badgeId;
 }

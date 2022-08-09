@@ -27,7 +27,7 @@ public class UserBadge extends Badge {
     private UUID programId;
 
     @Column("badge_id")
-    private String badgeId;
+    private UUID badgeId;
 
     @Column("program_type")
     private ProgramType programType;
