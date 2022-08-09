@@ -29,5 +29,5 @@ public class UserProgramsResponse extends Program {
     private Integer currentPoint;
     private List<UserTask> userTasks;
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;
-    private UserProgramState state;
+    private UserProgramState userProgramState;
 }
