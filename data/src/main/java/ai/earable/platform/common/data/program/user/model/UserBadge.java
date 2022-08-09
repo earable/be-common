@@ -26,7 +26,7 @@ public class UserBadge extends Badge {
     @PrimaryKeyColumn(name = "program_id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private UUID programId;
 
-    @Column("badge_id")
+    @PrimaryKeyColumn(name = "badge_id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     private UUID badgeId;
 
     @Column("program_type")
