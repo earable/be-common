@@ -20,6 +20,6 @@ public class UserBadgeResponse extends Badge {
     private UUID userId;
     private UUID programId;
     private ProgramType programType;
-    private UserBadgeStatus status;
+    private UserBadgeStatus userBadgeStatus;
     protected Long receivedAt;
 }
