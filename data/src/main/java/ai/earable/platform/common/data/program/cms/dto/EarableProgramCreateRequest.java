@@ -46,7 +46,6 @@ public class EarableProgramCreateRequest {
     public void validate(){
         ValidationUtils.checkBlank("name",this.name);
         ValidationUtils.checkBlank("icon",this.icon);
-        ValidationUtils.checkNull("duration",this.duration);
         ValidationUtils.checkBlank("information",this.information);
         ValidationUtils.checkBlank("shortDescription",this.shortDescription);
         ValidationUtils.checkNull("requiredPoint",this.requiredPoint);
@@ -60,6 +59,8 @@ public class EarableProgramCreateRequest {
         if (programType.equals(ProgramType.CONTEST)){
             if (this.startDate == null || this.endDate == null)
                 throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"startDate = null or endDate = null");
+            if (this.duration != null)
+                throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"duration");
 
         }else if (programType.equals(ProgramType.CHALLENGE)){
             if (this.startDate !=null || this.endDate!=null)
