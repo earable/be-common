@@ -1,4 +1,4 @@
-package ai.earable.platform.common.data.program.cms.dto;
+package ai.earable.platform.common.data.program.user.dto;
 
 import ai.earable.platform.common.data.program.common.enums.ProgramType;
 import ai.earable.platform.common.data.program.common.model.Badge;

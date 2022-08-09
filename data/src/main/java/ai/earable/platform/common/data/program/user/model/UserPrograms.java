@@ -40,5 +40,6 @@ public class UserPrograms extends Program {
     @Column("user_program_state")
     private UserProgramState userProgramState;
 
+    @Column("in_use")
     private boolean inUse;
 }

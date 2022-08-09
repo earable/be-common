@@ -32,6 +32,7 @@ public class UserBadge extends Badge {
     @Column("program_type")
     private ProgramType programType;
 
+    @Column("user_badge_status")
     private UserBadgeStatus userBadgeStatus;
 
     @Column("received_at")
