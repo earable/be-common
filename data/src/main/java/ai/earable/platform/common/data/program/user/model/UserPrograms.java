@@ -3,10 +3,7 @@ package ai.earable.platform.common.data.program.user.model;
 import ai.earable.platform.common.data.program.common.model.Program;
 import ai.earable.platform.common.data.program.common.model.Reward;
 import ai.earable.platform.common.data.program.user.enums.UserProgramState;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -29,11 +26,14 @@ public class UserPrograms extends Program {
     @PrimaryKeyColumn(name = "program_id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private UUID programId;
 
+    @ToString.Exclude
     @Column("badge_info_list")
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;
 
+    @ToString.Exclude
     private List<Reward> rewards;
 
+    @ToString.Exclude
     @Column("user_tasks")
     private List<UserTask> userTasks;
 
