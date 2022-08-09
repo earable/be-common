@@ -18,13 +18,13 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HealthRiskResponse {
     private UUID id;
-    private HealthRiskType type;
+    private HealthRiskType healthRiskType;
     private String name;
     private String description;
     private String icon;
     private String image;
     private Boolean isActive;
-    private HealthRiskUnit unit;
+    private HealthRiskUnit healthRiskUnit;
     private String ruleQuery;
     private String occurrenceQuery;
     private String crossingDirectionType;

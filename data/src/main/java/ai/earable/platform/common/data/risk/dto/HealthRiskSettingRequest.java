@@ -15,5 +15,5 @@ public class HealthRiskSettingRequest {
     @NotNull(message = "HealthRiskType is required!")
     private HealthRiskType healthRiskType;
     @NotNull(message = "Status is required!")
-    private HealthRiskSettingStatus status;
+    private HealthRiskSettingStatus healthRiskSettingStatus;
 }

@@ -16,10 +16,10 @@ import java.util.UUID;
 public class HealthRiskSettingResponse {
     private UUID id;
     private String name;
-    private HealthRiskType type;
+    private HealthRiskType healthRiskType;
     private String description;
     private String icon;
     private String image;
-    private HealthRiskSettingStatus status;
+    private HealthRiskSettingStatus healthRiskSettingStatus;
     private Integer notificationRemainingDays;
 }
