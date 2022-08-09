@@ -20,7 +20,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class EarableBadge extends Badge {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private String badgeId;
+    private UUID badgeId;
 
     @Column("program_ids")
     private List<UUID> programIds;

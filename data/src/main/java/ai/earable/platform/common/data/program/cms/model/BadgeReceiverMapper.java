@@ -4,6 +4,8 @@ import ai.earable.platform.common.data.program.common.enums.Receiver;
 import lombok.*;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @UserDefinedType
@@ -11,6 +13,6 @@ import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 @AllArgsConstructor
 @With
 public class BadgeReceiverMapper {
-    private String badgeId;
+    private UUID badgeId;
     private Receiver receiver;
 }
