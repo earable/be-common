@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class EarableProgramBadgeInfo {
+public class EarableProgramBadgeInfo extends Badge {
     private UUID badgeId;
     private Receiver receiver;
     protected String title;
