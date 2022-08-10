@@ -42,4 +42,8 @@ public class UserPrograms extends Program {
 
     @Column("in_use")
     private boolean inUse;
+
+    public String toString() {
+        return "UserPrograms";
+    }
 }
