@@ -16,4 +16,8 @@ import java.util.UUID;
 public class EarableProgramBadgeInfo extends Badge {
     private UUID badgeId;
     private Receiver receiver;
+
+    public String toString() {
+        return "EarableProgramBadgeInfo";
+    }
 }

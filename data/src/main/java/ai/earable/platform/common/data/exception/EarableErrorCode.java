@@ -62,6 +62,7 @@ public enum EarableErrorCode {
 
     CHALLENGE_IS_EXISTED("CHALLENGE_IS_EXISTED"),
     USER_HAVE_CHALLENGE_ONGOING("USER_HAVE_CHALLENGE_ONGOING"),
+    USER_NOT_SCORE("USER_NOT_SCORE"),
 
     //============== DMS ================
 
