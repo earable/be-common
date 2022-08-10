@@ -1,5 +1,6 @@
 package ai.earable.platform.common.data.program.cms.dto;
 
+import ai.earable.platform.common.data.program.cms.enums.EarableProgramStatus;
 import ai.earable.platform.common.data.program.cms.model.EarableProgramBadgeInfo;
 import ai.earable.platform.common.data.program.cms.model.EarableTask;
 import ai.earable.platform.common.data.program.common.model.Program;
@@ -19,5 +20,6 @@ public class EarableProgramDetailResponse extends Program {
     private List<EarableProgramBadgeInfo> earableProgramBadgeInfos;
     private List<Reward> rewards;
     private List<EarableTask> earableTasks;
+    private EarableProgramStatus status;
     private Integer participant;
 }
