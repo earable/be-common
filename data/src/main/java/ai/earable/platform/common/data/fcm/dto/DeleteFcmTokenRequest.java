@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -19,6 +20,6 @@ import java.util.UUID;
 public class DeleteFcmTokenRequest {
     @NotBlank(message = "deviceId is required")
     private String deviceId;
-    @NotBlank(message = "userId is required")
+    @NotNull(message = "userId is required")
     private UUID userId;
 }
