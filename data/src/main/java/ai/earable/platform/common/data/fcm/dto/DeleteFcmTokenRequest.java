@@ -20,5 +20,5 @@ public class DeleteFcmTokenRequest {
     @NotBlank(message = "deviceId is required")
     private String deviceId;
     @NotBlank(message = "userId is required")
-    private UUID userId;
+    private String userId;
 }
