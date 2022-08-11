@@ -38,11 +38,16 @@ public final class TimeUtils {
         return zonedDateTime.getOffset();
     }
 
+    public static int getNumberOfSecondsBetween(long timestampFirst, long timestampLast){
+        return (int) (timestampLast - timestampFirst);
+    }
+
     public static Date convertFromUnixTimestamp(long timeStamp){
         return new java.util.Date(timeStamp*1000);
     }
 
     public static void main(String[] args) {
+        System.out.println(getNumberOfSecondsBetween(1657702497, 1657702527));
         System.out.println(getCurrentUnixTimestamp(AMERICA_TZ_STRING) + "\n" + getNextTimestamp(AMERICA_TZ_STRING, 3));
         System.out.println(getZoneOffset(System.currentTimeMillis(), AMERICA_TZ_STRING));
         System.out.println(convertFromUnixTimestamp(getNextTimestamp(AMERICA_TZ_STRING, 180)));

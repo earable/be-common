@@ -79,13 +79,12 @@ public class EarableExceptionMapper {
     @ExceptionHandler(EarableException.class)
     public ResponseEntity handleEarableException(EarableException e) {
         log.error("handleEarableException error stack trace", e);
-        String detail = e.getEarableErrorCode() != null ? messageUtils.getMessage(e.getEarableErrorCode().name(), e.getParam())
-                : e.getDetails();
+        String detail = e.getEarableErrorCode() != null ? messageUtils.getMessage(e.getEarableErrorCode().name(),
+            e.getParam()) : e.getDetails();
         ErrorDetails errorDetails = ErrorDetails.builder()
-                .httpStatusCode(e.getHttpStatusCode())
-                .earableErrorCode( e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())
-                .details(detail).build();
-        e.printStackTrace();
+            .httpStatusCode(e.getHttpStatusCode())
+            .earableErrorCode( e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())
+            .details(detail).build();
         log.error("Return error to client with details {}", errorDetails.toString());
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);
@@ -95,10 +94,9 @@ public class EarableExceptionMapper {
     public ResponseEntity handleCommonException(Exception e) {
         log.error("handleCommonException error stack trace", e);
         ErrorDetails errorDetails = ErrorDetails.builder()
-                .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())
-                .details(EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail()).build();
-        e.printStackTrace();
+            .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())
+            .details(EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail()).build();
         log.error("Return error to client with details {}", errorDetails.toString());
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);

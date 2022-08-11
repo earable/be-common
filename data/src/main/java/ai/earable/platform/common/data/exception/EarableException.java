@@ -15,19 +15,21 @@ public class EarableException extends RuntimeException{
     private String details;
     private String param;
 
-    public EarableException(int httpStatusCode, EarableErrorCode commonErrorCode, String param){
+    public EarableException(int httpStatusCode, EarableErrorCode earableErrorCode, String param){
         super(param);
         this.httpStatusCode = httpStatusCode;
-        this.earableErrorCode = commonErrorCode;
+        this.earableErrorCode = earableErrorCode;
         this.param = param;
     }
 
+    //TODO: Hung Sotatek - What's meaning of errorCode?
     public EarableException(int httpStatusCode, String errorCode, String details) {
         this.httpStatusCode = httpStatusCode;
         this.errorCode = errorCode;
         this.details = details;
     }
 
+    @Deprecated
     public EarableException(int httpStatusCode, EarableErrorCode earableErrorCode){
         this(httpStatusCode, earableErrorCode, "");
     }
