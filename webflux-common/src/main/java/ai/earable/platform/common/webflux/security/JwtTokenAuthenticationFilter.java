@@ -24,15 +24,8 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        String bearerToken = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-
-        ServerHttpRequest.Builder mutatedRequestBuilder = exchange.getRequest().mutate();
-        ServerHttpRequest mutatedRequest = bearerToken == null ? mutatedRequestBuilder.build() :
-            mutatedRequestBuilder.header(HttpHeaders.AUTHORIZATION, bearerToken).build();
-        ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
-
-        String token = resolveToken(bearerToken);
-        return Mono.justOrEmpty(token)
+        String token = resolveToken(exchange.getRequest());
+        return Mono.justOrEmpty(resolveToken(exchange.getRequest()))
                 .filter(tk -> StringUtils.hasText(token))
                 // check token expired
                 .filter(tk ->  !jwtUtils.isTokenExpired(token))
@@ -41,12 +34,13 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                 .filter(isValid -> isValid)
                 .flatMap(b -> {
                     Authentication authentication = this.jwtUtils.getAuthentication(token);
-                    return chain.filter(mutatedExchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+                    return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
                 })
-                .switchIfEmpty(chain.filter(mutatedExchange));
+                .switchIfEmpty(chain.filter(exchange));
     }
 
-    private String resolveToken(String bearerToken) {
+    private String resolveToken(ServerHttpRequest serverHttpRequest) {
+        String bearerToken = serverHttpRequest.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_PREFIX)) {
             return bearerToken.substring(7);
         }
