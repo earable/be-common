@@ -24,7 +24,14 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        String token = resolveToken(exchange.getRequest());
+        String bearerToken = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+        ServerHttpRequest.Builder mutatedRequestBuilder = exchange.getRequest().mutate();
+        ServerHttpRequest mutatedRequest = bearerToken == null ? mutatedRequestBuilder.build() :
+            mutatedRequestBuilder.header(HttpHeaders.AUTHORIZATION, bearerToken).build();
+        ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
+
+        String token = resolveToken(bearerToken);
         return Mono.justOrEmpty(token)
                 .filter(tk -> StringUtils.hasText(token))
                 // check token expired
@@ -33,14 +40,13 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                 .flatMap(tk -> jwtUtils.validateTokenOnCache(token))
                 .filter(isValid -> isValid)
                 .flatMap(b -> {
-                            Authentication authentication = this.jwtUtils.getAuthentication(token);
-                            return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
-                        })
-                .switchIfEmpty(chain.filter(exchange));
+                    Authentication authentication = this.jwtUtils.getAuthentication(token);
+                    return chain.filter(mutatedExchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+                })
+                .switchIfEmpty(chain.filter(mutatedExchange));
     }
 
-    private String resolveToken(ServerHttpRequest request) {
-        String bearerToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+    private String resolveToken(String bearerToken) {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_PREFIX)) {
             return bearerToken.substring(7);
         }
