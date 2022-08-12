@@ -47,7 +47,7 @@ public class JwtUtils {
     @Value("#{new Boolean('${earable.auth.ignore:false}')}")
     private boolean ignoreAuth;
 
-    @Value("#{new Boolean('${earable.token.caching.enable:true}')}")
+    @Value("#{new Boolean('${earable.token.caching.redis.enable:true}')}")
     private boolean enableCacheToken;
 
     private static final String AUTHORITIES_KEY = "role"; //Need to map to IMS
