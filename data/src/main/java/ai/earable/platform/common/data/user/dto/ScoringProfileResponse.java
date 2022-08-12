@@ -17,6 +17,7 @@ import java.util.UUID;
 public class ScoringProfileResponse {
     private UUID userId;
     private String name;
+    private String avatar;
     private int score;
     private Long dailyWear;
     private Double focusHours;

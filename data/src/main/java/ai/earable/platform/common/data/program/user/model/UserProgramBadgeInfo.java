@@ -13,5 +13,5 @@ import java.util.UUID;
 @AllArgsConstructor
 @With
 public class UserProgramBadgeInfo extends Badge {
-    private UUID badgeId;
+    protected UUID badgeId;
 }

@@ -26,13 +26,13 @@ public class UserContestScore {
     @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 2)
     private UUID userId;
 
-    private int score;
+    private int score = 0;
 
     @Column("previous_day_contest_ranking")
-    private int previousDayContestRanking;
+    private int previousDayContestRanking = 0;
 
     @Column("contest_ranking")
-    private int contestRanking;
+    private int contestRanking = 0;
 
     @Column("user_avatar")
     private String userAvatar;

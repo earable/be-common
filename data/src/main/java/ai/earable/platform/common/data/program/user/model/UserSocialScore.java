@@ -18,7 +18,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class UserSocialScore {
     @PrimaryKeyColumn(name = "social_key", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private int socialKey; // Always = 0
+    private int socialKey = 0; // Always = 0
 
     @PrimaryKeyColumn(name = "user_full_name", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
     private String userFullName;
@@ -26,13 +26,13 @@ public class UserSocialScore {
     @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 2)
     private UUID userId;
 
-    private int score;
+    private int score = 0;
 
     @Column("previous_day_social_ranking")
-    private int previousDaySocialRanking;
+    private int previousDaySocialRanking = 0;
 
     @Column("social_ranking")
-    private int socialRanking;
+    private int socialRanking = 0;
 
     @Column("user_avatar")
     private String userAvatar;
