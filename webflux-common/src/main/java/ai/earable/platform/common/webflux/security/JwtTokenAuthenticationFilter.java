@@ -25,18 +25,11 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String token = resolveToken(exchange.getRequest());
-        return Mono.justOrEmpty(token)
-                .filter(tk -> StringUtils.hasText(token))
-                // check token expired
-                .filter(tk ->  !jwtUtils.isTokenExpired(token))
-                // check token on redis
-                .flatMap(tk -> jwtUtils.validateTokenOnCache(token))
-                .filter(isValid -> isValid)
-                .flatMap(b -> {
-                            Authentication authentication = this.jwtUtils.getAuthentication(token);
-                            return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
-                        })
-                .switchIfEmpty(chain.filter(exchange));
+        if (StringUtils.hasText(token) && this.jwtUtils.validateToken(token)) {
+            Authentication authentication = this.jwtUtils.getAuthentication(token);
+            return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+        }
+        return chain.filter(exchange);
     }
 
     private String resolveToken(ServerHttpRequest request) {
