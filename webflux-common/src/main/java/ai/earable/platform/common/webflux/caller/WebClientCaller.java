@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -42,8 +41,6 @@ public class WebClientCaller implements SpringCaller {
     private int defaultRetryDelay;
 
     private final WebClient webClient;
-
-    private final ServerCodecConfigurer configurer;
 
     @Override
     public <V> Mono<V> getMono(String uri, Class<V> responseType) {
