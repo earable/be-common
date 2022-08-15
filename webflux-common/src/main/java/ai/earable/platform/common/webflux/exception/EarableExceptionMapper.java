@@ -37,7 +37,7 @@ public class EarableExceptionMapper {
 
     @ExceptionHandler({ServerWebInputException.class})
     public ResponseEntity handleServerWebInputException(ServerWebInputException error) {
-        log.trace("handleServerWebInputException error stack trace", error);
+        log.error("handleServerWebInputException error stack trace", error);
         List<String> errMessages = new ArrayList<>();
         // handle for invalid request body
         if (error instanceof WebExchangeBindException && !((WebExchangeBindException) error).getAllErrors().isEmpty()) {
@@ -47,7 +47,7 @@ public class EarableExceptionMapper {
                 .collect(Collectors.toList());
             ErrorDetails errorDetails = ErrorDetails.builder().httpStatusCode(HttpStatus.BAD_REQUEST.value())
                     .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).build();
-            log.error("Return error to client with details {}", errorDetails.toString());
+            log.error("Return error to client with details {}", errorDetails.getDetails());
             return ResponseEntity.status(errorDetails.getHttpStatusCode()).body(errorDetails);
         }
 
@@ -61,7 +61,7 @@ public class EarableExceptionMapper {
                         .collect(Collectors.toList());
                 ErrorDetails errorDetails = ErrorDetails.builder().httpStatusCode(HttpStatus.BAD_REQUEST.value())
                         .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).build();
-                log.error("Return error to client with details {}", errorDetails.toString());
+                log.error("Return error to client with details {}", errorDetails.getDetails());
                 return ResponseEntity.status(errorDetails.getHttpStatusCode()).body(errorDetails);
             }
         }
@@ -72,7 +72,7 @@ public class EarableExceptionMapper {
         errMessages.add(String.format("%s %s", parameterName, reason));
         ErrorDetails errorDetails = ErrorDetails.builder().httpStatusCode(HttpStatus.BAD_REQUEST.value())
                 .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).build();
-        log.error("Return error to client with details {}", errorDetails.toString());
+        log.error("Return error to client with details {}", errorDetails.getDetails());
         return ResponseEntity.status(errorDetails.getHttpStatusCode()).body(errorDetails);
     }
 

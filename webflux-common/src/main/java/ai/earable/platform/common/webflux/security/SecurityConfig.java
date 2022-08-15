@@ -1,17 +1,14 @@
 package ai.earable.platform.common.webflux.security;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
@@ -21,14 +18,14 @@ import reactor.core.publisher.Mono;
  */
 @Configuration
 @EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Value("${earable.auth.whitelist.path:}")
     private String[] AUTH_WHITELIST;
 
-    @Autowired
-    private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
+    private final EarableAuthenticationManager reactiveAuthenticationManager;
+    private final SecurityContextRepository securityContextRepository;
 
     private static final String[] SWAGGER_WHITELIST = {
             // -- Swagger UI v2
@@ -46,8 +43,7 @@ public class SecurityConfig {
     };
 
     @Bean
-    public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http, JwtUtils jwtUtils,
-                                                       ReactiveAuthenticationManager reactiveAuthenticationManager) {
+    public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
         String[] whiteList = ArrayUtils.addAll(SWAGGER_WHITELIST, AUTH_WHITELIST);
         return http.exceptionHandling()
                 .authenticationEntryPoint(
@@ -65,17 +61,11 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authenticationManager(reactiveAuthenticationManager)
+                .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers(whiteList).permitAll()
                 .anyExchange().authenticated()
-                .and()
-                .addFilterAt(jwtTokenAuthenticationFilter, SecurityWebFiltersOrder.HTTP_BASIC)
-                .build();
-    }
-
-    @Bean
-    public ReactiveAuthenticationManager reactiveAuthenticationManager() {
-        return new EarableAuthenticationManager();
+                .and().build();
     }
 }
