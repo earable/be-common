@@ -133,7 +133,8 @@ public class WebClientCaller implements SpringCaller {
                                      MultipartBodyBuilder multipartBodyBuilder, Class<V> responseType) {
         return webClient.method(wrap(method))
                 .uri(uri)
-                .headers(httpHeaders -> headers.forEach(httpHeaders::set))
+                .header("Authorization", headers.get("Authorization"))
+                .header("Content-Type", headers.get("Content-Type"))
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
                 .timeout(Duration.ofSeconds(defaultTimeout));
