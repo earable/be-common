@@ -36,7 +36,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                             Authentication authentication = this.jwtUtils.getAuthentication(token);
                             return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
                         })
-                .switchIfEmpty(chain.filter(exchange));
+                .switchIfEmpty(Mono.defer(() -> chain.filter(exchange)));
     }
 
     private String resolveToken(ServerHttpRequest request) {
