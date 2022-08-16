@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,9 +41,8 @@ import java.util.Properties;
 @Component
 @Slf4j
 public class JwtUtils {
-
     @Autowired
-    private ReactiveRedisTemplate<String, String> redisTemplate;
+    private ConfigurableApplicationContext appContext;
 
     @Value("#{new Boolean('${earable.auth.ignore:false}')}")
     private boolean ignoreAuth;
@@ -114,21 +114,25 @@ public class JwtUtils {
 
     public Mono<Boolean> validateTokenOnCache(String token) {
         return Mono.justOrEmpty(token)
-                .flatMap(tk -> enableRedisTokenCaching ? isTokenExistOnRedis(token) : Mono.just(true))
+                .flatMap(tk -> isTokenExistOnRedis(token))
                 .switchIfEmpty(Mono.just(false));
     }
 
     private Mono<Boolean> isTokenExistOnRedis(String token) {
-        Claims claims = getAllClaimsFromToken(token);
-        String tokenId = claims.get("token_id", String.class);
-        String userId = claims.get("user_id", String.class);
-        // check token is existed on redis
-        return redisTemplate.opsForValue()
-                .get(userId)
-                .filter(savedTokenId -> ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(savedTokenId))
-                .filter(savedTokenId -> savedTokenId.equals(tokenId))
-                .flatMap(s -> Mono.just(true))
-                .switchIfEmpty(Mono.just(false));
+        if(enableRedisTokenCaching){
+            ReactiveRedisTemplate<String, String> redisTemplate = appContext.getBean(ReactiveRedisTemplate.class);
+            Claims claims = getAllClaimsFromToken(token);
+            String tokenId = claims.get("token_id", String.class);
+            String userId = claims.get("user_id", String.class);
+            // check token is existed on redis
+            return redisTemplate.opsForValue()
+                    .get(userId)
+                    .filter(savedTokenId -> ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(savedTokenId))
+                    .filter(savedTokenId -> savedTokenId.equals(tokenId))
+                    .flatMap(s -> Mono.just(true))
+                    .switchIfEmpty(Mono.just(false));
+        }
+        return Mono.just(true);
     }
 
     public boolean isTokenExpired(String token) {
@@ -144,7 +148,7 @@ public class JwtUtils {
         Claims claims = getAllClaimsFromToken(token);
         Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
         Collection<? extends GrantedAuthority> authorities = authoritiesClaim == null ? AuthorityUtils.NO_AUTHORITIES
-                : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
+            : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
