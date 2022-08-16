@@ -23,7 +23,6 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
     private static final String BEARER = "Bearer ";
 
-
     @Override
     public Mono<Void> save(ServerWebExchange swe, SecurityContext sc) {
         throw new UnsupportedOperationException("Not supported yet.");

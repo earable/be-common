@@ -10,10 +10,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
 @Configuration
 public class ReactiveRedisConfig {
-    @Value("#{new Boolean('${earable.token.caching.redis.enable:false}')}")
-    private boolean enableRedisTokenCaching;
-
-    @Value("${spring.redis.host:}")
+    @Value("${spring.redis.host}")
     private String redisHost;
 
     @Value("${spring.redis.port:6379}")
@@ -24,8 +21,6 @@ public class ReactiveRedisConfig {
 
     @Bean
     public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory() {
-        if(!enableRedisTokenCaching)
-            return null;
         RedisStandaloneConfiguration redisConf = new RedisStandaloneConfiguration();
         redisConf.setHostName(redisHost);
         redisConf.setPort(redisPort);
