@@ -48,7 +48,7 @@ public class JwtUtils {
     private boolean ignoreAuth;
 
     @Value("#{new Boolean('${earable.token.caching.redis.enable:false}')}")
-    private boolean enableCacheToken;
+    private boolean enableRedisTokenCaching;
 
     private static final String AUTHORITIES_KEY = "role"; //Need to map to IMS
     private PublicKey publicKey = null;
@@ -114,7 +114,7 @@ public class JwtUtils {
 
     public Mono<Boolean> validateTokenOnCache(String token) {
         return Mono.justOrEmpty(token)
-                .flatMap(tk -> enableCacheToken ? isTokenExistOnRedis(token) : Mono.just(true))
+                .flatMap(tk -> enableRedisTokenCaching ? isTokenExistOnRedis(token) : Mono.just(true))
                 .switchIfEmpty(Mono.just(false));
     }
 
