@@ -24,11 +24,11 @@ public class UserProgramsResponse extends Program {
     private UUID programId;
     private Integer totalTasks;
     private Integer tasksCompleted;
-    private UserProgramStatus userProgramStatus;
     private Integer participants;
     private Integer currentPoint;
     private Integer ranking;
     private List<UserTask> userTasks;
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;
     private UserProgramState userProgramState;
+    private UserProgramStatus userProgramStatus;
 }
