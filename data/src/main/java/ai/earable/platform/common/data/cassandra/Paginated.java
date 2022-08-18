@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class Paginated {
-    public static final Integer DEFAULT_LIMIT = 1000;
+    public static final Integer DEFAULT_LIMIT = 10;
     private Integer limit;
     private String pagingState;
 
