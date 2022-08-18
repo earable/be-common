@@ -31,6 +31,7 @@ public class UserProgramsResponse extends Program {
     private List<UserTask> userTasks;
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;
     private List<Reward> rewards;
+    private Boolean isCheck;
     private UserProgramState userProgramState;
     private UserProgramStatus userProgramStatus;
 }
