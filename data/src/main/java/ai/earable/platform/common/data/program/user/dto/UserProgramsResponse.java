@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.program.user.dto;
 
 import ai.earable.platform.common.data.program.common.model.Program;
+import ai.earable.platform.common.data.program.common.model.Reward;
 import ai.earable.platform.common.data.program.user.enums.UserProgramState;
 import ai.earable.platform.common.data.program.user.enums.UserProgramStatus;
 import ai.earable.platform.common.data.program.user.model.UserProgramBadgeInfo;
@@ -29,6 +30,7 @@ public class UserProgramsResponse extends Program {
     private Integer ranking;
     private List<UserTask> userTasks;
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;
+    private List<Reward> rewards;
     private UserProgramState userProgramState;
     private UserProgramStatus userProgramStatus;
 }
