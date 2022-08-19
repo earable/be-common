@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EndSessionRequest {
+    private String sessionId;
     private ActivityType activityType;
     private Long startTime;
     private Long endTime;
@@ -25,6 +26,7 @@ public class EndSessionRequest {
     private Integer year;
 
     public void validate() {
+        ValidationUtils.checkNull("sessionId", this.sessionId);
         ValidationUtils.checkNull("ActivityType", this.activityType);
         ValidationUtils.checkNull("startTime", this.startTime);
         ValidationUtils.checkNull("sessionPoint", this.sessionPoint);
