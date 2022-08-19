@@ -3,7 +3,7 @@ package ai.earable.platform.common.data.program.user.dto;
 import lombok.Data;
 
 @Data
-public class BestRecordsRequestDto {
+public class UpdateBestRecordsRequest {
     private Long numOfDailyIncrement;
     private Long numOfStreakIncrement;
     private Double usedHours;
