@@ -213,7 +213,9 @@ public class VertxCaller implements Caller {
     private static boolean needToRetry(Throwable throwable){
         if(throwable.getCause() instanceof TimeoutException)
             return true;
-        final String errorMess = throwable.getLocalizedMessage();
+
+        final String errorMess = throwable.getLocalizedMessage() == null ?
+                throwable.getMessage() : throwable.getLocalizedMessage();
         if(errorMess != null){
             return errorMess.toLowerCase().contains("connection reset by peer")
                     || errorMess.toLowerCase().contains("connection refused")
