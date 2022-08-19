@@ -286,7 +286,9 @@ public class WebClientCaller implements SpringCaller {
         final String errorMess = throwable.getLocalizedMessage();
         if(errorMess != null){
             return errorMess.toLowerCase().contains("connection reset by peer")
-                    || errorMess.toLowerCase().contains("connection refused");
+                    || errorMess.toLowerCase().contains("connection refused")
+                    || errorMess.toLowerCase().contains("connection time out")
+                    || errorMess.toLowerCase().contains("connection timeout");
         }
         return false;
     }
