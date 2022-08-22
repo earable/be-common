@@ -1,4 +1,4 @@
-package ai.earable.platform.common.data.fms;
+package ai.earable.platform.common.data.feature.dto;
 
 import ai.earable.platform.common.data.feature.model.SessionMode;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SessionDTO {
+public class SessionDetailResponse {
     private String userId;
     private String profileId;
     private String featureName;
