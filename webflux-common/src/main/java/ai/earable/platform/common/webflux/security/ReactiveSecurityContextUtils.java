@@ -22,6 +22,10 @@ public class ReactiveSecurityContextUtils {
         return jwtUtils.getAllClaimsFromToken(token).get("user_id").toString(); //TODO: Handle error cases
     }
 
+    private String getUserEmail(String token){
+        return jwtUtils.getAllClaimsFromToken(token).get("sub").toString(); //TODO: Handle error cases
+    }
+
     public Mono<String> getToken(){
         return ReactiveSecurityContextHolder.getContext().map(securityContext -> {
             return (String) securityContext.getAuthentication().getCredentials(); //TODO: Handle error cases
@@ -29,6 +33,6 @@ public class ReactiveSecurityContextUtils {
     }
 
     public Mono<UserIdToTokenMap> getUserId2TokenMap(){
-        return getToken().map(token -> UserIdToTokenMap.builder().userId(getUserId(token)).token(token).build());
+        return getToken().map(token -> UserIdToTokenMap.builder().userId(getUserId(token)).token(token).email(getUserEmail(token)).build());
     }
 }
