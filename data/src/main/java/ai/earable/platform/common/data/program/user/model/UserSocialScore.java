@@ -10,6 +10,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.util.UUID;
 
 @Data
+@With
 @Builder
 @Table(value = "user_social_score")
 @ToString
