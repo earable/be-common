@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 @ApplicationScoped
 @Slf4j
 public class Configuration {
-    @ConfigProperty(name = "earable.nio-event-loop.webclient", defaultValue="8")
+    @ConfigProperty(name = "earable.nio-event-loop.webclient", defaultValue="64")
     protected int webClientPoolSize;
 
     @Inject
