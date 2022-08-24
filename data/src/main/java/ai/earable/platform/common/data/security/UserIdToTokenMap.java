@@ -16,4 +16,5 @@ import lombok.NoArgsConstructor;
 public class UserIdToTokenMap {
     private String userId;
     private String token;
+    private String email;
 }
