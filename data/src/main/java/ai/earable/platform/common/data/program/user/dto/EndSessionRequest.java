@@ -18,7 +18,7 @@ public class EndSessionRequest {
     private ActivityType activityType;
     private Long startTime;
     private Long endTime;
-    private Integer duration;
+    private Double duration;
     private Integer sessionPoint;
     private Integer dayOfYear;
     private Integer weekOfYear;
