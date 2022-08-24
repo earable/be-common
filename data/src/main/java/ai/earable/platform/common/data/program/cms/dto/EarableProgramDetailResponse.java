@@ -22,5 +22,5 @@ public class EarableProgramDetailResponse extends Program {
     private List<EarableTask> earableTasks;
     private EarableProgramStatus status;
     private Integer participant;
-    private Boolean joined;
+    private Boolean canJoin;
 }
