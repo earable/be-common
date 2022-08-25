@@ -41,8 +41,8 @@ import java.util.Properties;
 @Slf4j
 public class JwtUtils {
 
-//    @Autowired
-//    private ReactiveRedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private ReactiveRedisTemplate<String, String> redisTemplate;
 
     @Value("#{new Boolean('${earable.auth.ignore:false}')}")
     private boolean ignoreAuth;
@@ -82,9 +82,9 @@ public class JwtUtils {
 
             String keyString = new String(keyBytes);
             keyString = keyString
-                    .replace("-----BEGIN PUBLIC KEY-----", "")
-                    .replaceAll(System.lineSeparator(), "")
-                    .replace("-----END PUBLIC KEY-----", "");
+                .replace("-----BEGIN PUBLIC KEY-----", "")
+                .replaceAll(System.lineSeparator(), "")
+                .replace("-----END PUBLIC KEY-----", "");
 
             X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
@@ -119,17 +119,16 @@ public class JwtUtils {
     }
 
     private Mono<Boolean> isTokenExistOnRedis(String token) {
-//        Claims claims = getAllClaimsFromToken(token);
-//        String tokenId = claims.get("token_id", String.class);
-//        String userId = claims.get("user_id", String.class);
-//        // check token is existed on redis
-//        return redisTemplate.opsForValue()
-//                .get(userId)
-//                .filter(savedTokenId -> ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(savedTokenId))
-//                .filter(savedTokenId -> savedTokenId.equals(tokenId))
-//                .flatMap(s -> Mono.just(true))
-//                .switchIfEmpty(Mono.just(false));
-        return Mono.just(true);
+        Claims claims = getAllClaimsFromToken(token);
+        String tokenId = claims.get("token_id", String.class);
+        String userId = claims.get("user_id", String.class);
+        // check token is existed on redis
+        return redisTemplate.opsForValue()
+                .get(userId)
+                .filter(savedTokenId -> ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(savedTokenId))
+                .filter(savedTokenId -> savedTokenId.equals(tokenId))
+                .flatMap(s -> Mono.just(true))
+                .switchIfEmpty(Mono.just(false));
     }
 
     public boolean isTokenExpired(String token) {
@@ -145,7 +144,7 @@ public class JwtUtils {
         Claims claims = getAllClaimsFromToken(token);
         Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
         Collection<? extends GrantedAuthority> authorities = authoritiesClaim == null ? AuthorityUtils.NO_AUTHORITIES
-                : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
+            : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
