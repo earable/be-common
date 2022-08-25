@@ -13,10 +13,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by BinhNH on 25/08/2022
@@ -64,8 +61,8 @@ public class QuorumStatement implements SimpleStatement{
             Integer.MIN_VALUE);
     }
 
-    public QuorumStatement(@NonNull String cqlQuery, @NonNull List<Object> positionalValues){
-        this(cqlQuery, positionalValues,
+    public QuorumStatement(@NonNull String cqlQuery, @NonNull Object... positionalValues){
+        this(cqlQuery, Arrays.asList(positionalValues),
             NullAllowingImmutableMap.of(),
             (String)null,
             (DriverExecutionProfile)null,
