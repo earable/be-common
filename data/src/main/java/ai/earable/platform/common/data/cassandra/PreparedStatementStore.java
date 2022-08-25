@@ -5,8 +5,6 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import com.datastax.oss.driver.api.core.cql.Statement;
-import com.datastax.oss.driver.internal.core.cql.DefaultSimpleStatement;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +29,18 @@ public class PreparedStatementStore {
     /**
      * Get prepared statement existed in store
      * If not existed, prepare new statement and store
+     *
+     * Note 1:
+     * - When you prepare the statement, Cassandra will parse the query string, cache the result and return a unique
+     * identifier (the PreparedStatement object keeps an internal reference to that identifier).
+     * - When you bind and execute a prepared statement, the driver will only send the identifier, which allows
+     * Cassandra to skip the parsing phase
+     * => So we should prepare only once, and cache the PreparedStatement in our application (thread-safe) to avoid
+     * preparing multiple times with the same query string
+     *
+     * Note 2:
+     * If you execute a query only once, a prepared statement is inefficient because it requires two roundtrips.
+     * Consider a {@link SimpleStatement} or {@link QuorumStatement} instead (like below).
      */
     public BoundStatement getStatement(String cql) {
         PreparedStatement ps = preparedStatementMap.get(cql);
