@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * Created by BinhNH on 25/08/2022
  */
-public class QuorumStatement implements SimpleStatement{
+public class QuorumStatement implements SimpleStatement {
     private final String query;
     private final List<Object> positionalValues;
     private final Map<CqlIdentifier, Object> namedValues;
