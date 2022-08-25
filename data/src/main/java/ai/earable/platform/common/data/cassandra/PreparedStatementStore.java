@@ -30,6 +30,6 @@ public class PreparedStatementStore {
             ps = cqlSession.prepare(cql);
             preparedStatementMap.put(cql, ps);
         }
-        return ps.bind().setConsistencyLevel(ConsistencyLevel.QUORUM);
+        return ps.bind();
     }
 }
