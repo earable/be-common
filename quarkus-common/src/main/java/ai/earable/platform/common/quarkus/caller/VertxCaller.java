@@ -214,13 +214,17 @@ public class VertxCaller implements Caller {
         if(throwable.getCause() instanceof TimeoutException)
             return true;
 
+        if(throwable.getCause() instanceof java.util.concurrent.TimeoutException)
+            return true;
+
         final String errorMess = throwable.getLocalizedMessage() == null ?
                 throwable.getMessage() : throwable.getLocalizedMessage();
         if(errorMess != null){
             return errorMess.toLowerCase().contains("connection reset by peer")
                     || errorMess.toLowerCase().contains("connection refused")
-                    || errorMess.toLowerCase().contains("connection time out")
-                    || errorMess.toLowerCase().contains("connection timeout");
+                    || errorMess.toLowerCase().contains("connection timed out")
+                    || errorMess.toLowerCase().contains("connection timeout")
+                    || errorMess.toLowerCase().contains("not observe any item or terminal signal within");
         }
         return false;
     }

@@ -32,10 +32,10 @@ public class WebFluxConfiguration {
     @Value(value = "${earable.service.name}")
     private String serviceName;
 
-    @Value(value = "${earable.nio-event-loop.http-server}")
+    @Value(value = "${earable.nio-event-loop.http-server:64}")
     private int httpServerEventLoop;
 
-    @Value(value = "${earable.nio-event-loop.webclient}")
+    @Value(value = "${earable.nio-event-loop.webclient:64}")
     private int webClientEventLoop;
 
     @Value(value = "${earable.reactor.scheduler:4}")
