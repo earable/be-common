@@ -56,7 +56,8 @@ public class EarableProgramCreateRequest {
 //        ValidationUtils.checkNull("earableTasks",this.earableTasks);
 
         for (EarableTask earableTask : earableTasks){
-            earableTask.setTaskId(UUID.randomUUID());
+            if (earableTask.getTaskId() == null)
+                earableTask.setTaskId(UUID.randomUUID());
         }
 
         for (Reward reward : rewards){
