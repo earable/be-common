@@ -61,9 +61,9 @@ public class EarableProgramCreateRequest {
 
         for (Reward reward : rewards){
             if (reward.getDescription().length() > 60)
-                throw new EarableException(400,EarableErrorCode.PARAM_REQUIRED,"description max 60 characters");
+                throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"description max 60 characters");
             if (reward.getTitle().length() > 60)
-                throw new EarableException(400,EarableErrorCode.PARAM_REQUIRED,"title max 60 characters");
+                throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"title max 60 characters");
         }
 
         if (programType.equals(ProgramType.CONTEST)){
