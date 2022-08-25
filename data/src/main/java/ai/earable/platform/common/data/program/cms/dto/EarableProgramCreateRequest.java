@@ -10,7 +10,10 @@ import ai.earable.platform.common.data.program.common.model.Reward;
 import ai.earable.platform.common.data.program.cms.model.EarableTask;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -50,11 +53,18 @@ public class EarableProgramCreateRequest {
         ValidationUtils.checkBlank("shortDescription",this.shortDescription);
         ValidationUtils.checkNull("requiredPoint",this.requiredPoint);
         ValidationUtils.checkNull("earableRewards",this.rewards);
-        //ValidationUtils.checkNull("earableTasks",this.earableTasks);
+//        ValidationUtils.checkNull("earableTasks",this.earableTasks);
 
-//        if (this.earableTasks.stream().map(EarableTask::getId)==null) {
-//            earableTasks.stream().map(o -> o.setId(UUID.randomUUID())).collect(Collectors.toList());
-//        }
+        for (EarableTask earableTask : earableTasks){
+            earableTask.setTaskId(UUID.randomUUID());
+        }
+
+        for (Reward reward : rewards){
+            if (reward.getDescription().length() > 60)
+                throw new EarableException(400,EarableErrorCode.PARAM_REQUIRED,"description max 60 characters");
+            if (reward.getTitle().length() > 60)
+                throw new EarableException(400,EarableErrorCode.PARAM_REQUIRED,"title max 60 characters");
+        }
 
         if (programType.equals(ProgramType.CONTEST)){
             if (this.startDate == null || this.endDate == null)

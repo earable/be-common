@@ -27,6 +27,13 @@ public class EarableBadgeCreateRequest {
         ValidationUtils.checkBlank("icon",this.icon);
         ValidationUtils.checkNull("benefitValue",this.benefitValue);
         ValidationUtils.checkNull("benefitType",this.benefitType);
+
+        if (this.title.length() > 30)
+            throw new EarableException(400,EarableErrorCode.PARAM_INVALID,"title max character 30");
+
+        if (this.description.length() > 60)
+            throw new EarableException(400, EarableErrorCode.PARAM_INVALID,"description max character 60");
+
         if (benefitType.equals(BenefitType.POINT)){
             if (null!= this.benefitEffectivePeriod)
                 throw new EarableException(400, EarableErrorCode.PARAM_INVALID,"benefiEffectivePeriod");
