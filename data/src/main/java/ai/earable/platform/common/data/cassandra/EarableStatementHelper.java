@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by BinhNH on 25/08/2022
  */
 @Component
-public class PreparedStatementStore {
+public class EarableStatementHelper {
     private final Map<String, PreparedStatement> preparedStatementMap = new ConcurrentHashMap<>();
 
     @Autowired
@@ -43,7 +43,7 @@ public class PreparedStatementStore {
      * If you execute a query only once, a prepared statement is inefficient because it requires two roundtrips.
      * Consider a {@link SimpleStatement} or {@link QuorumStatement} instead (like below).
      */
-    public Mono<BoundStatement> getStatement(String cql) {
+    public Mono<BoundStatement> prepare(String cql) {
         PreparedStatement ps = preparedStatementMap.get(cql);
         if (ps == null) {
             return reactiveSession.prepare(cql).map(preparedStatement -> {
