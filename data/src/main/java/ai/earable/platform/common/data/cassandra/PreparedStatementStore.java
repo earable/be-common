@@ -8,7 +8,11 @@ import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.cassandra.ReactiveSession;
+import org.springframework.data.cassandra.core.ReactiveCassandraTemplate;
+import org.springframework.data.cassandra.core.cql.ReactiveCqlTemplate;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +25,7 @@ public class PreparedStatementStore {
     private final Map<String, PreparedStatement> preparedStatementMap = new ConcurrentHashMap<>();
 
     @Autowired
-    private CqlSession cqlSession;
+    private ReactiveSession reactiveSession;
 
     @Value(value = "${earable.cassandra.consistency.level:QUORUM}")
     private ConsistencyLevel consistencyLevel;
@@ -42,13 +46,15 @@ public class PreparedStatementStore {
      * If you execute a query only once, a prepared statement is inefficient because it requires two roundtrips.
      * Consider a {@link SimpleStatement} or {@link QuorumStatement} instead (like below).
      */
-    public BoundStatement getStatement(String cql) {
+    public Mono<BoundStatement> getStatement(String cql) {
         PreparedStatement ps = preparedStatementMap.get(cql);
         if (ps == null) {
-            ps = cqlSession.prepare(cql);
-            preparedStatementMap.put(cql, ps);
+            return reactiveSession.prepare(cql).map(preparedStatement -> {
+                preparedStatementMap.put(cql, preparedStatement);
+                return preparedStatement.bind().setConsistencyLevel(consistencyLevel);
+            });
         }
-        return ps.bind().setConsistencyLevel(consistencyLevel);
+        return Mono.just(ps.bind().setConsistencyLevel(consistencyLevel));
     }
 
     /**
