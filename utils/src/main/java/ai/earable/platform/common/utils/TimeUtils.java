@@ -1,11 +1,10 @@
 package ai.earable.platform.common.utils;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -44,6 +43,31 @@ public final class TimeUtils {
 
     public static Date convertFromUnixTimestamp(long timeStamp){
         return new java.util.Date(timeStamp*1000);
+    }
+
+    public static boolean isGreaterThan(LocalTime input, LocalTime compareTo){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        return input.format(dtf).compareTo(compareTo.format(dtf)) > 0;
+    }
+
+    public static boolean isEqual(LocalTime input, LocalTime compareTo){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        return input.format(dtf).compareTo(compareTo.format(dtf)) == 0;
+    }
+
+    public static boolean isLessThan(LocalTime input, LocalTime compareTo){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        return input.format(dtf).compareTo(compareTo.format(dtf)) < 0;
+    }
+
+    public static boolean isLessThanOrEqual(LocalTime input, LocalTime compareTo){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        return input.format(dtf).compareTo(compareTo.format(dtf)) <= 0;
+    }
+
+    public static boolean isGreaterThanOrEqual(LocalTime input, LocalTime compareTo){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        return input.format(dtf).compareTo(compareTo.format(dtf)) >= 0;
     }
 
     public static void main(String[] args) {

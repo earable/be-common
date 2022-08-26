@@ -7,8 +7,13 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import static ai.earable.platform.common.utils.TimeUtils.*;
 
 @Component
 public class MessageUtils {
