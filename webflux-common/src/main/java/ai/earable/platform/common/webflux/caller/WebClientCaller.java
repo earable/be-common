@@ -52,7 +52,6 @@ public class WebClientCaller implements SpringCaller {
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay))
                 .timeout(Duration.ofSeconds(timeout))
                 .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay));
     }
