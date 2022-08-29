@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -19,6 +20,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserProfileRequest {
     @Size(max = 255, message = "name must not be greater than 255 characters.")
+    @Pattern(regexp = "^\\s*$", message = "name must be not empty.")
     private String name;
     @Size(min = 6, max = 20, message = "phone must be on range from 6 to 20 characters.")
     private String phone;
