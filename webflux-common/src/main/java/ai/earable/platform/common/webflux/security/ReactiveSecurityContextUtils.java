@@ -18,6 +18,10 @@ public class ReactiveSecurityContextUtils {
         return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("user_id").toString()); //TODO: Handle error cases
     }
 
+    public Mono<String> getUserEmail(){
+        return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("sub").toString()); //TODO: Handle error cases
+    }
+
     private String getUserId(String token){
         return jwtUtils.getAllClaimsFromToken(token).get("user_id").toString(); //TODO: Handle error cases
     }
