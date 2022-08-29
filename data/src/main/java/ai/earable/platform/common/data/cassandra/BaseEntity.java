@@ -13,10 +13,12 @@ import java.time.Instant;
  */
 @Data
 public class BaseEntity {
+
+    @CreatedDate
+    @Column("created_at")
+    private Instant createdAt = Instant.now();
+
     @LastModifiedDate
     @Column("updated_at")
     private Instant updatedAt;
-    @CreatedDate
-    @Column("created_at")
-    private Instant createdAt;
 }
