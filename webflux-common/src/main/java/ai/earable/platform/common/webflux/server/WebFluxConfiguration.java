@@ -20,8 +20,6 @@ import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.netty.resources.ConnectionProvider;
 
-import java.util.concurrent.Executors;
-
 /**
  * Created by BinhNH on 3/27/2022
  */
@@ -37,6 +35,12 @@ public class WebFluxConfiguration {
 
     @Value(value = "${earable.nio-event-loop.webclient:64}")
     private int webClientEventLoop;
+
+    @Value(value = "${earable.netty.pool.connections.max:2048}")
+    private int nettyPoolMaxConnections;
+
+    @Value(value = "${earable.netty.pool.connections.pending.max:4096}")
+    private int nettyPoolMaxAcquirePending;
 
     @Value(value = "${earable.reactor.scheduler:4}")
     private int reactorScheduler;
@@ -55,14 +59,13 @@ public class WebFluxConfiguration {
 
     @Bean
     public WebClient webClient(){
-        // in Mb
-        final int size = webClientMaxInMemorySize * 1024 * 1024;
+        final int size = webClientMaxInMemorySize * 1024 * 1024; // in Mb
         final ExchangeStrategies strategies = ExchangeStrategies.builder()
-                .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
-                .build();
+            .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size)).build();
         NioEventLoopGroup nioEventLoopGroup = init(webClientEventLoop);
         ReactorResourceFactory reactorResourceFactory = initReactorResourceFactory(nioEventLoopGroup);
-        ReactorClientHttpConnector reactorClientHttpConnector = new ReactorClientHttpConnector(reactorResourceFactory, httpClient -> httpClient);
+        ReactorClientHttpConnector reactorClientHttpConnector = new ReactorClientHttpConnector(reactorResourceFactory,
+            httpClient -> httpClient);
         return WebClient.builder()
                 .exchangeStrategies(strategies)
                 .clientConnector(reactorClientHttpConnector)
@@ -105,7 +108,11 @@ public class WebFluxConfiguration {
         ReactorResourceFactory reactorResourceFactory = new ReactorResourceFactory();
         reactorResourceFactory.setUseGlobalResources(false);
         reactorResourceFactory.setLoopResources(b -> nioEventLoopGroup);
-        reactorResourceFactory.setConnectionProvider(ConnectionProvider.builder(serviceName+"-http-server-connection-pool").build());
+        reactorResourceFactory.setConnectionProvider(ConnectionProvider
+            .builder(serviceName+"-http-server-connection-pool")
+            .maxConnections(nettyPoolMaxConnections)
+            .pendingAcquireMaxCount(nettyPoolMaxAcquirePending)
+            .build());
         return reactorResourceFactory;
     }
 }

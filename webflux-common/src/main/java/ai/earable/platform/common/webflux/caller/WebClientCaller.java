@@ -280,9 +280,6 @@ public class WebClientCaller implements SpringCaller {
     }
 
     private static boolean needToRetry(Throwable throwable){
-        if(throwable.getCause() instanceof TimeoutException)
-            return true;
-
         if(throwable.getCause() instanceof java.util.concurrent.TimeoutException)
             return true;
 
