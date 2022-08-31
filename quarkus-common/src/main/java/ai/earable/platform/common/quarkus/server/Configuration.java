@@ -26,6 +26,7 @@ public class Configuration {
     public WebClient getWebClient(){ //TODO: Move config to properties file and configMap
         WebClientOptions webClientOptions = new WebClientOptions()
             .setMaxPoolSize(webClientPoolSize) //IO threads handle sending and receiving
+            .setMaxWaitQueueSize(webClientPoolSize*2)
             .setConnectTimeout(1) //Maximum time to wait connection available
             .setIdleTimeout(100) // Maximum time before release connection if no data is received.
             .setKeepAlive(true)
