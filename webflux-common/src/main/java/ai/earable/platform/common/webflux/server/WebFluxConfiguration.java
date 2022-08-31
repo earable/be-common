@@ -45,7 +45,7 @@ public class WebFluxConfiguration {
     @Value(value = "${earable.reactor.scheduler:4}")
     private int reactorScheduler;
 
-    @Value(value = "${earable.webclient.codec.max-in-memory.size:20}")
+    @Value(value = "${earable.webclient.codec.max-in-memory.size:48}")
     private int webClientMaxInMemorySize;
 
     @Bean
