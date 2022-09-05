@@ -34,7 +34,7 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                 .filter(authHeader -> authHeader.startsWith(BEARER))
                 .map(authHeader -> authHeader.substring(BEARER.length()))
                 // check token expire
-                .filter(token -> !jwtUtils.isTokenExpired(token))
+                .filter(token -> jwtUtils.isValidToken(token))
                 // validate token on redis
                 .flatMap(authToken -> jwtUtils.validateTokenOnCache(authToken)
                         .filter(isValid -> isValid)

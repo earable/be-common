@@ -51,6 +51,11 @@ public class JwtUtils {
     private boolean enableRedisTokenCaching;
 
     private static final String AUTHORITIES_KEY = "role"; //Need to map to IMS
+
+    private static final String TOKEN_TYPE = "token_type";
+
+    private static final String ACCESS_TOKEN = "ACCESS_TOKEN";
+
     private PublicKey publicKey = null;
 
     //TODO: Clean this method
@@ -131,13 +136,23 @@ public class JwtUtils {
                 .switchIfEmpty(Mono.just(false));
     }
 
-    public boolean isTokenExpired(String token) {
+    public boolean isValidToken(String token) {
         final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        final String tokenType = getTokenType(token);
+
+        // Check token is expired time
+        if(expiration.before(new Date())) return false;
+
+        // Check Token type is ACCESS TOKEN
+        return ACCESS_TOKEN.equals(tokenType);
     }
 
     public Date getExpirationDateFromToken(String token) {
         return getAllClaimsFromToken(token).getExpiration();
+    }
+
+    public String getTokenType(String token) {
+        return getAllClaimsFromToken(token).get(TOKEN_TYPE, String.class);
     }
 
     public Authentication getAuthentication(String token) {
