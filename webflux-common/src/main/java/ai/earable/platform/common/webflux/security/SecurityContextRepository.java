@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.stereotype.Component;
@@ -43,7 +44,10 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                 .switchIfEmpty(Mono.error(new EarableException(HttpStatus.UNAUTHORIZED.value(), EarableErrorCode.UNAUTHORIZED)))
                 .flatMap(authToken -> {
                     Authentication authentication = jwtUtils.getAuthentication(authToken);
-                    return this.authenticationManager.authenticate(authentication).map(SecurityContextImpl::new);
+                    return this.authenticationManager.authenticate(authentication).map(newAuthentication -> {
+                        SecurityContextHolder.setContext(new SecurityContextImpl(newAuthentication));
+                        return SecurityContextHolder.getContext();
+                    });
                 });
     }
 }

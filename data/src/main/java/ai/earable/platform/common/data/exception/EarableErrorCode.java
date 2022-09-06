@@ -71,6 +71,7 @@ public enum EarableErrorCode {
     CALLER_ERROR ("CALLER_ERROR"),
 
     UNAUTHORIZED ("UNAUTHORIZED"),
+    ACCESS_DENIED ("ACCESS_DENIED"),
     INTERNAL_SERVER_ERROR ("INTERNAL_SERVER_ERROR");
 
     private final String errorDetail;

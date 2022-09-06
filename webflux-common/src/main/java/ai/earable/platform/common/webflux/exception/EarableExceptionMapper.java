@@ -14,7 +14,10 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.codec.DecodingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebInputException;
@@ -98,6 +101,18 @@ public class EarableExceptionMapper {
             .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())
             .details(EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail()).build();
         log.error("Return error to client with details {}", errorDetails.toString());
+        return ResponseEntity.status(errorDetails.getHttpStatusCode())
+                .body(errorDetails);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public @ResponseBody ResponseEntity handleCommonException(AccessDeniedException e) {
+        ErrorDetails errorDetails = ErrorDetails.builder()
+                .httpStatusCode(HttpStatus.FORBIDDEN.value())
+                .earableErrorCode(EarableErrorCode.ACCESS_DENIED.name())
+                .details(EarableErrorCode.ACCESS_DENIED.getErrorDetail()).build();
+        log.warn("Don't have permission access to resource {}", errorDetails.toString());
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);
     }

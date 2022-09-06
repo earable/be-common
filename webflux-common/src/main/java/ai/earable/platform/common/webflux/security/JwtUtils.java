@@ -2,12 +2,7 @@ package ai.earable.platform.common.webflux.security;
 
 import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +17,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -44,10 +35,10 @@ public class JwtUtils {
     @Autowired
     private ReactiveRedisTemplate<String, String> redisTemplate;
 
-    @Value("#{new Boolean('${earable.auth.ignore:false}')}")
+    @Value("${earable.auth.ignore:false}")
     private boolean ignoreAuth;
 
-    @Value("#{new Boolean('${earable.token.caching.redis.enable:false}')}")
+    @Value("${earable.token.caching.redis.enable:false}")
     private boolean enableRedisTokenCaching;
 
     private static final String AUTHORITIES_KEY = "role"; //Need to map to IMS
@@ -141,7 +132,7 @@ public class JwtUtils {
         final String tokenType = getTokenType(token);
 
         // Check token is expired time
-        if(expiration.before(new Date())) return false;
+        if (expiration.before(new Date())) return false;
 
         // Check Token type is ACCESS TOKEN
         return ACCESS_TOKEN.equals(tokenType);
@@ -157,9 +148,9 @@ public class JwtUtils {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getAllClaimsFromToken(token);
-        Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
-        Collection<? extends GrantedAuthority> authorities = authoritiesClaim == null ? AuthorityUtils.NO_AUTHORITIES
-            : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
+        Object roles = claims.get(AUTHORITIES_KEY);
+        Collection<? extends GrantedAuthority> authorities = roles == null ? AuthorityUtils.NO_AUTHORITIES
+                : AuthorityUtils.commaSeparatedStringToAuthorityList(roles.toString().replace("[","").replace("]",""));
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
