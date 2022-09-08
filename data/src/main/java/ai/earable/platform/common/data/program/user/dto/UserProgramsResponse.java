@@ -1,5 +1,6 @@
 package ai.earable.platform.common.data.program.user.dto;
 
+import ai.earable.platform.common.data.program.common.enums.BenefitType;
 import ai.earable.platform.common.data.program.common.model.Program;
 import ai.earable.platform.common.data.program.common.model.Reward;
 import ai.earable.platform.common.data.program.user.enums.UserProgramState;
@@ -27,6 +28,8 @@ public class UserProgramsResponse extends Program {
     private Integer tasksCompleted;
     private Integer participants;
     private Integer currentPoint;
+    private Integer pointBiggest;
+    private BenefitType typeOfPointBiggest;
     private Integer ranking;
     private List<UserTask> userTasks;
     private List<UserProgramBadgeInfo> userProgramBadgeInfos;
