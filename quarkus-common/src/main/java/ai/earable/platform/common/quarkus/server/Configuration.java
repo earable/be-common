@@ -20,7 +20,7 @@ public class Configuration {
     protected int webClientPoolSize;
 
     @Inject
-    protected  io.vertx.core.Vertx globalVertx;
+    protected io.vertx.core.Vertx globalVertx;
 
     @Singleton
     public WebClient getWebClient(){ //TODO: Move config to properties file and configMap
@@ -29,9 +29,9 @@ public class Configuration {
             .setMaxWaitQueueSize(webClientPoolSize*2)
             .setConnectTimeout(1) //Maximum time to wait connection available
             .setIdleTimeout(100) // Maximum time before release connection if no data is received.
-            .setKeepAlive(true)
+            .setKeepAlive(false)
             .setKeepAliveTimeout(5)  // Maximum time in pool of this connection before be evicted or closed.
-            .setTcpKeepAlive(true)
+            .setTcpKeepAlive(false)
             .setTcpNoDelay(true);
         return WebClient.create(new Vertx(globalVertx), webClientOptions);
     }
