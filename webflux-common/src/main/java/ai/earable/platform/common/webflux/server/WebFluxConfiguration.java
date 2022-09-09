@@ -108,11 +108,12 @@ public class WebFluxConfiguration {
         ReactorResourceFactory reactorResourceFactory = new ReactorResourceFactory();
         reactorResourceFactory.setUseGlobalResources(false);
         reactorResourceFactory.setLoopResources(b -> nioEventLoopGroup);
-        reactorResourceFactory.setConnectionProvider(ConnectionProvider
-            .builder(serviceName+"-http-server-connection-pool")
-            .maxConnections(nettyPoolMaxConnections)
-            .pendingAcquireMaxCount(nettyPoolMaxAcquirePending)
-            .build());
+        reactorResourceFactory.setConnectionProvider(ConnectionProvider.builder(serviceName+"-http-server-connection-pool").build());
+//        reactorResourceFactory.setConnectionProvider(ConnectionProvider
+//            .builder(serviceName+"-http-server-connection-pool")
+//            .maxConnections(nettyPoolMaxConnections)
+//            .pendingAcquireMaxCount(nettyPoolMaxAcquirePending)
+//            .build());
         return reactorResourceFactory;
     }
 }
