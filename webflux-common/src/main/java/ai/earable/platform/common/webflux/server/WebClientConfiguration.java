@@ -53,7 +53,7 @@ public class WebClientConfiguration {
 
     @Bean
     public WebClient webClient(){
-        final int size = webClientMaxInMemorySize * 1024 * 1024; // in Mb
+        final int size = webClientMaxInMemorySize * 1024 * 1024; // in MB
         final ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size)).build();
         return WebClient.builder().clientConnector(reactorClientHttpConnector())
