@@ -8,7 +8,7 @@ import reactor.netty.resources.LoopResources;
 /**
  * Created by BinhNH on 9/9/2022
  */
-final class ConfigurationUtil {
+final class WebFluxConfigurationUtil {
     public static NioEventLoopGroup init(int nThreads){
         return new NioEventLoopGroup(nThreads);
     }

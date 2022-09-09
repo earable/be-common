@@ -27,9 +27,9 @@ public class WebServerConfiguration {
 
     @Bean
     public ReactiveWebServerFactory reactiveWebServerFactory(){
-        NioEventLoopGroup nioEventLoopGroup = ConfigurationUtil.init(httpServerEventLoop);
-        ConnectionProvider connectionProvider = ConfigurationUtil.createConnectionProvider(serviceName+"-server-connection-pool", nettyPoolMaxConnections);
-        ReactorResourceFactory reactorResourceFactory  = ConfigurationUtil.initReactorResourceFactory(nioEventLoopGroup, connectionProvider);
+        NioEventLoopGroup nioEventLoopGroup = WebFluxConfigurationUtil.init(httpServerEventLoop);
+        ConnectionProvider connectionProvider = WebFluxConfigurationUtil.createConnectionProvider(serviceName+"-server-connection-pool", nettyPoolMaxConnections);
+        ReactorResourceFactory reactorResourceFactory  = WebFluxConfigurationUtil.initReactorResourceFactory(nioEventLoopGroup, connectionProvider);
         NettyReactiveWebServerFactory factory = new NettyReactiveWebServerFactory();
         factory.setResourceFactory(reactorResourceFactory);
         return factory;

@@ -2,8 +2,6 @@ package ai.earable.platform.common.webflux.server;
 
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +16,7 @@ import reactor.netty.resources.ConnectionProvider;
 
 import java.util.concurrent.TimeUnit;
 
-import static ai.earable.platform.common.webflux.server.ConfigurationUtil.init;
+import static ai.earable.platform.common.webflux.server.WebFluxConfigurationUtil.init;
 
 /**
  * Created by BinhNH on 9/9/2022
@@ -42,8 +40,8 @@ public class WebClientConfiguration {
 
     private ReactorClientHttpConnector reactorClientHttpConnector(){
         NioEventLoopGroup nioEventLoopGroup = init(webClientEventLoop);
-        ConnectionProvider provider = ConfigurationUtil.createConnectionProvider("webclient-connection-pool", nettyPoolMaxConnections);
-        ReactorResourceFactory reactorResourceFactory = ConfigurationUtil.initReactorResourceFactory(nioEventLoopGroup, provider);
+        ConnectionProvider provider = WebFluxConfigurationUtil.createConnectionProvider("webclient-connection-pool", nettyPoolMaxConnections);
+        ReactorResourceFactory reactorResourceFactory = WebFluxConfigurationUtil.initReactorResourceFactory(nioEventLoopGroup, provider);
         return new ReactorClientHttpConnector(reactorResourceFactory, httpClient ->
                     httpClient.doOnConnected(connection ->
                         connection.addHandlerLast(new ReadTimeoutHandler(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS))

@@ -18,7 +18,7 @@ import reactor.core.scheduler.Schedulers;
 @org.springframework.context.annotation.Configuration
 @Component
 @EnableAutoConfiguration
-public class WebFluxConfiguration {
+public class GeneralConfiguration {
     @Value(value = "${earable.reactor.scheduler:4}")
     private int reactorScheduler;
 
