@@ -42,5 +42,7 @@ public class UserProfileResponse {
     private Long currentStreak;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long ranking;
+    private Boolean focusFlag;
+    private Boolean recoveryFlag;
     private ProfileProgress profileProgress;
 }
