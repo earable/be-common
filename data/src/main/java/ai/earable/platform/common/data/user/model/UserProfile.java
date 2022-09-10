@@ -49,6 +49,10 @@ public class UserProfile extends BaseEntity {
     private Long currentStreak;
     @Column("old_streak")
     private Long oldStreak;
+    @Column("focus_flag")
+    private Boolean focusFlag;
+    @Column("recovery_flag")
+    private Boolean recoveryFlag;
     @Column("profile_progress")
     private ProfileProgress profileProgress;
 }
