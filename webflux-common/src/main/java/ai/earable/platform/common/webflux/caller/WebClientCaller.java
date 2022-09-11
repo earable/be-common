@@ -157,7 +157,22 @@ public class WebClientCaller implements SpringCaller {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(multipartData))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, 2, 2));
+    }
+
+    @Override
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken,
+                                        MultiValueMap<String, String> queryParams,
+                                        Class<V> responseType, String... pathParams) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(queryParams).encode().toUriString();
+        return webClient.method(wrap(method))
+                .uri(urlTemplate)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
