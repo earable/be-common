@@ -4,7 +4,6 @@ import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.exception.ErrorDetails;
 import ai.earable.platform.common.data.http.HttpMethod;
-import io.netty.handler.timeout.TimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

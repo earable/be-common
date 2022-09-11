@@ -1,12 +1,9 @@
 package ai.earable.platform.common.data.timeseries.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * Created by BinhNH on 7/10/22
@@ -15,11 +12,16 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DefaultReportMetric implements Serializable {
+public class DefaultReportMetric {
     /**
      * The new metric will be reported
      */
     private String metricName;
+
+    /**
+     * Describe details about this metric
+     */
+    private String description;
 
     /**
      * The template of victoria metric query
@@ -27,6 +29,9 @@ public class DefaultReportMetric implements Serializable {
      */
     private String queryTemplate;
 
-    @JsonIgnore
-    private double value;
+    /**
+     * If this value is true, this query is not supported by timeseries victoria
+     * So we need implementation
+     */
+    private boolean needSelfImpl = false;
 }
