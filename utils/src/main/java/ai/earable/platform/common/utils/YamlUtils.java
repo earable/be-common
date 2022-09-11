@@ -19,4 +19,8 @@ public final class YamlUtils {
     public static <T> T readFromYamlFile(String yamlFilePath, Class<T> outputType) throws IOException {
         return MAPPER.readValue(new File(yamlFilePath), outputType);
     }
+
+    public static <T> T readFromBytes(byte[] bytes, Class<T> outputType) throws IOException {
+        return MAPPER.readValue(bytes, outputType);
+    }
 }

@@ -115,16 +115,17 @@ public class JwtUtils {
     }
 
     private Mono<Boolean> isTokenExistOnRedis(String token) {
-        Claims claims = getAllClaimsFromToken(token);
-        String tokenId = claims.get("token_id", String.class);
-        String userId = claims.get("user_id", String.class);
-        // check token is existed on redis
-        return redisTemplate.opsForValue()
-                .get(userId)
-                .filter(savedTokenId -> ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(savedTokenId))
-                .filter(savedTokenId -> savedTokenId.equals(tokenId))
-                .flatMap(s -> Mono.just(true))
-                .switchIfEmpty(Mono.just(false));
+//        Claims claims = getAllClaimsFromToken(token);
+//        String tokenId = claims.get("token_id", String.class);
+//        String userId = claims.get("user_id", String.class);
+//        // check token is existed on redis
+//        return redisTemplate.opsForValue()
+//                .get(userId)
+//                .filter(savedTokenId -> ObjectUtils.isNotEmpty(userId) && ObjectUtils.isNotEmpty(savedTokenId))
+//                .filter(savedTokenId -> savedTokenId.equals(tokenId))
+//                .flatMap(s -> Mono.just(true))
+//                .switchIfEmpty(Mono.just(false));
+        return Mono.just(true);
     }
 
     public boolean isValidToken(String token) {
