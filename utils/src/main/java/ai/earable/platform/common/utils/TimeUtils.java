@@ -1,5 +1,6 @@
 package ai.earable.platform.common.utils;
 
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -70,10 +71,21 @@ public final class TimeUtils {
         return input.format(dtf).compareTo(compareTo.format(dtf)) >= 0;
     }
 
+    public static int getHourFromTimestamp(long timestamp, String timezone){
+        Timestamp stamp = new Timestamp(timestamp);
+        Date date = new Date(stamp.getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone(timezone));
+        cal.setTime(date);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        return cal.get(Calendar.MINUTE) > 45 ? hour+1 : hour;
+    }
+
     public static void main(String[] args) {
         System.out.println(getNumberOfSecondsBetween(1657702497, 1657702527));
         System.out.println(getCurrentUnixTimestamp(AMERICA_TZ_STRING) + "\n" + getNextTimestamp(AMERICA_TZ_STRING, 3));
         System.out.println(getZoneOffset(System.currentTimeMillis(), AMERICA_TZ_STRING));
         System.out.println(convertFromUnixTimestamp(getNextTimestamp(AMERICA_TZ_STRING, 180)));
+        System.out.println(getHourFromTimestamp(1662663427000L, VN_TIME_ZONE_STRING));
     }
 }

@@ -4,8 +4,8 @@ import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.exception.ErrorDetails;
 import ai.earable.platform.common.data.http.HttpMethod;
-import io.netty.handler.timeout.TimeoutException;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -31,12 +31,15 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class WebClientCaller implements SpringCaller {
+    @Setter
     @Value(value = "${earable.internal.caller.timeout:15}")
     private int defaultTimeout;
 
+    @Setter
     @Value(value = "${earable.internal.caller.retry.times:3}")
     private int defaultRetryTimes;
 
+    @Setter
     @Value(value = "${earable.internal.caller.retry.delay:1}")
     private int defaultRetryDelay;
 
@@ -153,11 +156,26 @@ public class WebClientCaller implements SpringCaller {
     @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, MultiValueMap<String, T> multipartData, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
-                .uri(uri)
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(multipartData))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
-                .timeout(Duration.ofSeconds(defaultTimeout));
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, 2, 2));
+    }
+
+    @Override
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken,
+                                        MultiValueMap<String, String> queryParams,
+                                        Class<V> responseType, String... pathParams) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri).queryParams(queryParams).encode().toUriString();
+        return webClient.method(wrap(method))
+                .uri(urlTemplate, pathParams)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", bearerToken)
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
     @Override
