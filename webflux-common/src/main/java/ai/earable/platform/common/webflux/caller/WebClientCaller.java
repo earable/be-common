@@ -156,7 +156,7 @@ public class WebClientCaller implements SpringCaller {
     @Override
     public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, MultiValueMap<String, T> multipartData, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
-                .uri(uri)
+                .uri(uri, params)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromMultipartData(multipartData))
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
