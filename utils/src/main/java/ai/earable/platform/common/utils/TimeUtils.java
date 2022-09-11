@@ -1,7 +1,6 @@
 package ai.earable.platform.common.utils;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -78,7 +77,8 @@ public final class TimeUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone(timezone));
         cal.setTime(date);
-        return cal.get(Calendar.HOUR_OF_DAY);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        return cal.get(Calendar.MINUTE) > 45 ? hour+1 : hour;
     }
 
     public static void main(String[] args) {

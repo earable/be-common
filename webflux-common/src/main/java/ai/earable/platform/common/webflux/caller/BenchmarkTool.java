@@ -4,6 +4,8 @@ import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.http.HttpMethod;
 import ai.earable.platform.common.data.timeseries.dto.TimeseriesDataResponse;
+import ai.earable.platform.common.data.timeseries.model.MonitoredDataValue;
+import ai.earable.platform.common.utils.TimeUtils;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.A;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -113,24 +116,100 @@ public class BenchmarkTool {
 
         String readPath = "https://api.eardev.xyz" + "/des/api/v3/read/profile/{profileId}";
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("weekOfYear", "37");
-        queryParams.add("featureFilter", "SLEEP");
-        queryParams.add("metricFilter", "recovery_score");
+        queryParams.add("dayOfYear", "252");
+        queryParams.add("featureFilter", "FOCUS");
+        queryParams.add("metricFilter", "FOCUS_SCORE");
 
         String profileId = "47ab0f17-7592-4d70-bb97-5727dfef7a97";
         caller.requestToMono(HttpMethod.GET, readPath, stagingToken, queryParams, TimeseriesDataResponse.class, profileId)
             .flatMap(timeseriesDataResponse -> {
-                List<String> recovery_scores = new ArrayList<>();
+                List<List<String>> focusScoresList = new ArrayList<>();
+                List<String> startedTimestamp = new ArrayList<>();
                 timeseriesDataResponse.getData().getResult().forEach(result -> {
-                    recovery_scores.add(result.getValues().get(0).get(1));
+                    List<String> focusScores = new ArrayList<>();
+                    result.getValues().forEach(value -> focusScores.add(value.get(1)));
+                    focusScoresList.add(focusScores);
+
+                    long firstTimestamp = Long.parseLong(result.getValues().get(0).get(0))*1000;
+                    startedTimestamp.add(TimeUtils.getHourFromTimestamp(firstTimestamp, "Asia/Ho_Chi_Minh")+"");
                 });
-                return Mono.just(recovery_scores);
+                return Mono.just(startedTimestamp);
             })
             .doOnSuccess(strings ->
                     System.out.println(strings.size()))
             .onErrorResume(throwable -> Mono.error(new EarableException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 EarableErrorCode.INTERNAL_SERVER_ERROR, throwable.getLocalizedMessage()))).block();
 
+    }
+
+    private void testLongestFocusTime(){
+        WebClient webClient = init();
+
+        WebClientCaller caller = new WebClientCaller(webClient);
+        caller.setDefaultTimeout(15);
+        caller.setDefaultRetryTimes(1);
+        caller.setDefaultRetryDelay(1);
+
+        AtomicReference<String> path = new AtomicReference<>(localHost+dmsRootPath+benchmarkingPath);
+        if(env == ENV.DEV) path = new AtomicReference<>(devHost+dmsRootPath+benchmarkingPath);
+        if(env == ENV.STAGING) path = new AtomicReference<>(stagingHost+dmsRootPath+benchmarkingPath);
+
+        String nextHost = localHost+fmsRootPath+benchmarkingPath;
+        if(env == ENV.DEV) nextHost = devHost+fmsRootPath+benchmarkingPath;
+        if(env == ENV.STAGING) nextHost = stagingHost+fmsRootPath+benchmarkingPath;
+
+        String token = localToken;
+        if(env == ENV.DEV) token = devToken;
+        if(env == ENV.STAGING) token = stagingToken;
+
+        String readPath = "https://api.eardev.xyz" + "/des/api/v3/read/profile/{profileId}";
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("dayOfYear", "249");
+        queryParams.add("featureFilter", "FOCUS");
+        queryParams.add("metricFilter", "FOCUS_SCORE");
+
+        String profileId = "47ab0f17-7592-4d70-bb97-5727dfef7a97";
+        caller.requestToMono(HttpMethod.GET, readPath, stagingToken, queryParams, TimeseriesDataResponse.class, profileId)
+                .flatMap(timeseriesDataResponse -> {
+                    List<String> longestFocusHours = new ArrayList<>();
+                    timeseriesDataResponse.getData().getResult().forEach(result -> {
+                        longestFocusHours.add(countLongestFocusDuration(result.getValues())+"");
+                    });
+                    return Mono.just(longestFocusHours);
+                })
+                .doOnSuccess(strings ->
+                        System.out.println(strings.size()))
+                .onErrorResume(throwable -> Mono.error(new EarableException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        EarableErrorCode.INTERNAL_SERVER_ERROR, throwable.getLocalizedMessage()))).block();
+
+    }
+
+    /**
+     * This method to count the longest duration of focus time in seconds from FOCUS_SCORE data
+     */
+    private long countLongestFocusDuration(List<List<String>> monitoredDataValues){
+        double focusThreshold = 30.0;
+        boolean isFocusing = false;
+        long longestDuration = 0;
+        long startTimestamp = 0;
+        long lastTimestamp = 0;
+        for (List<String> monitoredDataValue : monitoredDataValues) {
+            if (Double.parseDouble(monitoredDataValue.get(1)) > focusThreshold) {
+                if (!isFocusing) {
+                    isFocusing = true;
+                    startTimestamp = Long.parseLong(monitoredDataValue.get(0));
+                }
+                lastTimestamp = Long.parseLong(monitoredDataValue.get(0));
+            } else {
+                if (isFocusing) {
+                    isFocusing = false;
+                    lastTimestamp = Long.parseLong(monitoredDataValue.get(0));
+                    long duration = lastTimestamp - startTimestamp;
+                    if (duration > longestDuration) longestDuration = duration;
+                }
+            }
+        }
+        return longestDuration == 0 ? lastTimestamp - startTimestamp : longestDuration;
     }
 
     private void benchmark(){
@@ -180,7 +259,8 @@ public class BenchmarkTool {
     public static void main(String[] args) {
         BenchmarkTool benchmarkTool = new BenchmarkTool();
 //        benchmarkTool.benchmark();
-        benchmarkTool.testReadDataWithTimeTags();
+//        benchmarkTool.testReadDataWithTimeTags();
+        benchmarkTool.testLongestFocusTime();
     }
 
 }
