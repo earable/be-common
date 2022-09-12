@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by BinhNH on 21/07/2022
  */
 public interface SpringCaller extends Caller {
-    <V> Mono<V> requestToMono(HttpMethod method, String uri, Map<String, String> headers, MultipartBodyBuilder requestBody, Class<V> responseType);
+    <V> Mono<V> requestToMono(HttpMethod method, String uri, Map<String, String> headers, MultipartBodyBuilder requestBody, Class<V> responseType, String... pathParams);
     <V> Mono<V> getMono(String uri, Class<V> responseType, MultiValueMap<String, String> queryParams, String... pathParams);
     <V> Mono<ClientResponse> requestToClientResponse(HttpMethod method, String uri, String bearerToken, String... pathParams);
     <T, V> Mono<V> requestToMono(HttpMethod method, String uri, MultiValueMap<String, T> multipartData, Class<V> responseType, String... pathParams);
