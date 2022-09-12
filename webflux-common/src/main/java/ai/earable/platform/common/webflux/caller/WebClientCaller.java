@@ -129,9 +129,9 @@ public class WebClientCaller implements SpringCaller {
 
     @Override
     public <V> Mono<V> requestToMono(HttpMethod method, String uri, Map<String, String> headers,
-                                     MultipartBodyBuilder multipartBodyBuilder, Class<V> responseType) {
+                                     MultipartBodyBuilder multipartBodyBuilder, Class<V> responseType,  String... params) {
         return webClient.method(wrap(method))
-                .uri(uri)
+                .uri(uri, params)
                 .header("Authorization", headers.get("Authorization"))
                 .header("Content-Type", headers.get("Content-Type"))
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
