@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CalculateEnergyRequest {
-    private List<String> recovery_score;
-    private List<List<String>> focus_session_trends; //focus score
-    private List<String> focus_session_relative_timestamps; //In hour
+    private double recovery_score;
+    private List<List<Double>> focus_session_trends; //focus score
+    private List<Integer> focus_session_relative_timestamps; //In hour
 }

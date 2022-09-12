@@ -28,5 +28,4 @@ public class MonitoredData {
      * Series of values of this metric
      */
     private List<MonitoredDataValue> monitoredDataValues;
-
 }
