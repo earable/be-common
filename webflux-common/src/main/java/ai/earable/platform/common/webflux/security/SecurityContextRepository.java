@@ -45,8 +45,9 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                 .flatMap(authToken -> {
                     Authentication authentication = jwtUtils.getAuthentication(authToken);
                     return this.authenticationManager.authenticate(authentication).map(newAuthentication -> {
-                        SecurityContextHolder.setContext(new SecurityContextImpl(newAuthentication));
-                        return SecurityContextHolder.getContext();
+                        SecurityContext securityContext = new SecurityContextImpl(newAuthentication);
+                        SecurityContextHolder.setContext(securityContext);
+                        return securityContext;
                     });
                 });
     }
