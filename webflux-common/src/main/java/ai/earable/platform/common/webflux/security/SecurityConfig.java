@@ -13,6 +13,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 @Configuration
 @EnableWebFluxSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -35,6 +36,8 @@ public class SecurityConfig {
 
     private final EarableAuthenticationManager reactiveAuthenticationManager;
     private final SecurityContextRepository securityContextRepository;
+
+    private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
     private static final String[] SWAGGER_WHITELIST = {
             // -- Swagger UI v2
@@ -72,6 +75,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(securityContextRepository)
+                .addFilterBefore(jwtTokenAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers(whiteList).permitAll()
