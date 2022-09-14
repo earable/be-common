@@ -13,17 +13,21 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 /**
  * Created by BinhNH on 6/13/2022
  */
 @Configuration
 @EnableWebFluxSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -32,6 +36,8 @@ public class SecurityConfig {
 
     private final EarableAuthenticationManager reactiveAuthenticationManager;
     private final SecurityContextRepository securityContextRepository;
+
+    private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
     private static final String[] SWAGGER_WHITELIST = {
             // -- Swagger UI v2
@@ -62,17 +68,30 @@ public class SecurityConfig {
                     return swe.getResponse().writeWith(Mono.just(new DefaultDataBufferFactory().wrap("FORBIDDEN".getBytes())));
                 })
                 .and()
-                .cors().disable()
+                .cors().configurationSource(request -> corsConfiguration())
+                .and()
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(securityContextRepository)
+                .addFilterBefore(jwtTokenAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers(whiteList).permitAll()
                 .anyExchange().authenticated()
                 .and().build();
+    }
+
+    @Bean
+    CorsConfiguration corsConfiguration() {
+        List<String> allowedMethods = List.of(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.PATCH.name(), HttpMethod.DELETE.name());
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedMethods(allowedMethods);
+        corsConfiguration.setAllowCredentials(false);
+        return corsConfiguration;
     }
 
     @Bean
