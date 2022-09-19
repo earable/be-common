@@ -24,7 +24,7 @@ public class GeneralConfiguration {
 
     @Bean
     public Scheduler scheduler(){
-        return Schedulers.boundedElastic();
+        return Schedulers.newBoundedElastic(reactorScheduler, Integer.MAX_VALUE, "earable-reactor-thread");
     }
 
     @Bean
