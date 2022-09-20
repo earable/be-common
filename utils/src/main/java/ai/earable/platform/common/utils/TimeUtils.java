@@ -51,23 +51,23 @@ public final class TimeUtils {
         return new java.util.Date(timeStamp*1000);
     }
 
-    public static boolean isGreaterThan(LocalTime input, LocalTime compareTo){
+    public static boolean isGreaterThan(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) > 0;
     }
 
-    public static boolean isEqual(LocalTime input, LocalTime compareTo){
+    public static boolean isEqual(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) == 0;
     }
 
-    public static boolean isLessThan(LocalTime input, LocalTime compareTo){
+    public static boolean isLessThan(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) < 0;
     }
 
-    public static boolean isLessThanOrEqual(LocalTime input, LocalTime compareTo){
+    public static boolean isLessThanOrEqual(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) <= 0;
     }
 
-    public static boolean isGreaterThanOrEqual(LocalTime input, LocalTime compareTo){
+    public static boolean isGreaterThanOrEqual(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) >= 0;
     }
 
@@ -83,8 +83,8 @@ public final class TimeUtils {
 
     public static void main(String[] args) {
 
-        LocalTime inputEnd = LocalTime.of(11, 01);
-        LocalTime existedEnd = LocalTime.of(11, 01);
-        System.out.println(isEqual(inputEnd, existedEnd));
+        LocalDateTime inputEnd = LocalDateTime.of(2022, Month.JANUARY, 1, 12, 12);
+        LocalDateTime existedEnd = LocalDateTime.of(2022, Month.JANUARY, 1, 13, 12);
+        System.out.println(isGreaterThan(inputEnd, existedEnd));
     }
 }
