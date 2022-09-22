@@ -25,7 +25,7 @@ public class GeneralConfiguration {
     @Value(value = "${earable.reactor.scheduler:4}")
     private int reactorScheduler;
 
-    private static final String MESSAGE_SOURCE = "classpath:messages";
+    private static final String MESSAGE_SOURCE = "classpath:messages/messages";
 
     @Bean
     public Scheduler scheduler() {
