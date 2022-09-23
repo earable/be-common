@@ -2,9 +2,6 @@ package ai.earable.platform.common.utils;
 
 import java.sql.Timestamp;
 import java.time.*;
-import java.time.temporal.ChronoField;
-import java.time.temporal.IsoFields;
-import java.time.temporal.JulianFields;
 import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,23 +48,23 @@ public final class TimeUtils {
         return new java.util.Date(timeStamp*1000);
     }
 
-    public static boolean isGreaterThan(LocalTime input, LocalTime compareTo){
+    public static boolean isGreaterThan(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) > 0;
     }
 
-    public static boolean isEqual(LocalTime input, LocalTime compareTo){
+    public static boolean isEqual(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) == 0;
     }
 
-    public static boolean isLessThan(LocalTime input, LocalTime compareTo){
+    public static boolean isLessThan(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) < 0;
     }
 
-    public static boolean isLessThanOrEqual(LocalTime input, LocalTime compareTo){
+    public static boolean isLessThanOrEqual(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) <= 0;
     }
 
-    public static boolean isGreaterThanOrEqual(LocalTime input, LocalTime compareTo){
+    public static boolean isGreaterThanOrEqual(LocalDateTime input, LocalDateTime compareTo){
         return input.compareTo(compareTo) >= 0;
     }
 
@@ -149,17 +146,5 @@ public final class TimeUtils {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.set(Calendar.YEAR, year);
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
-    }
-
-    public static void main(String[] args) {
-        int year = 2022;
-        int day = 264;
-
-        System.out.println(getWeekOfYearFrom(year, day));
-
-        LocalDate localDate = LocalDate.ofYearDay(year, day);
-        System.out.println(localDate.get(ChronoField.ALIGNED_WEEK_OF_YEAR));
-        System.out.println(localDate.get(WeekFields.SUNDAY_START.weekOfYear()));
-
     }
 }
