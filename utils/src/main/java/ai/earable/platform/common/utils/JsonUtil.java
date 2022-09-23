@@ -29,4 +29,9 @@ public final class JsonUtil {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         return ow.writeValueAsString(object);
     }
+
+    public static void main(String[] args) {
+        Double d = 0.5;
+        System.out.println(d > 0);
+    }
 }
