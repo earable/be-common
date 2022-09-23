@@ -3,6 +3,7 @@ package ai.earable.platform.common.data.feature.dto;
 import ai.earable.platform.common.data.feature.model.SessionEvent;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SessionOperationNotification {
+public class SessionOperationNotification implements Serializable {
     private String userId;
     private String featureName;
     private String profileId;
