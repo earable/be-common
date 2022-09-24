@@ -44,6 +44,7 @@ public final class TimeUtils {
         return (int) (timestampLast - timestampFirst);
     }
 
+    //TODO: Must use timezone
     public static Date convertFromUnixTimestamp(long timeStamp){
         return new java.util.Date(timeStamp*1000);
     }
@@ -92,6 +93,7 @@ public final class TimeUtils {
     /**
      * Using LocalDate to get week of year
      * Note: Java return wrong value if you use Calendar
+     * TODO: Must use timezone
      */
     public static int getWeekOfYearFrom(int year, int dayOfYear){
         LocalDate localDate = LocalDate.ofYearDay(year, dayOfYear);
