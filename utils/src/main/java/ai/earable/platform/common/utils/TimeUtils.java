@@ -91,7 +91,8 @@ public final class TimeUtils {
 
     public static int getWeekOfYearFrom(long timestamp, String timezone){
         Date dateTime = new Date(timestamp*1000);
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone(timezone));
         calendar.setTime(dateTime);
         return calendar.get(Calendar.WEEK_OF_YEAR);
     }
