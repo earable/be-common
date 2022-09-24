@@ -28,7 +28,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         try {
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            if (StringUtils.hasText(authHeader)) {
+            if (StringUtils.hasText(authHeader) && authHeader.length() > BEARER.length()) {
                 Authentication authentication = jwtUtils.getAuthentication(authHeader.substring(BEARER.length()));
                 SecurityContext context = new SecurityContextImpl(authentication);
                 SecurityContextHolder.setContext(context);
