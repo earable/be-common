@@ -2,7 +2,6 @@ package ai.earable.platform.common.utils;
 
 import java.sql.Timestamp;
 import java.time.*;
-import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -90,16 +89,11 @@ public final class TimeUtils {
         return cal.get(Calendar.DAY_OF_YEAR);
     }
 
-    /**
-     * Using LocalDate to get week of year
-     * Note: Java return wrong value if you use Calendar
-     * TODO: Must use timezone
-     */
-    public static int getWeekOfYearFrom(int year, int dayOfYear){
-        LocalDate localDate = LocalDate.ofYearDay(year, dayOfYear);
-        //return localDate.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
-        //return localDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-        return localDate.get(WeekFields.SUNDAY_START.weekOfYear()); //This map to ios apple week of year from mobile
+    public static int getWeekOfYearFrom(long timestamp, String timezone){
+        Date dateTime = new Date(timestamp*1000);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+        calendar.setTime(dateTime);
+        return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
     public static int getMonthOfYearFrom(long timestamp, String timezone){
@@ -157,10 +151,5 @@ public final class TimeUtils {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.set(Calendar.YEAR, year);
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(getLastTimestampOf(260, 2022, VN_TIME_ZONE_STRING));
-        System.out.println(getLastTimestampOf(260, 2022, AMERICA_TZ_STRING));
     }
 }
