@@ -2,7 +2,6 @@ package ai.earable.platform.common.utils;
 
 import java.sql.Timestamp;
 import java.time.*;
-import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -44,6 +43,7 @@ public final class TimeUtils {
         return (int) (timestampLast - timestampFirst);
     }
 
+    //TODO: Must use timezone
     public static Date convertFromUnixTimestamp(long timeStamp){
         return new java.util.Date(timeStamp*1000);
     }
@@ -89,15 +89,11 @@ public final class TimeUtils {
         return cal.get(Calendar.DAY_OF_YEAR);
     }
 
-    /**
-     * Using LocalDate to get week of year
-     * Note: Java return wrong value if you use Calendar
-     */
-    public static int getWeekOfYearFrom(int year, int dayOfYear){
-        LocalDate localDate = LocalDate.ofYearDay(year, dayOfYear);
-        //return localDate.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
-        //return localDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-        return localDate.get(WeekFields.SUNDAY_START.weekOfYear()); //This map to ios apple week of year from mobile
+    public static int getWeekOfYearFrom(long timestamp, String timezone){
+        Date dateTime = new Date(timestamp*1000);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+        calendar.setTime(dateTime);
+        return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
     public static int getMonthOfYearFrom(long timestamp, String timezone){
@@ -122,20 +118,29 @@ public final class TimeUtils {
         return isSameDay(convertFrom(timestamp1), convertFrom(timestamp2), timezone);
     }
 
-    public static LocalDate getDateFrom(int dayOfYear, int year){
-        return Year.of(year).atDay(dayOfYear);
+    /**
+     * To get last timestamp of
+     * @param dayOfYear - day of the year
+     * @param year - year
+     * @param timezone - timezone id
+     * @return last timestamp of this day by this timezone
+     *
+     * Note: You should use input from mobile to sync output
+     */
+    public static long getLastTimestampOf(int dayOfYear, int year, String timezone){
+        LocalDate ld = LocalDate.ofYearDay(year, dayOfYear);
+        LocalTime lt = LocalTime.of(23,59,59);
+        LocalDateTime ldt = LocalDateTime.of(ld, lt);
+        ZoneId zoneId = ZoneId.of(timezone);
+        return ldt.atZone(zoneId).toEpochSecond();
     }
 
-    public static long getFirstTimestampOf(int dayOfYear, int year){
-        return java.sql.Timestamp.valueOf(getDateFrom(dayOfYear, year)+" 00:00:00.0").getTime()/1000L;
-    }
-
-    public static long getLastTimestampOf(int dayOfYear, int year){
-        return java.sql.Timestamp.valueOf(getDateFrom(dayOfYear, year)+" 23:59:59.0").getTime()/1000L;
-    }
-
-    public static long getFirstTimestampOf(String dayOfYear, String year){
-        return getFirstTimestampOf(Integer.parseInt(dayOfYear), Integer.parseInt(year));
+    public static long getFirstTimestampOf(int dayOfYear, int year, String timezone){
+        LocalDate ld = LocalDate.ofYearDay(year, dayOfYear);
+        LocalTime lt = LocalTime.of(0, 0, 0);
+        LocalDateTime ldt = LocalDateTime.of(ld, lt);
+        ZoneId zoneId = ZoneId.of(timezone);
+        return ldt.atZone(zoneId).toEpochSecond();
     }
 
     public static long convertFrom(String timestamp){
