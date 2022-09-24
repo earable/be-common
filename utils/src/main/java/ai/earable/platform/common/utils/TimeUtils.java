@@ -122,14 +122,6 @@ public final class TimeUtils {
         return isSameDay(convertFrom(timestamp1), convertFrom(timestamp2), timezone);
     }
 
-    public static LocalDate getDateFrom(int dayOfYear, int year){
-        return Year.of(year).atDay(dayOfYear);
-    }
-
-    public static long getFirstTimestampOf(int dayOfYear, int year){
-        return java.sql.Timestamp.valueOf(getDateFrom(dayOfYear, year)+" 00:00:00.0").getTime()/1000L;
-    }
-
     /**
      * To get last timestamp of
      * @param dayOfYear - day of the year
