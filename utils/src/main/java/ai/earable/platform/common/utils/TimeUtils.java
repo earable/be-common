@@ -2,6 +2,9 @@ package ai.earable.platform.common.utils;
 
 import java.sql.Timestamp;
 import java.time.*;
+import java.time.temporal.ChronoField;
+import java.time.temporal.IsoFields;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -95,6 +98,15 @@ public final class TimeUtils {
         calendar.setTimeZone(TimeZone.getTimeZone(timezone));
         calendar.setTime(dateTime);
         return calendar.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    /**
+     * Using this method to map to mobile at this time
+     */
+    public static int getWeekOfYearFrom(int dayOfYear, int year){
+        LocalDate localDate = LocalDate.ofYearDay(year, dayOfYear);
+        int weekOfYear = localDate.get(WeekFields.ISO.weekOfYear()) + 1;
+        return weekOfYear == 53 ? 1 : weekOfYear;
     }
 
     public static int getMonthOfYearFrom(long timestamp, String timezone){
