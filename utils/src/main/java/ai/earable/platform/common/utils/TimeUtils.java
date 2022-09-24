@@ -130,12 +130,29 @@ public final class TimeUtils {
         return java.sql.Timestamp.valueOf(getDateFrom(dayOfYear, year)+" 00:00:00.0").getTime()/1000L;
     }
 
-    public static long getLastTimestampOf(int dayOfYear, int year){
-        return java.sql.Timestamp.valueOf(getDateFrom(dayOfYear, year)+" 23:59:59.0").getTime()/1000L;
+    /**
+     * To get last timestamp of
+     * @param dayOfYear - day of the year
+     * @param year - year
+     * @param timezone - timezone id
+     * @return last timestamp of this day by this timezone
+     *
+     * Note: You should use input from mobile to sync output
+     */
+    public static long getLastTimestampOf(int dayOfYear, int year, String timezone){
+        LocalDate ld = LocalDate.ofYearDay(year, dayOfYear);
+        LocalTime lt = LocalTime.of(23,59,59);
+        LocalDateTime ldt = LocalDateTime.of(ld, lt);
+        ZoneId zoneId = ZoneId.of(timezone);
+        return ldt.atZone(zoneId).toEpochSecond();
     }
 
-    public static long getFirstTimestampOf(String dayOfYear, String year){
-        return getFirstTimestampOf(Integer.parseInt(dayOfYear), Integer.parseInt(year));
+    public static long getFirstTimestampOf(int dayOfYear, int year, String timezone){
+        LocalDate ld = LocalDate.ofYearDay(year, dayOfYear);
+        LocalTime lt = LocalTime.of(0, 0, 0);
+        LocalDateTime ldt = LocalDateTime.of(ld, lt);
+        ZoneId zoneId = ZoneId.of(timezone);
+        return ldt.atZone(zoneId).toEpochSecond();
     }
 
     public static long convertFrom(String timestamp){
@@ -146,5 +163,10 @@ public final class TimeUtils {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.set(Calendar.YEAR, year);
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getLastTimestampOf(260, 2022, VN_TIME_ZONE_STRING));
+        System.out.println(getLastTimestampOf(260, 2022, AMERICA_TZ_STRING));
     }
 }
