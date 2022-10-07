@@ -1,8 +1,8 @@
 package ai.earable.platform.common.utils;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.*;
-import java.time.temporal.ChronoField;
 import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.Calendar;
@@ -92,12 +92,17 @@ public final class TimeUtils {
         return cal.get(Calendar.DAY_OF_YEAR);
     }
 
+    @Deprecated
     public static int getWeekOfYearFrom(long timestamp, String timezone){
         Date dateTime = new Date(timestamp*1000);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone(timezone));
         calendar.setTime(dateTime);
         return calendar.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    public static int getIso8601WeekOfYearFrom(int dayOfYear, int year){
+        return LocalDate.ofYearDay(year, dayOfYear).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
     }
 
     /**
@@ -114,6 +119,11 @@ public final class TimeUtils {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.MONTH) + 1;
+    }
+
+    public static Date getDateFromDayOfYear(Calendar calendar, int dayOfYear){
+        calendar.set(Calendar.DAY_OF_YEAR, dayOfYear);
+        return calendar.getTime();
     }
 
     public static int getYearFrom(long timestamp, String timezone){
@@ -164,5 +174,16 @@ public final class TimeUtils {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.set(Calendar.YEAR, year);
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
+    }
+
+    public static void main(String[] args) {
+        int year = 2023;
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(VN_TIME_ZONE_STRING));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        for(int i=1; i<=365; i++){
+            String date = sdf.format(getDateFromDayOfYear(cal, i));
+            int weekOfYear = getIso8601WeekOfYearFrom(i, year);
+            System.out.println("Backend date "+date+" - day "+i+" - week "+weekOfYear);
+        }
     }
 }
