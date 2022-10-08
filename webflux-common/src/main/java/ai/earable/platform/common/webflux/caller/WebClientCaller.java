@@ -108,6 +108,18 @@ public class WebClientCaller implements SpringCaller {
     }
 
     @Override
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, T requestBody, Class<V> responseType, String... pathParams) {
+        return webClient.method(wrap(method))
+                .uri(uri, pathParams)
+                .header("Authorization", bearerToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(requestBody), requestBody.getClass())
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
+    }
+
+    @Override
     public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
                 .uri(uri, params)

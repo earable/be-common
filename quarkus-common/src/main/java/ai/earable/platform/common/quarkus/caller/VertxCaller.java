@@ -127,6 +127,11 @@ public class VertxCaller implements Caller {
     }
 
     @Override
+    public <T, V> Mono<V> requestToMono(HttpMethod method, String uri, String bearerToken, T requestBody, Class<V> responseType, String... pathParams) {
+        return Mono.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
+    }
+
+    @Override
     public <V> Flux<V> requestToFlux(HttpMethod method, String uri, String bearerToken, Class<V> responseType, String... pathParams) {
         return Flux.error(new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!"));
     }
