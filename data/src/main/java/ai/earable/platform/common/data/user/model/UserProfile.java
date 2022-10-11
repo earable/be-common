@@ -55,4 +55,8 @@ public class UserProfile extends BaseEntity {
     private Boolean recoveryFlag;
     @Column("profile_progress")
     private ProfileProgress profileProgress;
+    @Column("last_occur_session")
+    private Long lastOccurSession;
+    @Column("consecutive_day")
+    private Integer consecutiveDay;
 }
