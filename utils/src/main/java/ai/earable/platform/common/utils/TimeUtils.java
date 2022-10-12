@@ -195,7 +195,5 @@ public final class TimeUtils {
 //            int weekOfYear = getIso8601WeekOfYearFrom(i, year);
 //            System.out.println("Backend date "+date+" - day "+i+" - week "+weekOfYear);
 //        }
-
-        System.out.println(getDayOfYearFrom(1665303036L, VN_TIME_ZONE_STRING));
     }
 }
