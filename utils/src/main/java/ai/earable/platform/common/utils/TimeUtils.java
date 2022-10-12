@@ -1,10 +1,15 @@
 package ai.earable.platform.common.utils;
 
+import org.springframework.aop.ThrowsAdvice;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -141,6 +146,10 @@ public final class TimeUtils {
         return isSameDay(convertFrom(timestamp1), convertFrom(timestamp2), timezone);
     }
 
+    public static boolean isSameWeek(int dayOfYear1, int year1, int dayOfYear2, int year2){
+        return getIso8601WeekOfYearFrom(dayOfYear1, year1) == getIso8601WeekOfYearFrom(dayOfYear2, year2);
+    }
+
     /**
      * To get last timestamp of
      * @param dayOfYear - day of the year
@@ -176,14 +185,14 @@ public final class TimeUtils {
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
     }
 
-    public static void main(String[] args) {
-        int year = 2023;
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(VN_TIME_ZONE_STRING));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        for(int i=1; i<=365; i++){
-            String date = sdf.format(getDateFromDayOfYear(cal, i));
-            int weekOfYear = getIso8601WeekOfYearFrom(i, year);
-            System.out.println("Backend date "+date+" - day "+i+" - week "+weekOfYear);
-        }
+    public static void main(String[] args) throws InterruptedException {
+//        int year = 2023;
+//        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(VN_TIME_ZONE_STRING));
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//        for(int i=1; i<=365; i++){
+//            String date = sdf.format(getDateFromDayOfYear(cal, i));
+//            int weekOfYear = getIso8601WeekOfYearFrom(i, year);
+//            System.out.println("Backend date "+date+" - day "+i+" - week "+weekOfYear);
+//        }
     }
 }
