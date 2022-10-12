@@ -91,7 +91,8 @@ public final class TimeUtils {
     }
 
     public static int getDayOfYearFrom(long timestamp, String timezone){
-        Date dateTime = new Date(timestamp*1000);
+        int length = (int) (Math.log10(timestamp) + 1);
+        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp*1000);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.DAY_OF_YEAR);
@@ -194,5 +195,7 @@ public final class TimeUtils {
 //            int weekOfYear = getIso8601WeekOfYearFrom(i, year);
 //            System.out.println("Backend date "+date+" - day "+i+" - week "+weekOfYear);
 //        }
+
+        System.out.println(getDayOfYearFrom(1665303036L, VN_TIME_ZONE_STRING));
     }
 }
