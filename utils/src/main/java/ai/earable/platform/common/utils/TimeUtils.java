@@ -121,7 +121,8 @@ public final class TimeUtils {
     }
 
     public static int getMonthOfYearFrom(long timestamp, String timezone){
-        Date dateTime = new Date(timestamp*1000);
+        int length = (int) (Math.log10(timestamp) + 1);
+        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp*1000);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.MONTH) + 1;
@@ -133,7 +134,8 @@ public final class TimeUtils {
     }
 
     public static int getYearFrom(long timestamp, String timezone){
-        Date dateTime = new Date(timestamp*1000);
+        int length = (int) (Math.log10(timestamp) + 1);
+        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp*1000);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.YEAR);
