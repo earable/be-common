@@ -42,13 +42,13 @@ public class WebFluxFmsCaller implements FmsCaller {
                 }).doOnSuccess(s -> log.trace("[CONFIGURATION SERVICE] -> Call Feature Service successfully"));
     }
 
-    public Mono<Boolean> validateFeature(String token, String featureName){
-        if(featureName == null || featureName.isBlank()){
+    public Mono<Boolean> validateFeature(String token, String featureName) {
+        if (featureName == null || featureName.isBlank()) {
             log.error("Validate featureName failed with error code {}", EarableErrorCode.FEATURE_NAME_NOT_NULL_OR_BLANK);
             return Mono.error(new EarableException(HttpStatus.BAD_REQUEST.value(), EarableErrorCode.FEATURE_NAME_NOT_NULL_OR_BLANK));
         }
 
-        if(cachingActivatedFeatures.contains(featureName.toUpperCase()))
+        if (cachingActivatedFeatures.contains(featureName.toUpperCase()))
             return Mono.just(true);
 
         return checkFeatureIsActive(token, featureName.toUpperCase()).flatMap(s -> {
@@ -72,7 +72,7 @@ public class WebFluxFmsCaller implements FmsCaller {
     @Override
     public Mono<Boolean> validateProfileId(String token, String userId, String profileId) {
         //TODO: call to FMS to validate
-        if(!userId.equals(profileId))
+        if (!userId.equals(profileId))
             return Mono.error(new EarableException(HttpStatus.FORBIDDEN.value(), EarableErrorCode.INPUT_INVALID, "profileId"));
         return Mono.just(true);
     }

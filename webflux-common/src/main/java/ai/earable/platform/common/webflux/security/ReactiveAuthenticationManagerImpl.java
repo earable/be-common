@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
  * Created by BinhNH on 6/14/22
  */
 @Component
-public class EarableAuthenticationManager implements ReactiveAuthenticationManager {
+public class ReactiveAuthenticationManagerImpl implements ReactiveAuthenticationManager {
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {

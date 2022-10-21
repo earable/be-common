@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import java.net.InetSocketAddress;
-import java.time.Duration;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -45,12 +44,12 @@ public class CassandraMigrationConfig {
                 .collect(Collectors.toList());
 
         return new CqlSessionBuilder().withConfigLoader(DriverConfigLoader.programmaticBuilder()
-                        .withDuration(DefaultDriverOption.METADATA_SCHEMA_REQUEST_TIMEOUT, cassandraProperties.getConnection().getConnectTimeout())
-                        .withDuration(DefaultDriverOption.CONNECTION_CONNECT_TIMEOUT, cassandraProperties.getConnection().getConnectTimeout())
-                        .withDuration(DefaultDriverOption.CONNECTION_INIT_QUERY_TIMEOUT, cassandraProperties.getConnection().getInitQueryTimeout())
-                        .withDuration(DefaultDriverOption.CONTROL_CONNECTION_TIMEOUT, cassandraProperties.getControlconnection().getTimeout())
-                        .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, cassandraProperties.getRequest().getTimeout())
-                        .build())
+                .withDuration(DefaultDriverOption.METADATA_SCHEMA_REQUEST_TIMEOUT, cassandraProperties.getConnection().getConnectTimeout())
+                .withDuration(DefaultDriverOption.CONNECTION_CONNECT_TIMEOUT, cassandraProperties.getConnection().getConnectTimeout())
+                .withDuration(DefaultDriverOption.CONNECTION_INIT_QUERY_TIMEOUT, cassandraProperties.getConnection().getInitQueryTimeout())
+                .withDuration(DefaultDriverOption.CONTROL_CONNECTION_TIMEOUT, cassandraProperties.getControlconnection().getTimeout())
+                .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, cassandraProperties.getRequest().getTimeout())
+                .build())
                 .addContactPoints(contractEndPoints)
                 .withKeyspace(cassandraProperties.getKeyspaceName())
                 .withAuthCredentials(cassandraProperties.getUsername(), cassandraProperties.getPassword())

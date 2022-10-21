@@ -34,7 +34,7 @@ public class SecurityConfig {
     @Value("${earable.auth.whitelist.path:}")
     private String[] AUTH_WHITELIST;
 
-    private final EarableAuthenticationManager reactiveAuthenticationManager;
+    private final ReactiveAuthenticationManagerImpl reactiveAuthenticationManager;
     private final SecurityContextRepository securityContextRepository;
 
     private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
@@ -59,10 +59,10 @@ public class SecurityConfig {
         String[] whiteList = ArrayUtils.addAll(SWAGGER_WHITELIST, AUTH_WHITELIST);
         return http.exceptionHandling()
                 .authenticationEntryPoint(
-                    (swe, e) -> { //TODO: Wrap to earable errors details
-                        swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                        return swe.getResponse().writeWith(Mono.just(new DefaultDataBufferFactory().wrap("UNAUTHORIZED".getBytes())));
-                    })
+                        (swe, e) -> { //TODO: Wrap to earable errors details
+                            swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                            return swe.getResponse().writeWith(Mono.just(new DefaultDataBufferFactory().wrap("UNAUTHORIZED".getBytes())));
+                        })
                 .accessDeniedHandler((swe, e) -> {
                     swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                     return swe.getResponse().writeWith(Mono.just(new DefaultDataBufferFactory().wrap("FORBIDDEN".getBytes())));

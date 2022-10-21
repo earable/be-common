@@ -16,13 +16,13 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI getOpenAPI() {
         return new OpenAPI()
-            // Components section defines Security Scheme "authHeader"
-            .components(new Components()
-                .addSecuritySchemes("authHeader", new SecurityScheme()
-                    .type(SecurityScheme.Type.APIKEY)
-                    .in(SecurityScheme.In.HEADER)
-                    .name("Authorization")))
-            // AddSecurityItem section applies created scheme globally
-            .addSecurityItem(new SecurityRequirement().addList("authHeader"));
+                // Components section defines Security Scheme "authHeader"
+                .components(new Components()
+                        .addSecuritySchemes("authHeader", new SecurityScheme()
+                                .type(SecurityScheme.Type.APIKEY)
+                                .in(SecurityScheme.In.HEADER)
+                                .name("Authorization")))
+                // AddSecurityItem section applies created scheme globally
+                .addSecurityItem(new SecurityRequirement().addList("authHeader"));
     }
 }
