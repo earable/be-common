@@ -72,6 +72,7 @@ public enum EarableErrorCode {
 
     UNAUTHORIZED ("UNAUTHORIZED"),
     ACCESS_DENIED ("ACCESS_DENIED"),
+    USER_ID_NOT_EXISTING ("USER_ID_NOT_EXISTING"),
     INTERNAL_SERVER_ERROR ("INTERNAL_SERVER_ERROR");
 
     private final String errorDetail;
