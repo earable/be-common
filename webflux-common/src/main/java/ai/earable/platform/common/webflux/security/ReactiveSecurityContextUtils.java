@@ -14,29 +14,29 @@ public class ReactiveSecurityContextUtils {
     @Autowired
     protected JwtUtils jwtUtils;
 
-    public Mono<String> getUserId(){
+    public Mono<String> getUserId() {
         return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("user_id").toString()); //TODO: Handle error cases
     }
 
-    public Mono<String> getUserEmail(){
+    public Mono<String> getUserEmail() {
         return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("sub").toString()); //TODO: Handle error cases
     }
 
-    private String getUserId(String token){
+    private String getUserId(String token) {
         return jwtUtils.getAllClaimsFromToken(token).get("user_id").toString(); //TODO: Handle error cases
     }
 
-    private String getUserEmail(String token){
+    private String getUserEmail(String token) {
         return jwtUtils.getAllClaimsFromToken(token).get("sub").toString(); //TODO: Handle error cases
     }
 
-    public Mono<String> getToken(){
+    public Mono<String> getToken() {
         return ReactiveSecurityContextHolder.getContext().map(securityContext -> {
             return (String) securityContext.getAuthentication().getCredentials(); //TODO: Handle error cases
         });
     }
 
-    public Mono<UserIdToTokenMap> getUserId2TokenMap(){
+    public Mono<UserIdToTokenMap> getUserId2TokenMap() {
         return getToken().map(token -> UserIdToTokenMap.builder().userId(getUserId(token)).token(token).email(getUserEmail(token)).build());
     }
 }

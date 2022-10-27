@@ -1,12 +1,11 @@
 package ai.earable.platform.common.webflux.server;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import reactor.core.scheduler.Scheduler;
@@ -18,9 +17,7 @@ import java.util.Locale;
 /**
  * Created by BinhNH on 3/27/2022
  */
-@org.springframework.context.annotation.Configuration
-@Component
-@EnableAutoConfiguration
+@Configuration
 public class GeneralConfiguration {
     @Value(value = "${earable.reactor.scheduler:4}")
     private int reactorScheduler;

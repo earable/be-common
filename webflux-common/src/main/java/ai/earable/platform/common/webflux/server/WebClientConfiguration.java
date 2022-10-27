@@ -1,28 +1,28 @@
 package ai.earable.platform.common.webflux.server;
 
+import ai.earable.platform.common.webflux.utils.WebFluxUtils;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorResourceFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.resources.ConnectionProvider;
 
 import java.util.concurrent.TimeUnit;
 
-import static ai.earable.platform.common.webflux.server.WebFluxConfigurationUtil.init;
 
 /**
  * Created by BinhNH on 9/9/2022
  */
+@Slf4j
 @Configuration
-@Component
 public class WebClientConfiguration {
     @Value(value = "${earable.nio-event-loop.webclient:64}")
     private int webClientEventLoop;
@@ -38,21 +38,21 @@ public class WebClientConfiguration {
     private static final int WRITE_TIMEOUT_SECONDS = 10;
     private static final int CONNECTION_TIMEOUT_MILLISECONDS = 10000;
 
-    private ReactorClientHttpConnector reactorClientHttpConnector(){
-        NioEventLoopGroup nioEventLoopGroup = init(webClientEventLoop);
-        ConnectionProvider provider = WebFluxConfigurationUtil.createConnectionProvider("webclient-connection-pool", nettyPoolMaxConnections);
-        ReactorResourceFactory reactorResourceFactory = WebFluxConfigurationUtil.initReactorResourceFactory(nioEventLoopGroup, provider);
+    private ReactorClientHttpConnector reactorClientHttpConnector() {
+        NioEventLoopGroup nioEventLoopGroup = WebFluxUtils.init(webClientEventLoop);
+        ConnectionProvider provider = WebFluxUtils.createConnectionProvider("webclient-connection-pool", nettyPoolMaxConnections);
+        ReactorResourceFactory reactorResourceFactory = WebFluxUtils.initReactorResourceFactory(nioEventLoopGroup, provider);
         return new ReactorClientHttpConnector(reactorResourceFactory, httpClient ->
-                    httpClient.doOnConnected(connection ->
+                httpClient.doOnConnected(connection ->
                         connection.addHandlerLast(new ReadTimeoutHandler(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS))
-                            .addHandlerLast(new WriteTimeoutHandler(WRITE_TIMEOUT_SECONDS)))
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECTION_TIMEOUT_MILLISECONDS)
-                    .option(ChannelOption.TCP_NODELAY, true)
-                    .option(ChannelOption.SO_KEEPALIVE, false));
+                                .addHandlerLast(new WriteTimeoutHandler(WRITE_TIMEOUT_SECONDS)))
+                        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECTION_TIMEOUT_MILLISECONDS)
+                        .option(ChannelOption.TCP_NODELAY, true)
+                        .option(ChannelOption.SO_KEEPALIVE, false));
     }
 
     @Bean
-    public WebClient webClient(){
+    public WebClient webClient() {
         final int size = webClientMaxInMemorySize * 1024 * 1024; // in MB
         final ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size)).build();

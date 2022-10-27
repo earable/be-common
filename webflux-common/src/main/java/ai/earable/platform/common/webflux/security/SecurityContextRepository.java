@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class SecurityContextRepository implements ServerSecurityContextRepository {
 
-    private final EarableAuthenticationManager authenticationManager;
+    private final ReactiveAuthenticationManagerImpl authenticationManager;
 
     private final JwtUtils jwtUtils;
 

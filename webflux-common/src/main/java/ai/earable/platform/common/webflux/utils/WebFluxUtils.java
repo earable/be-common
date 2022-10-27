@@ -1,4 +1,4 @@
-package ai.earable.platform.common.webflux.server;
+package ai.earable.platform.common.webflux.utils;
 
 import io.netty.channel.nio.NioEventLoopGroup;
 import org.springframework.http.client.reactive.ReactorResourceFactory;
@@ -7,7 +7,7 @@ import reactor.netty.resources.ConnectionProvider;
 /**
  * Created by BinhNH on 9/9/2022
  */
-final class WebFluxConfigurationUtil {
+public final class WebFluxUtils {
     public static NioEventLoopGroup init(int nThreads) {
         return new NioEventLoopGroup(nThreads);
     }
