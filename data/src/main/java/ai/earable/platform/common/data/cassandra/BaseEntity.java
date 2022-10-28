@@ -16,9 +16,9 @@ public class BaseEntity {
 
     @CreatedDate
     @Column("created_at")
-    private Instant createdAt = Instant.now();
+    protected Instant createdAt = Instant.now();
 
     @LastModifiedDate
     @Column("updated_at")
-    private Instant updatedAt;
+    protected Instant updatedAt;
 }
