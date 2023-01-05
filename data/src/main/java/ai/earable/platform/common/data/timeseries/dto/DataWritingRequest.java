@@ -1,8 +1,10 @@
 package ai.earable.platform.common.data.timeseries.dto;
 
 import ai.earable.platform.common.data.timeseries.model.MonitoredData;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +16,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataWritingRequest {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class DataWritingRequest implements Serializable {
     private String featureName;
     private String profileId;
     private String deviceId;
