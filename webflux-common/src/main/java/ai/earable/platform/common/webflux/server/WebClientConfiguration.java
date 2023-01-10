@@ -33,10 +33,13 @@ public class WebClientConfiguration {
     @Value(value = "${earable.webclient.codec.max-in-memory.size:48}")
     private int webClientMaxInMemorySize;
 
+    @Value(value = "${earable.internal.caller.timeout:30}")
+    private int defaultTimeout;
+
     //TODO: Config outside
-    private static final int READ_TIMEOUT_SECONDS = 10;
-    private static final int WRITE_TIMEOUT_SECONDS = 10;
-    private static final int CONNECTION_TIMEOUT_MILLISECONDS = 10000;
+    private static final int READ_TIMEOUT_SECONDS = 30;
+    private static final int WRITE_TIMEOUT_SECONDS = 30;
+    private static final int CONNECTION_TIMEOUT_MILLISECONDS = 30000;
 
     private ReactorClientHttpConnector reactorClientHttpConnector(){
         NioEventLoopGroup nioEventLoopGroup = init(webClientEventLoop);
@@ -44,9 +47,9 @@ public class WebClientConfiguration {
         ReactorResourceFactory reactorResourceFactory = WebFluxConfigurationUtil.initReactorResourceFactory(nioEventLoopGroup, provider);
         return new ReactorClientHttpConnector(reactorResourceFactory, httpClient ->
                     httpClient.doOnConnected(connection ->
-                        connection.addHandlerLast(new ReadTimeoutHandler(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS))
-                            .addHandlerLast(new WriteTimeoutHandler(WRITE_TIMEOUT_SECONDS)))
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECTION_TIMEOUT_MILLISECONDS)
+                        connection.addHandlerLast(new ReadTimeoutHandler(defaultTimeout, TimeUnit.SECONDS))
+                            .addHandlerLast(new WriteTimeoutHandler(defaultTimeout)))
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, defaultTimeout*1000)
                     .option(ChannelOption.TCP_NODELAY, true)
                     .option(ChannelOption.SO_KEEPALIVE, false));
     }
