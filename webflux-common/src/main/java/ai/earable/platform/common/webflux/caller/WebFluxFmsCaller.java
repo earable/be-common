@@ -26,7 +26,7 @@ public class WebFluxFmsCaller implements FmsCaller {
     @Autowired
     private Caller caller;
 
-    @Value("${earable.fms.host}")
+    @Value("${earable.fms.host:}")
     private String fmsHost;
 
     private static final List<String> cachingActivatedFeatures = Arrays.asList("FOCUS", "NAP", "SLEEP", "RECOVERY");
