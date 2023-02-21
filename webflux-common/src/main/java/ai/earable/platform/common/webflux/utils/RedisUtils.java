@@ -15,25 +15,37 @@ import java.util.Locale;
 @Slf4j
 @Component
 public class RedisUtils {
-
+    private final String USER_SUB = "sub";
+    private final Duration LANGUAGE_EXPIRY_TIME = Duration.ofDays(365);
     @Autowired
     private ReactiveRedisTemplate<String, String> redisTemplate;
+
     @Autowired
     protected JwtUtils jwtUtils;
 
     public Mono<Boolean> saveLanguage(String token, String language) {
         Claims claims = jwtUtils.getAllClaimsFromToken(token);
 
-        String userId = claims.get("user_id", String.class);
-        String key = String.format("%s_language", userId);
-        Duration duration = Duration.ofMillis(claims.getExpiration().getTime() - System.currentTimeMillis());
-        return redisTemplate.opsForValue().set(key, language, duration);
+        String userName = claims.get(USER_SUB, String.class);
+        String key = String.format("%s_language", userName);
+        return redisTemplate.opsForValue().set(key, language, LANGUAGE_EXPIRY_TIME);
+    }
+
+    public Mono<Boolean> saveLanguage1(String email, String language) {
+
+        String key = String.format("%s_language", email);
+        return redisTemplate.opsForValue().set(key, language, LANGUAGE_EXPIRY_TIME);
     }
 
     public Mono<String> getLanguage(String token) {
         Claims claims = jwtUtils.getAllClaimsFromToken(token);
-        String userId = claims.get("user_id", String.class);
-        String key = String.format("%s_language", userId);
+        String userName = claims.get(USER_SUB, String.class);
+        String key = String.format("%s_language", userName);
+        return redisTemplate.opsForValue().get(key).switchIfEmpty(Mono.just(Locale.ENGLISH.getLanguage()));
+    }
+
+    public Mono<String> getLanguageByUserName(String userName) {
+        String key = String.format("%s_language", userName);
         return redisTemplate.opsForValue().get(key).switchIfEmpty(Mono.just(Locale.ENGLISH.getLanguage()));
     }
 }

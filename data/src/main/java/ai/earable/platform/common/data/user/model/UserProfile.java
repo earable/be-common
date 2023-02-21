@@ -2,6 +2,7 @@ package ai.earable.platform.common.data.user.model;
 
 import ai.earable.platform.common.data.cassandra.BaseEntity;
 import ai.earable.platform.common.data.user.enums.Gender;
+import ai.earable.platform.common.data.user.enums.Language;
 import ai.earable.platform.common.data.user.enums.ProfileProgress;
 import ai.earable.platform.common.data.user.enums.UserLevel;
 import lombok.*;
@@ -60,5 +61,5 @@ public class UserProfile extends BaseEntity {
     @Column("consecutive_day")
     private Integer consecutiveDay;
     @Column("language")
-    private String language;
+    private Language language;
 }
