@@ -59,4 +59,6 @@ public class UserProfile extends BaseEntity {
     private Long lastOccurSession;
     @Column("consecutive_day")
     private Integer consecutiveDay;
+    @Column("language")
+    private String language;
 }
