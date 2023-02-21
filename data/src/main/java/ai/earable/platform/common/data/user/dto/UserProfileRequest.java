@@ -20,18 +20,18 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfileRequest {
-    @Size(max = 100, message = "name must not be greater than 100 characters.")
-    @NotBlank(message = "name is required.")
+    @Size(max = 100, message = "{USER_PROFILE_NAME_MAX_LENGTH_ERROR}")
+    @NotBlank(message = "{USER_PROFILE_NAME_REQUIRED}")
     private String name;
-    @Size(min = 6, max = 20, message = "phone must be on range from 6 to 20 characters.")
+    @Size(min = 6, max = 20, message = "{USER_PROFILE_PHONE_LENGTH_ERROR}")
     private String phone;
     private String address;
-    @Size(max = 255, message = "occupation must not be greater than 255 characters.")
+    @Size(max = 255, message = "{USER_PROFILE_OCCUPATION_LENGTH_ERROR}")
     private String occupation;
     private String dob;
-    @Min(value = 1, message = "height must be greater than or equal to 1")
+    @Min(value = 1, message = "{USER_PROFILE_HEIGHT_ERROR}")
     private Integer height;
-    @Min(value = 1, message = "weight must be greater than or equal to 1")
+    @Min(value = 1, message = "{USER_PROFILE_WEIGHT_ERROR}")
     private Integer weight;
     private Gender gender;
 }
