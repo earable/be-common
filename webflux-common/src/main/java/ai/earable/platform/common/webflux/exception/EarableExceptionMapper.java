@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.MethodParameter;
@@ -24,6 +25,8 @@ import org.springframework.web.server.ServerWebInputException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ai.earable.platform.common.data.exception.EarableErrorCode.INPUT_INVALID;
@@ -46,7 +49,17 @@ public class EarableExceptionMapper {
         if (error instanceof WebExchangeBindException && !((WebExchangeBindException) error).getAllErrors().isEmpty()) {
             errMessages = ((WebExchangeBindException) error).getAllErrors()
                 .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .map(e -> {
+                    var re = "\\{(.*?)\\}";
+                    Pattern p = Pattern.compile(re);
+                    Matcher m = p.matcher(e.getDefaultMessage());
+                    String msg = "";
+                    if (m.find()) {
+                        msg = messageUtils.getMessage(m.group(1));
+                    }
+
+                    return StringUtils.isBlank(msg) ? e.getDefaultMessage() : msg;
+                })
                 .collect(Collectors.toList());
             ErrorDetails errorDetails = ErrorDetails.builder().httpStatusCode(HttpStatus.BAD_REQUEST.value())
                     .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).build();
@@ -82,8 +95,8 @@ public class EarableExceptionMapper {
     @ExceptionHandler(EarableException.class)
     public ResponseEntity handleEarableException(EarableException e) {
         log.error("handleEarableException error stack trace", e);
-        String detail = e.getEarableErrorCode() != null ? messageUtils.getMessage(e.getEarableErrorCode().name(),
-            e.getParam()) : e.getDetails();
+        String errorCode = e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode();
+        String detail = !StringUtils.isBlank(errorCode) ? messageUtils.getMessageWithDefault(errorCode, e.getDetails(), e.getParam()) : e.getDetails();
         ErrorDetails errorDetails = ErrorDetails.builder()
             .httpStatusCode(e.getHttpStatusCode())
             .earableErrorCode( e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())

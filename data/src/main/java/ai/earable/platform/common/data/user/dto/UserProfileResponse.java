@@ -45,4 +45,5 @@ public class UserProfileResponse {
     private Boolean focusFlag;
     private Boolean recoveryFlag;
     private ProfileProgress profileProgress;
+    private String language;
 }
