@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.user.dto;
 
 import ai.earable.platform.common.data.user.enums.Gender;
+import ai.earable.platform.common.data.user.enums.Language;
 import ai.earable.platform.common.data.user.enums.ProfileProgress;
 import ai.earable.platform.common.data.user.enums.UserLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -45,5 +46,5 @@ public class UserProfileResponse {
     private Boolean focusFlag;
     private Boolean recoveryFlag;
     private ProfileProgress profileProgress;
-    private String language;
+    private Language language;
 }
