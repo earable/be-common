@@ -1,6 +1,7 @@
 package ai.earable.platform.common.webflux.security;
 
 import ai.earable.platform.common.data.security.UserIdToTokenMap;
+import ai.earable.platform.common.webflux.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,9 @@ import reactor.core.publisher.Mono;
 public class ReactiveSecurityContextUtils {
     @Autowired
     protected JwtUtils jwtUtils;
+
+    @Autowired
+    private RedisUtils redisUtils;
 
     public Mono<String> getUserId(){
         return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("user_id").toString()); //TODO: Handle error cases
@@ -38,5 +42,9 @@ public class ReactiveSecurityContextUtils {
 
     public Mono<UserIdToTokenMap> getUserId2TokenMap(){
         return getToken().map(token -> UserIdToTokenMap.builder().userId(getUserId(token)).token(token).email(getUserEmail(token)).build());
+    }
+
+    public Mono<String> getLanguageByUserName() {
+        return getUserEmail().flatMap(userName  -> redisUtils.getLanguageByUserName(userName));
     }
 }
