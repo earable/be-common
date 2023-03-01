@@ -7,6 +7,9 @@ import ai.earable.platform.common.data.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -20,9 +23,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by BinhNH on 3/30/2022
@@ -67,6 +73,22 @@ public class WebClientCaller implements SpringCaller {
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
                 .timeout(Duration.ofSeconds(defaultTimeout))
                 .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay));
+    }
+
+    @Override
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, Map<String, String> params) {
+        URI uri1 = null;
+        try {
+            uri1 = new URIBuilder(uri).addParameters(params.entrySet().stream().map(t -> new BasicNameValuePair(t.getKey(), t.getValue())).collect(Collectors.toList())).build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return webClient.method(org.springframework.http.HttpMethod.GET)
+                .uri(uri1)
+                .headers(httpHeaders -> headers.forEach(httpHeaders::set))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     private <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers,
@@ -250,8 +272,10 @@ public class WebClientCaller implements SpringCaller {
 
     private <V> Mono<V> convertToMonoResponse(ClientResponse clientResponse, Class<V> result){
         if(clientResponse.statusCode().isError())
-            return clientResponse.bodyToMono(ErrorDetails.class)
-                    .flatMap(errorDetails -> Mono.error(convertFrom(errorDetails)));
+            return clientResponse.bodyToMono(String.class).flatMap(t -> {
+                return clientResponse.bodyToMono(ErrorDetails.class)
+                        .flatMap(errorDetails -> Mono.error(convertFrom(errorDetails)));
+            });
         return clientResponse.bodyToMono(result);
     }
 
