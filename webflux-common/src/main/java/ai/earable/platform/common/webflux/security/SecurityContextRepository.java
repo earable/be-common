@@ -10,6 +10,7 @@ import ai.earable.platform.common.webflux.utils.MessageUtils;
 import ai.earable.platform.common.webflux.utils.RedisUtils;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -50,8 +51,8 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
     @Override
     public Mono<SecurityContext> load(ServerWebExchange swe) {
-
         messageUtils.setLocaleContext(Locale.ENGLISH.getLanguage());
+        final String[] requestId = {null};
         return Mono.justOrEmpty(swe.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(authHeader -> authHeader.startsWith(BEARER))
                 .map(authHeader -> authHeader.substring(BEARER.length()))
@@ -68,12 +69,17 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                         if (!StringUtils.isBlank(language)) {
                             messageUtils.setLocaleContext(language);
                         }
-                        Claims claims = jwtUtils.getAllClaimsFromToken(authToken);
-                        List<String> roleNames = (List<String>) claims.get(ClaimsConstant.ROLE);
-                        String userId = claims.get(ClaimsConstant.USER_ID, String.class);
-                        if (!roleNames.isEmpty() && !StringUtils.isBlank(userId) && roleNames.stream().anyMatch(r -> r.equals(RoleType.ROLE_CUSTOMER.name()))) {
-                            redisUtils.addAuditLog(AuditLog.builder().createdAt(new Timestamp(System.currentTimeMillis())).auditType(AuditType.API_REQUEST).userId(UUID.fromString(userId)).apiUrlRequest(swe.getRequest().getURI().toString()).build());
+
+                        if (requestId[0] == null || !requestId[0].equals(swe.getRequest().getId())) {
+                            Claims claims = jwtUtils.getAllClaimsFromToken(authToken);
+                            List<String> roleNames = (List<String>) claims.get(ClaimsConstant.ROLE);
+                            String userId = claims.get(ClaimsConstant.USER_ID, String.class);
+                            if (!roleNames.isEmpty() && !StringUtils.isBlank(userId) && roleNames.stream().anyMatch(r -> r.equals(RoleType.ROLE_CUSTOMER.name()))) {
+                                redisUtils.addAuditLog(AuditLog.builder().createdAt(new Timestamp(System.currentTimeMillis())).auditType(AuditType.API_REQUEST).userId(UUID.fromString(userId)).apiUrlRequest(swe.getRequest().getURI().toString()).build());
+                            }
                         }
+                        requestId[0] = swe.getRequest().getId();
+
                         Authentication authentication = jwtUtils.getAuthentication(authToken);
                         return this.authenticationManager.authenticate(authentication).map(SecurityContextImpl::new);
                     });
