@@ -1,10 +1,16 @@
 package ai.earable.platform.common.utils;
 
+import ai.earable.platform.common.data.exception.EarableErrorCode;
+import ai.earable.platform.common.data.exception.EarableException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.ThrowsAdvice;
+import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.IsoFields;
@@ -24,20 +30,20 @@ public final class TimeUtils {
     public static final String VN_TIME_ZONE_STRING = "Asia/Ho_Chi_Minh";
     public static final String AMERICA_TZ_STRING = "America/New_York";
 
-    public static long getCurrentTimestamp(String timezone){
+    public static long getCurrentTimestamp(String timezone) {
         TimeZone timeZone = TimeZone.getTimeZone(timezone);
         Calendar calendar = Calendar.getInstance(timeZone);
         return calendar.getTimeInMillis();
     }
 
-    public static long getNextTimestamp(String timezone, int plusSecond){
+    public static long getNextTimestamp(String timezone, int plusSecond) {
         TimeZone timeZone = TimeZone.getTimeZone(timezone);
         Calendar calendar = Calendar.getInstance(timeZone);
         calendar.add(Calendar.SECOND, plusSecond);
         return calendar.getTimeInMillis() / 1000L;
     }
 
-    public static long getCurrentUnixTimestamp(String timezone){
+    public static long getCurrentUnixTimestamp(String timezone) {
         return getCurrentTimestamp(timezone) / 1000L;
     }
 
@@ -47,130 +53,131 @@ public final class TimeUtils {
         return zonedDateTime.getOffset();
     }
 
-    public static int getNumberOfSecondsBetween(long timestampFirst, long timestampLast){
+    public static int getNumberOfSecondsBetween(long timestampFirst, long timestampLast) {
         return (int) (timestampLast - timestampFirst);
     }
 
     //TODO: Must use timezone
-    public static Date convertFromUnixTimestamp(long timeStamp){
-        return new java.util.Date(timeStamp*1000);
+    public static Date convertFromUnixTimestamp(long timeStamp) {
+        return new java.util.Date(timeStamp * 1000);
     }
 
-    public static boolean isGreaterThan(LocalDateTime input, LocalDateTime compareTo){
+    public static boolean isGreaterThan(LocalDateTime input, LocalDateTime compareTo) {
         return input.compareTo(compareTo) > 0;
     }
 
-    public static boolean isEqual(LocalDateTime input, LocalDateTime compareTo){
+    public static boolean isEqual(LocalDateTime input, LocalDateTime compareTo) {
         return input.compareTo(compareTo) == 0;
     }
 
-    public static boolean isLessThan(LocalDateTime input, LocalDateTime compareTo){
+    public static boolean isLessThan(LocalDateTime input, LocalDateTime compareTo) {
         return input.compareTo(compareTo) < 0;
     }
 
-    public static boolean isLessThanOrEqual(LocalDateTime input, LocalDateTime compareTo){
+    public static boolean isLessThanOrEqual(LocalDateTime input, LocalDateTime compareTo) {
         return input.compareTo(compareTo) <= 0;
     }
 
-    public static boolean isGreaterThanOrEqual(LocalDateTime input, LocalDateTime compareTo){
+    public static boolean isGreaterThanOrEqual(LocalDateTime input, LocalDateTime compareTo) {
         return input.compareTo(compareTo) >= 0;
     }
 
-    public static int getHourFromTimestamp(long timestamp, String timezone){
+    public static int getHourFromTimestamp(long timestamp, String timezone) {
         Timestamp stamp = new Timestamp(timestamp);
         Date date = new Date(stamp.getTime());
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone(timezone));
         cal.setTime(date);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
-        return cal.get(Calendar.MINUTE) > 45 ? hour+1 : hour;
+        return cal.get(Calendar.MINUTE) > 45 ? hour + 1 : hour;
     }
 
-    public static int getHourFromTimestamp(String timestamp, String timezone){
+    public static int getHourFromTimestamp(String timestamp, String timezone) {
         return getHourFromTimestamp(convertFrom(timestamp), timezone);
     }
 
-    public static int getDayOfYearFrom(long timestamp, String timezone){
+    public static int getDayOfYearFrom(long timestamp, String timezone) {
         int length = (int) (Math.log10(timestamp) + 1);
-        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp*1000);
+        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp * 1000);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.DAY_OF_YEAR);
     }
 
     @Deprecated
-    public static int getWeekOfYearFrom(long timestamp, String timezone){
-        Date dateTime = new Date(timestamp*1000);
+    public static int getWeekOfYearFrom(long timestamp, String timezone) {
+        Date dateTime = new Date(timestamp * 1000);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone(timezone));
         calendar.setTime(dateTime);
         return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
-    public static int getIso8601WeekOfYearFrom(int dayOfYear, int year){
+    public static int getIso8601WeekOfYearFrom(int dayOfYear, int year) {
         return LocalDate.ofYearDay(year, dayOfYear).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
     }
 
     /**
      * Using this method to map to mobile at this time
      */
-    public static int getWeekOfYearFrom(int dayOfYear, int year){
+    public static int getWeekOfYearFrom(int dayOfYear, int year) {
         LocalDate localDate = LocalDate.ofYearDay(year, dayOfYear);
         int weekOfYear = localDate.get(WeekFields.ISO.weekOfYear()) + 1;
         return weekOfYear == 53 ? 1 : weekOfYear;
     }
 
-    public static int getMonthOfYearFrom(long timestamp, String timezone){
+    public static int getMonthOfYearFrom(long timestamp, String timezone) {
         int length = (int) (Math.log10(timestamp) + 1);
-        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp*1000);
+        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp * 1000);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.MONTH) + 1;
     }
 
-    public static Date getDateFromDayOfYear(Calendar calendar, int dayOfYear){
+    public static Date getDateFromDayOfYear(Calendar calendar, int dayOfYear) {
         calendar.set(Calendar.DAY_OF_YEAR, dayOfYear);
         return calendar.getTime();
     }
 
-    public static int getYearFrom(long timestamp, String timezone){
+    public static int getYearFrom(long timestamp, String timezone) {
         int length = (int) (Math.log10(timestamp) + 1);
-        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp*1000);
+        Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp * 1000);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.YEAR);
     }
 
-    public static boolean isSameDay(long timestamp1, long timestamp2, String timezone){
+    public static boolean isSameDay(long timestamp1, long timestamp2, String timezone) {
         return getDayOfYearFrom(timestamp1, timezone) == getDayOfYearFrom(timestamp2, timezone);
     }
 
-    public static boolean isSameDay(String timestamp1, String timestamp2, String timezone){
+    public static boolean isSameDay(String timestamp1, String timestamp2, String timezone) {
         return isSameDay(convertFrom(timestamp1), convertFrom(timestamp2), timezone);
     }
 
-    public static boolean isSameWeek(int dayOfYear1, int year1, int dayOfYear2, int year2){
+    public static boolean isSameWeek(int dayOfYear1, int year1, int dayOfYear2, int year2) {
         return getIso8601WeekOfYearFrom(dayOfYear1, year1) == getIso8601WeekOfYearFrom(dayOfYear2, year2);
     }
 
     /**
      * To get last timestamp of
-     * @param dayOfYear - day of the year
-     * @param year - year
-     * @param timezone - timezone id
-     * @return last timestamp of this day by this timezone
      *
+     * @param dayOfYear - day of the year
+     * @param year      - year
+     * @param timezone  - timezone id
+     * @return last timestamp of this day by this timezone
+     * <p>
      * Note: You should use input from mobile to sync output
      */
-    public static long getLastTimestampOf(int dayOfYear, int year, String timezone){
+    public static long getLastTimestampOf(int dayOfYear, int year, String timezone) {
         LocalDate ld = LocalDate.ofYearDay(year, dayOfYear);
-        LocalTime lt = LocalTime.of(23,59,59);
+        LocalTime lt = LocalTime.of(23, 59, 59);
         LocalDateTime ldt = LocalDateTime.of(ld, lt);
         ZoneId zoneId = ZoneId.of(timezone);
         return ldt.atZone(zoneId).toEpochSecond();
     }
 
-    public static long getFirstTimestampOf(int dayOfYear, int year, String timezone){
+    public static long getFirstTimestampOf(int dayOfYear, int year, String timezone) {
         LocalDate ld = LocalDate.ofYearDay(year, dayOfYear);
         LocalTime lt = LocalTime.of(0, 0, 0);
         LocalDateTime ldt = LocalDateTime.of(ld, lt);
@@ -178,7 +185,7 @@ public final class TimeUtils {
         return ldt.atZone(zoneId).toEpochSecond();
     }
 
-    public static long convertFrom(String timestamp){
+    public static long convertFrom(String timestamp) {
         return Double.valueOf(timestamp).longValue();
     }
 
@@ -197,5 +204,26 @@ public final class TimeUtils {
 //            int weekOfYear = getIso8601WeekOfYearFrom(i, year);
 //            System.out.println("Backend date "+date+" - day "+i+" - week "+weekOfYear);
 //        }
+    }
+
+    public static Date validateDate(String input, String fieldName) {
+        if (StringUtils.isBlank(input)) {
+            return null;
+        }
+        DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        sdf.setLenient(false);
+        try {
+            return sdf.parse(input);
+        } catch (ParseException e) {
+            throw new EarableException(HttpStatus.BAD_REQUEST.value(), EarableErrorCode.PARAM_INVALID, fieldName);
+        }
+    }
+
+    public static String formatDate(Date date) {
+        if (date == null) {
+            return null;
+        }
+        DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(date);
     }
 }
