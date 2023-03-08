@@ -8,9 +8,9 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 @Configuration
 public class WebFluxConfiguration implements WebFluxConfigurer {
     @Value(value = "${spring.codec.max-in-memory-size:512000}")
-    private int maxInMemorySize;
+    private String maxInMemorySize;
     @Override
     public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
-        configurer.defaultCodecs().maxInMemorySize(maxInMemorySize);
+        configurer.defaultCodecs().maxInMemorySize(Integer.parseInt(maxInMemorySize));
     }
 }
