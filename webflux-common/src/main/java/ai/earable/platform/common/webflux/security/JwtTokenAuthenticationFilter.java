@@ -28,15 +28,23 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         try {
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+            String userAgent = exchange.getRequest().getHeaders().getFirst("User-Agent");
+
+            boolean isLogged = false;
             if (StringUtils.hasText(authHeader) && authHeader.length() > BEARER.length()) {
                 Authentication authentication = jwtUtils.getAuthentication(authHeader.substring(BEARER.length()));
+
+                log.info("userAgent = " + userAgent + " userName = " + authentication.getName());
+
                 SecurityContext context = new SecurityContextImpl(authentication);
                 SecurityContextHolder.setContext(context);
                 ReactiveSecurityContextHolder.withSecurityContext(Mono.just(context));
-            }
 
-            String userAgent = exchange.getRequest().getHeaders().getFirst("User-Agent");
-            log.info("userAgent = " + userAgent);
+                isLogged = true;
+            }
+            if (!isLogged) {
+                log.info("userAgent = " + userAgent);
+            }
         } catch (Exception ex) {
             log.warn(ex.toString(), ex);
             SecurityContextHolder.clearContext();
