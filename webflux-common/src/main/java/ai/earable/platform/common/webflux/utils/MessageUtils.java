@@ -29,7 +29,11 @@ public class MessageUtils {
                 paramStrs.add(value);
             }
         }
-        return msgSource.getMessage(key, paramStrs.toArray(), LocaleContextHolder.getLocale());
+        try {
+            return msgSource.getMessage(key, paramStrs.toArray(), LocaleContextHolder.getLocale());
+        } catch (Exception ex) {
+            return params.length > 0 ? params[0].toString() : key;
+        }
     }
 
     public String getMessageWithDefault(String key, String defaultValue, Object... params) {
@@ -49,6 +53,7 @@ public class MessageUtils {
     public String getMessage(FieldError field) {
         return msgSource.getMessage(field, LocaleContextHolder.getLocale());
     }
+
     public void setLocaleContext(String language) {
         if (!StringUtils.isBlank(language)) {
             LocaleContextHolder.setDefaultLocale(Locale.forLanguageTag(language));
