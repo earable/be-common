@@ -34,6 +34,9 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                 SecurityContextHolder.setContext(context);
                 ReactiveSecurityContextHolder.withSecurityContext(Mono.just(context));
             }
+
+            String userAgent = exchange.getRequest().getHeaders().getFirst("User-Agent");
+            log.info("userAgent = " + userAgent);
         } catch (Exception ex) {
             log.warn(ex.toString(), ex);
             SecurityContextHolder.clearContext();
