@@ -206,14 +206,16 @@ public final class TimeUtils {
 //        }
     }
 
-    public static Date validateDate(String input, String fieldName) {
+    public static Date validateDate(String input, String fieldName, String timeZone) {
         if (StringUtils.isBlank(input)) {
             return null;
         }
+        long clientTimeZoneValue = StringUtils.isBlank(timeZone) ? 0 : TimeZone.getTimeZone(timeZone).getRawOffset();
+
         DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         sdf.setLenient(false);
         try {
-            return sdf.parse(input);
+            return new Date(sdf.parse(input).getTime() - clientTimeZoneValue);
         } catch (ParseException e) {
             throw new EarableException(HttpStatus.BAD_REQUEST.value(), EarableErrorCode.PARAM_INVALID, fieldName);
         }
