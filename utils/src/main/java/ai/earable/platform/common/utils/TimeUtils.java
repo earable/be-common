@@ -113,8 +113,8 @@ public final class TimeUtils {
         return calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
-    public static int getIso8601WeekOfYearFrom(int dayOfYear, int year) {
-        return LocalDate.ofYearDay(year, dayOfYear).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+    public static LocalDate getIso8601WeekOfYearFrom(int dayOfYear, int year) {
+        return LocalDate.ofYearDay(year, dayOfYear);
     }
 
     /**
@@ -156,7 +156,7 @@ public final class TimeUtils {
     }
 
     public static boolean isSameWeek(int dayOfYear1, int year1, int dayOfYear2, int year2) {
-        return getIso8601WeekOfYearFrom(dayOfYear1, year1) == getIso8601WeekOfYearFrom(dayOfYear2, year2);
+        return getIso8601WeekOfYearFrom(dayOfYear1, year1).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) == getIso8601WeekOfYearFrom(dayOfYear2, year2).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
     }
 
     /**
