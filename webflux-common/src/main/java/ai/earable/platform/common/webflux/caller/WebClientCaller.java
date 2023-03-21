@@ -7,6 +7,8 @@ import ai.earable.platform.common.data.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -20,9 +22,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by BinhNH on 3/30/2022
@@ -67,6 +72,22 @@ public class WebClientCaller implements SpringCaller {
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
                 .timeout(Duration.ofSeconds(defaultTimeout))
                 .retryWhen(configRetry(HttpMethod.GET, uri, defaultRetryTimes, defaultRetryDelay));
+    }
+
+    @Override
+    public <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers, Map<String, String> params) {
+        URI uri1 = null;
+        try {
+            uri1 = new URIBuilder(uri).addParameters(params.entrySet().stream().map(t -> new BasicNameValuePair(t.getKey(), t.getValue())).collect(Collectors.toList())).build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return webClient.method(org.springframework.http.HttpMethod.GET)
+                .uri(uri1)
+                .headers(httpHeaders -> headers.forEach(httpHeaders::set))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeout));
     }
 
     private <V> Mono<V> getMono(String uri, Class<V> responseType, Map<String, String> headers,
@@ -144,7 +165,7 @@ public class WebClientCaller implements SpringCaller {
 
     @Override
     public <V> Mono<V> requestToMono(HttpMethod method, String uri, Map<String, String> headers,
-                                     MultipartBodyBuilder multipartBodyBuilder, Class<V> responseType,  String... params) {
+                                     MultipartBodyBuilder multipartBodyBuilder, Class<V> responseType, String... params) {
         return webClient.method(wrap(method))
                 .uri(uri, params)
                 .header("Authorization", headers.get("Authorization"))
@@ -217,7 +238,7 @@ public class WebClientCaller implements SpringCaller {
     }
 
     @Override
-    public <V> Flux<V> getFlux(HttpMethod method, String uri,  Class<V> responseType) {
+    public <V> Flux<V> getFlux(HttpMethod method, String uri, Class<V> responseType) {
         return webClient.method(wrap(method))
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
@@ -248,21 +269,21 @@ public class WebClientCaller implements SpringCaller {
                 .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
-    private <V> Mono<V> convertToMonoResponse(ClientResponse clientResponse, Class<V> result){
-        if(clientResponse.statusCode().isError())
+    private <V> Mono<V> convertToMonoResponse(ClientResponse clientResponse, Class<V> result) {
+        if (clientResponse.statusCode().isError())
             return clientResponse.bodyToMono(ErrorDetails.class)
                     .flatMap(errorDetails -> Mono.error(convertFrom(errorDetails)));
         return clientResponse.bodyToMono(result);
     }
 
-    private <V> Flux<V> convertToFluxResponse(ClientResponse clientResponse, Class<V> result){
-        if(clientResponse.statusCode().isError())
+    private <V> Flux<V> convertToFluxResponse(ClientResponse clientResponse, Class<V> result) {
+        if (clientResponse.statusCode().isError())
             return clientResponse.bodyToMono(ErrorDetails.class)
                     .flatMapMany(errorDetails -> Flux.error(convertFrom(errorDetails)));
         return clientResponse.bodyToFlux(result);
     }
 
-    private EarableException convertFrom(ErrorDetails errorDetails){
+    private EarableException convertFrom(ErrorDetails errorDetails) {
         log.error("Rest API calling failed! The error code: {}, detail: {}!", errorDetails.getHttpStatusCode(), errorDetails.getDetails());
         return new EarableException(errorDetails.getHttpStatusCode(),
                 EarableErrorCode.valueOf(errorDetails.getEarableErrorCode()), errorDetails.getDetails());
@@ -288,34 +309,42 @@ public class WebClientCaller implements SpringCaller {
                 .exchangeToFlux(clientResponse -> convertToFluxResponse(clientResponse, responseType));
     }
 
-    private org.springframework.http.HttpMethod wrap(HttpMethod httpMethod){
+    private org.springframework.http.HttpMethod wrap(HttpMethod httpMethod) {
         switch (httpMethod) {
-            case HEAD: return org.springframework.http.HttpMethod.HEAD;
-            case GET: return org.springframework.http.HttpMethod.GET;
-            case POST: return org.springframework.http.HttpMethod.POST;
-            case PUT: return org.springframework.http.HttpMethod.PUT;
-            case PATCH: return org.springframework.http.HttpMethod.PATCH;
-            case DELETE: return org.springframework.http.HttpMethod.DELETE;
-            case TRACE: return org.springframework.http.HttpMethod.TRACE;
-            default: return org.springframework.http.HttpMethod.OPTIONS;
+            case HEAD:
+                return org.springframework.http.HttpMethod.HEAD;
+            case GET:
+                return org.springframework.http.HttpMethod.GET;
+            case POST:
+                return org.springframework.http.HttpMethod.POST;
+            case PUT:
+                return org.springframework.http.HttpMethod.PUT;
+            case PATCH:
+                return org.springframework.http.HttpMethod.PATCH;
+            case DELETE:
+                return org.springframework.http.HttpMethod.DELETE;
+            case TRACE:
+                return org.springframework.http.HttpMethod.TRACE;
+            default:
+                return org.springframework.http.HttpMethod.OPTIONS;
         }
     }
 
-    private static Retry configRetry(HttpMethod httpMethod, String uri, int numberOfRetries, int retryDelayInSecond){
+    private static Retry configRetry(HttpMethod httpMethod, String uri, int numberOfRetries, int retryDelayInSecond) {
         return Retry.fixedDelay(numberOfRetries, Duration.ofSeconds(retryDelayInSecond))
                 .filter(WebClientCaller::needToRetry)
                 .doAfterRetry(retrySignal -> log.warn("Retry {} request to {} in {}/{} because of {}", httpMethod, uri,
-                    retrySignal.totalRetriesInARow()+1, numberOfRetries, retrySignal.failure().getLocalizedMessage()))
+                        retrySignal.totalRetriesInARow() + 1, numberOfRetries, retrySignal.failure().getLocalizedMessage()))
                 .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> retrySignal.failure()));
     }
 
-    private static boolean needToRetry(Throwable throwable){
-        if(throwable.getCause() instanceof java.util.concurrent.TimeoutException)
+    private static boolean needToRetry(Throwable throwable) {
+        if (throwable.getCause() instanceof java.util.concurrent.TimeoutException)
             return true;
 
         final String errorMess = throwable.getLocalizedMessage() == null ?
                 throwable.getMessage() : throwable.getLocalizedMessage();
-        if(errorMess != null){
+        if (errorMess != null) {
             return errorMess.toLowerCase().contains("connection reset by peer")
                     || errorMess.toLowerCase().contains("connection refused")
                     || errorMess.toLowerCase().contains("connection timed out")
