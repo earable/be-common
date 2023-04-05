@@ -43,11 +43,11 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                 Authentication authentication = jwtUtils.getAuthentication(authHeader.substring(BEARER.length()));
 
                 String[] blacklistUsernames = this.blacklistUsernames.split(",");
+
+                log.info("userAgent = " + userAgent + " userName = " + authentication.getName());
                 if (Arrays.stream(blacklistUsernames).anyMatch(u -> u.equalsIgnoreCase(authentication.getName()))) {
                     return Mono.error(new EarableException(400, EarableErrorCode.USERNAME_IS_NOT_PERMITTED, "Username is not permitted!"));
                 }
-                log.info("userAgent = " + userAgent + " userName = " + authentication.getName());
-
                 SecurityContext context = new SecurityContextImpl(authentication);
                 SecurityContextHolder.setContext(context);
                 ReactiveSecurityContextHolder.withSecurityContext(Mono.just(context));
