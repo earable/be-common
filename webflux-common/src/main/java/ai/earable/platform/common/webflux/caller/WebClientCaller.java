@@ -285,6 +285,9 @@ public class WebClientCaller implements SpringCaller {
 
     private EarableException convertFrom(ErrorDetails errorDetails) {
         log.error("Rest API calling failed! The error code: {}, detail: {}!", errorDetails.getHttpStatusCode(), errorDetails.getDetails());
+        if (errorDetails.getEarableErrorCode() == null) {
+            return new EarableException(500, EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail(), "Unsupported method!");
+        }
         return new EarableException(errorDetails.getHttpStatusCode(),
                 EarableErrorCode.valueOf(errorDetails.getEarableErrorCode()), errorDetails.getDetails());
     }
