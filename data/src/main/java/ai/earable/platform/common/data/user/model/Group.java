@@ -9,7 +9,6 @@ import lombok.With;
 import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -17,14 +16,17 @@ import java.util.UUID;
 
 @Data
 @Builder
-@Table(value = "sleeplessness_level")
+@Table(value = "group")
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @With
-public class SleeplessnessLevel {
-    @PrimaryKeyColumn(name = "name", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
+public class Group {
+    @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
+    private UUID id;
+
+    @Column("name")
     private String name;
 
     @Column("order")

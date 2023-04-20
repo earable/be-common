@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @Data
 @Builder
-@Table(value = "gender")
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
