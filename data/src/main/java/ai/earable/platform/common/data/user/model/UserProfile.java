@@ -62,4 +62,13 @@ public class UserProfile extends BaseEntity {
     private Integer consecutiveDay;
     @Column("language")
     private Language language;
+
+    @Column("profiling_health")
+    private String profilingHealth;
+
+    @Column("insomnia_level")
+    private String insomniaLevel;
+
+    @Column("group")
+    private UUID group;
 }

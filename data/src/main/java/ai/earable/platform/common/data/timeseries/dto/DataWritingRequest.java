@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataWritingRequest implements Serializable {
+public class DataWritingRequest implements Serializable, Cloneable {
     private String featureName;
     private String profileId;
     private String deviceId;
@@ -31,4 +31,9 @@ public class DataWritingRequest implements Serializable {
      * List of metrics, tags and data value.
      */
     private List<MonitoredData> monitoredDataList;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

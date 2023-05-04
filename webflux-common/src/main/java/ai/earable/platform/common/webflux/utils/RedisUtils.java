@@ -7,12 +7,14 @@ import ai.earable.platform.common.webflux.security.JwtUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.InputStream;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Map;
@@ -72,6 +74,32 @@ public class RedisUtils {
                 e.printStackTrace();
             }
             return Mono.empty();
+        });
+    }
+
+    public Mono<Boolean> saveString(String key, String obj) {
+        return redisTemplate.opsForValue().set(key, obj);
+    }
+
+    public Mono<String> getString(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
+    public Mono<Boolean> deleteKey(String key) {
+        return redisTemplate.opsForValue().delete(key);
+    }
+
+    public <T> Mono<T> getObject(String key, Class<T> valueType) {
+        return redisTemplate.opsForValue().get(key).map(value -> {
+            if (StringUtils.isBlank(value)) {
+                return null;
+            }
+            try {
+                return JsonUtil.convertJsonToObject(value, valueType);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return null;
         });
     }
 
