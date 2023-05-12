@@ -16,6 +16,17 @@ add languages List<text>;
 alter table playlist
 add languages List<text>;
 
+#- 2023/05/12 change table access_tokeb by run this sql script
+alter table user
+add user_agent text;
+
+alter table user
+add last_signed_in timestamp;
+
+
+
+
+
 
 
 

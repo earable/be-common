@@ -13,6 +13,7 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,4 +44,8 @@ public class User extends BaseEntity {
     private String password;
     private UserStatus status;
     private List<RoleType> roles;
+    @Column("user_agent")
+    private String userAgent;
+    @Column("last_signed_in")
+    private Timestamp lastSignedIn;
 }
