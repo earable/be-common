@@ -68,7 +68,4 @@ public class UserProfile extends BaseEntity {
 
     @Column("insomnia_level")
     private String insomniaLevel;
-
-    @Column("group")
-    private UUID group;
 }
