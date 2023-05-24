@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -48,4 +49,11 @@ public class User extends BaseEntity {
     private String userAgent;
     @Column("last_signed_in")
     private Timestamp lastSignedIn;
+
+    public String getUsername() {
+        if (StringUtils.isEmpty(this.username)) {
+            return phoneNumber.toString();
+        }
+        return this.username;
+    }
 }
