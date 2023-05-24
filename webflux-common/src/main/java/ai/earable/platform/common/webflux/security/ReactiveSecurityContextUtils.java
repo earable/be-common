@@ -18,33 +18,49 @@ public class ReactiveSecurityContextUtils {
     @Autowired
     private RedisUtils redisUtils;
 
-    public Mono<String> getUserId(){
+    public Mono<String> getUserId() {
         return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("user_id").toString()); //TODO: Handle error cases
     }
 
-    public Mono<String> getUserEmail(){
-        return getToken().map(token -> jwtUtils.getAllClaimsFromToken(token).get("sub").toString()); //TODO: Handle error cases
+    public Mono<String> getUserEmail() {
+        return getToken().map(token -> getUserEmail(token));
     }
 
-    private String getUserId(String token){
+    public Mono<Long> getPhoneNumber() {
+        return getToken().map(token -> getPhoneNumber(token));
+    }
+
+    private String getUserId(String token) {
         return jwtUtils.getAllClaimsFromToken(token).get("user_id").toString(); //TODO: Handle error cases
     }
 
-    private String getUserEmail(String token){
-        return jwtUtils.getAllClaimsFromToken(token).get("sub").toString(); //TODO: Handle error cases
+    private String getUserEmail(String token) {
+        String sub = jwtUtils.getAllClaimsFromToken(token).get("sub").toString();
+        if (sub.contains("@")) {
+            return sub;
+        }
+        return null;
     }
 
-    public Mono<String> getToken(){
+    private Long getPhoneNumber(String token) {
+        String sub = jwtUtils.getAllClaimsFromToken(token).get("sub").toString();
+        if (sub.contains("@")) {
+            return null;
+        }
+        return Long.parseLong(sub);
+    }
+
+    public Mono<String> getToken() {
         return ReactiveSecurityContextHolder.getContext().map(securityContext -> {
             return (String) securityContext.getAuthentication().getCredentials(); //TODO: Handle error cases
         });
     }
 
-    public Mono<UserIdToTokenMap> getUserId2TokenMap(){
-        return getToken().map(token -> UserIdToTokenMap.builder().userId(getUserId(token)).token(token).email(getUserEmail(token)).build());
+    public Mono<UserIdToTokenMap> getUserId2TokenMap() {
+        return getToken().map(token -> UserIdToTokenMap.builder().userId(getUserId(token)).token(token).phoneNumber(getPhoneNumber(token)).email(getUserEmail(token)).build());
     }
 
     public Mono<String> getLanguageByUserName() {
-        return getUserEmail().flatMap(userName  -> redisUtils.getLanguageByUserName(userName));
+        return getUserEmail().switchIfEmpty(getPhoneNumber().map(phoneNumber -> ((Long) phoneNumber).toString())).flatMap(userName -> redisUtils.getLanguageByUserName(userName));
     }
 }
