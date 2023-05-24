@@ -52,7 +52,9 @@ public class User extends BaseEntity {
 
     public String getUsername() {
         if (StringUtils.isEmpty(this.username)) {
-            return phoneNumber.toString();
+            if (phoneNumber != null) {
+                return phoneNumber.toString();
+            }
         }
         return this.username;
     }
