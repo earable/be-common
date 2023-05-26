@@ -49,13 +49,4 @@ public class User extends BaseEntity {
     private String userAgent;
     @Column("last_signed_in")
     private Timestamp lastSignedIn;
-
-    public String getUsername() {
-        if (StringUtils.isEmpty(this.username)) {
-            if (phoneNumber != null) {
-                return phoneNumber.toString();
-            }
-        }
-        return this.username;
-    }
 }
