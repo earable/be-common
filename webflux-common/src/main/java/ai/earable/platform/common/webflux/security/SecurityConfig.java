@@ -99,7 +99,8 @@ public class SecurityConfig {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         String hierarchy = new StringBuilder(RoleType.ROLE_ADMIN.name()).append(" > ").append(RoleType.ROLE_MANAGER.name()).append(" \n ")
                 .append(RoleType.ROLE_MANAGER.name()).append(" > ").append(RoleType.ROLE_USER.name()).append(" \n ")
-                .append(RoleType.ROLE_USER.name()).append(" > ").append(RoleType.ROLE_CUSTOMER.name()).toString();
+                .append(RoleType.ROLE_USER.name()).append(" > ").append(RoleType.ROLE_CUSTOMER_ADMIN.name())
+                .append(RoleType.ROLE_CUSTOMER_ADMIN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER.name()).toString();
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
     }

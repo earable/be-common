@@ -6,5 +6,7 @@ package ai.earable.platform.common.data.user.enums;
  */
 public enum UserStatus {
     ACTIVE,
-    INACTIVE
+    INACTIVE,
+    DISABLED,
+    LOCKED
 }

@@ -17,4 +17,5 @@ public class UserIdToTokenMap {
     private String userId;
     private String token;
     private String email;
+    private Long phoneNumber;
 }
