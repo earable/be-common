@@ -26,6 +26,12 @@ add last_signed_in timestamp;
 alter table user_profile
 add start_using_band_time timestamp;
 
+#- 2023/05/30 change table earable_news by run this sql script
+alter table earable_news
+add language text;
+
+
+
 
 
 
