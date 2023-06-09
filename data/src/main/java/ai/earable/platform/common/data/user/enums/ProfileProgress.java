@@ -7,5 +7,6 @@ package ai.earable.platform.common.data.user.enums;
 public enum ProfileProgress {
     QnA_COMPLETED,
     PROFILE_COMPLETED,
+    ONBOARDING_QUESTION_INPROGRESS,
     ONBOARDING_QUESTION_COMPLETED
 }
