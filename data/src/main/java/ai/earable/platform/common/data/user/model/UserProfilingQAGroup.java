@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
-
+import ai.earable.platform.common.data.user.enums.ProfileProgress;
 import java.util.UUID;
 
 /**
@@ -30,4 +30,7 @@ public class UserProfilingQAGroup extends BaseEntity {
 
     @Column("user_id")
     private UUID userId;
+
+    @Column("profile_progress")
+    private ProfileProgress profileProgress;
 }
