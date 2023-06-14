@@ -5,6 +5,8 @@ public enum RoleType {
     ROLE_MANAGER,
     ROLE_USER,
     ROLE_CUSTOMER_ADMIN,
+    ROLE_CUSTOMER_TECHNICIAN,
+    ROLE_CUSTOMER_SUPER_ADMIN,
     ROLE_CUSTOMER;
 
     public String getAuthority() {
