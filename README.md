@@ -29,6 +29,16 @@ add start_using_band_time timestamp;
 #- 2023/05/30 change table earable_news by run this sql script
 alter table earable_news
 add language text;
+# done on production------------------------------------------------------------
+#- 2023/06/16 change table earable_news by run this sql script
+
+alter table user_profile
+add gender_1 text;
+
+alter table user_profile
+add country text;
+
+
 
 
 
