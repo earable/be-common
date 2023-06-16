@@ -26,6 +26,7 @@ public class UserProfileRequest {
     @Size(min = 6, max = 20, message = "{USER_PROFILE_PHONE_LENGTH_ERROR}")
     private String phone;
     private String address;
+    private String country;
     @Size(max = 255, message = "{USER_PROFILE_OCCUPATION_LENGTH_ERROR}")
     private String occupation;
     private String dob;
@@ -34,4 +35,5 @@ public class UserProfileRequest {
     @Min(value = 1, message = "{USER_PROFILE_WEIGHT_ERROR}")
     private Integer weight;
     private Gender gender;
+    private String gender_1;
 }

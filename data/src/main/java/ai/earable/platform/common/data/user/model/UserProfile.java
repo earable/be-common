@@ -38,6 +38,8 @@ public class UserProfile extends BaseEntity {
     private Integer height;
     private Integer weight;
     private Gender gender;
+    private String gender_1;
+    private String country;
     @Column("user_level")
     private UserLevel userLevel;
     private String avatar;
