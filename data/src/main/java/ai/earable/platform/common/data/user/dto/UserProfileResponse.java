@@ -47,4 +47,6 @@ public class UserProfileResponse {
     private Boolean recoveryFlag;
     private ProfileProgress profileProgress;
     private Language language;
+    private String gender_1;
+    private String country;
 }
