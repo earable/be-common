@@ -49,4 +49,5 @@ public class UserProfileResponse {
     private Language language;
     private String gender_1;
     private String country;
+    private Integer tutorialStatus;
 }

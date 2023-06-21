@@ -75,4 +75,6 @@ public class UserProfile extends BaseEntity {
 
     @Column(value = "start_using_band_time")
     private Timestamp startUsingBandTime;
+    @Column("tutorial_status")
+    private Integer tutorialStatus;
 }
