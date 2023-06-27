@@ -48,7 +48,15 @@ public class ReactiveSecurityContextUtils {
         if (sub.contains("@")) {
             return null;
         }
-        return Long.parseLong(sub);
+        try {
+            return Long.parseLong(sub);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    private String getSub(String token) {
+        String sub = jwtUtils.getAllClaimsFromToken(token).get("sub").toString();
+        return sub;
     }
 
     public Mono<String> getToken() {
@@ -63,7 +71,7 @@ public class ReactiveSecurityContextUtils {
 
     public Mono<String> getLanguageByUserName(String token) {
         String email = getUserEmail(token);
-        String userName = StringUtils.isEmpty(email) ? getPhoneNumber(token).toString() : email;
+        String userName = StringUtils.isEmpty(email) ? getSub(token) : email;
         return redisUtils.getLanguageByUserName(userName);
     }
 }
