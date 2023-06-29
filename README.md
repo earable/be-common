@@ -38,7 +38,10 @@ add gender_1 text;
 alter table user_profile
 add country text;
 
+#- 2023/06/21 change table user_profile by run this sql script
 
+alter table user_profile
+add tutorial_status int;
 
 
 
