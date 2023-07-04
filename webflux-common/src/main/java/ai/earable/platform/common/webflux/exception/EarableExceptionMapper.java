@@ -6,6 +6,8 @@ import ai.earable.platform.common.data.exception.ErrorDetails;
 import ai.earable.platform.common.webflux.utils.MessageUtils;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import io.sentry.Sentry;
+import io.sentry.SentryEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -114,6 +116,7 @@ public class EarableExceptionMapper {
             .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())
             .details(EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail()).build();
         log.error("Return error to client with details {}", errorDetails.toString());
+        Sentry.captureException(e);
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);
     }
