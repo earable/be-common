@@ -50,28 +50,28 @@ public class EarableExceptionMapper {
         // handle for invalid request body
         if (error instanceof WebExchangeBindException && !((WebExchangeBindException) error).getAllErrors().isEmpty()) {
             errMessages = ((WebExchangeBindException) error).getAllErrors()
-                .stream()
-                .map(e -> {
-                    var re = "\\{(.*?)\\}";
-                    Pattern p = Pattern.compile(re);
-                    Matcher m = p.matcher(e.getDefaultMessage());
-                    String msg = "";
-                    if (m.find()) {
-                        msg = messageUtils.getMessage(m.group(1));
-                    }
+                    .stream()
+                    .map(e -> {
+                        var re = "\\{(.*?)\\}";
+                        Pattern p = Pattern.compile(re);
+                        Matcher m = p.matcher(e.getDefaultMessage());
+                        String msg = "";
+                        if (m.find()) {
+                            msg = messageUtils.getMessage(m.group(1));
+                        }
 
-                    return StringUtils.isBlank(msg) ? e.getDefaultMessage() : msg;
-                })
-                .collect(Collectors.toList());
+                        return StringUtils.isBlank(msg) ? e.getDefaultMessage() : msg;
+                    })
+                    .collect(Collectors.toList());
             ErrorDetails errorDetails = ErrorDetails.builder().httpStatusCode(HttpStatus.BAD_REQUEST.value())
                     .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).build();
             log.error("Return error to client with details {}", errorDetails.getDetails());
             return ResponseEntity.status(errorDetails.getHttpStatusCode()).body(errorDetails);
         }
 
-        if(ObjectUtils.isNotEmpty(error.getCause()) && error.getCause() instanceof DecodingException) {
+        if (ObjectUtils.isNotEmpty(error.getCause()) && error.getCause() instanceof DecodingException) {
             DecodingException decodingException = (DecodingException) error.getCause();
-            if(ObjectUtils.isNotEmpty(decodingException.getCause()) && decodingException.getCause() instanceof InvalidFormatException) {
+            if (ObjectUtils.isNotEmpty(decodingException.getCause()) && decodingException.getCause() instanceof InvalidFormatException) {
                 InvalidFormatException invalidFormatException = (InvalidFormatException) decodingException.getCause();
                 List<JsonMappingException.Reference> references = invalidFormatException.getPath();
                 errMessages = references.stream()
@@ -100,10 +100,13 @@ public class EarableExceptionMapper {
         String errorCode = e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode();
         String detail = !StringUtils.isBlank(errorCode) ? messageUtils.getMessageWithDefault(errorCode, e.getDetails(), e.getParam()) : e.getDetails();
         ErrorDetails errorDetails = ErrorDetails.builder()
-            .httpStatusCode(e.getHttpStatusCode())
-            .earableErrorCode( e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())
-            .details(detail).build();
+                .httpStatusCode(e.getHttpStatusCode())
+                .earableErrorCode(e.getEarableErrorCode() != null ? e.getEarableErrorCode().name() : e.getErrorCode())
+                .details(detail).build();
         log.error("Return error to client with details {}", errorDetails.toString());
+        if (e.getHttpStatusCode() == 500) {
+            Sentry.captureException(e);
+        }
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
                 .body(errorDetails);
     }
@@ -112,9 +115,9 @@ public class EarableExceptionMapper {
     public ResponseEntity handleCommonException(Exception e) {
         log.error("handleCommonException error stack trace", e);
         ErrorDetails errorDetails = ErrorDetails.builder()
-            .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-            .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())
-            .details(EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail()).build();
+                .httpStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .earableErrorCode(EarableErrorCode.INTERNAL_SERVER_ERROR.name())
+                .details(EarableErrorCode.INTERNAL_SERVER_ERROR.getErrorDetail()).build();
         log.error("Return error to client with details {}", errorDetails.toString());
         Sentry.captureException(e);
         return ResponseEntity.status(errorDetails.getHttpStatusCode())
@@ -123,7 +126,8 @@ public class EarableExceptionMapper {
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    public @ResponseBody ResponseEntity handleCommonException(AccessDeniedException e) {
+    public @ResponseBody
+    ResponseEntity handleCommonException(AccessDeniedException e) {
         ErrorDetails errorDetails = ErrorDetails.builder()
                 .httpStatusCode(HttpStatus.FORBIDDEN.value())
                 .earableErrorCode(EarableErrorCode.ACCESS_DENIED.name())
