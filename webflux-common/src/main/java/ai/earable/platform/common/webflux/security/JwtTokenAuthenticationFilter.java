@@ -90,7 +90,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
         recentRequests = recentRequests.stream().filter(httpRequestInfo -> httpRequestInfo.getTimestamp() > timestamp).collect(Collectors.toList());
 
         CustomSamplingContext context = new CustomSamplingContext();
-        ITransaction transaction = Sentry.startTransaction(String.format("%s %s", exchange.getRequest().getMethod().name(), exchange.getRequest().getPath()), exchange.getRequest().getMethod().name(), context);
+        ITransaction transaction = Sentry.startTransaction(String.format("%s %s", exchange.getRequest().getMethod().name(), exchange.getRequest().getURI().getPath()), exchange.getRequest().getMethod().name(), context);
         return chain.filter(exchange).doOnEach(signal -> {
             if (signal.isOnComplete() || signal.isOnError()) {
                 transaction.finish();
