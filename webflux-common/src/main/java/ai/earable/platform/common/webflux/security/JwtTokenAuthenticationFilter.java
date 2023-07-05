@@ -8,6 +8,7 @@ import io.sentry.CustomSamplingContext;
 import io.sentry.ITransaction;
 import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext;
@@ -17,7 +18,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
@@ -55,7 +55,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
             String userAgent = exchange.getRequest().getHeaders().getFirst("User-Agent");
 
             boolean isLogged = false;
-            if (StringUtils.hasText(authHeader) && authHeader.length() > BEARER.length()) {
+            if (org.springframework.util.StringUtils.hasText(authHeader) && authHeader.length() > BEARER.length()) {
                 Authentication authentication = jwtUtils.getAuthentication(authHeader.substring(BEARER.length()));
 
                 String[] blacklistUsernames = this.blacklistUsernames.split(",");
@@ -94,7 +94,9 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
         recentRequests = recentRequests.stream().filter(httpRequestInfo -> httpRequestInfo.getTimestamp() > timestamp).collect(Collectors.toList());
 
         CustomSamplingContext context = new CustomSamplingContext();
-        ITransaction transaction = Sentry.startTransaction(String.format("%s %s", exchange.getRequest().getMethod().name(), exchange.getRequest().getURI().getPath()), exchange.getRequest().getMethod().name(), context);
+        String fullPath = StringUtils.isEmpty(exchange.getRequest().getURI().getQuery()) ? exchange.getRequest().getURI().getPath() :
+                exchange.getRequest().getURI().getPath() + "?" + exchange.getRequest().getURI().getQuery();
+        ITransaction transaction = Sentry.startTransaction(String.format("%s %s", exchange.getRequest().getMethod().name(), fullPath), exchange.getRequest().getMethod().name(), context);
         return chain.filter(exchange).doOnEach(signal -> {
             if (signal.isOnComplete() || signal.isOnError()) {
                 log.info("isOnComplete requestId = " + requestId);
