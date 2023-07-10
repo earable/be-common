@@ -47,6 +47,11 @@ add tutorial_status int;
 alter table version_info
 add no_of_supported_versions int;
 
+#- 2023/07/10 change table song by run this sql script
+alter table song
+add volume double;
+
+
 
 
 
