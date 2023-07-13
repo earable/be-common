@@ -4,6 +4,7 @@ import ai.earable.platform.common.data.exception.EarableErrorCode;
 import ai.earable.platform.common.data.exception.EarableException;
 import ai.earable.platform.common.data.exception.ErrorDetails;
 import ai.earable.platform.common.webflux.utils.MessageUtils;
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -27,7 +28,13 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         if (exchange.getResponse().isCommitted()) {
             return Mono.error(ex);
         }
+        if (ex != null) {
+            Sentry.captureException(ex);
 
+            log.error(ex.getLocalizedMessage());
+        } else {
+            log.error("ex.getLocalizedMessage() is null");
+        }
         if (ex instanceof EarableException) {
             EarableException e = (EarableException) ex;
 
@@ -43,7 +50,6 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             return bufferWriter.write(exchange.getResponse(), errorDetails);
         }
 
-        log.error(ex.getLocalizedMessage());
         exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         return bufferWriter.write(exchange.getResponse(), EarableErrorCode.INTERNAL_SERVER_ERROR.toString());
     }

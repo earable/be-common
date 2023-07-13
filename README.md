@@ -38,6 +38,20 @@ add gender_1 text;
 alter table user_profile
 add country text;
 
+#- 2023/06/21 change table user_profile by run this sql script
+
+alter table user_profile
+add tutorial_status int;
+
+#- 2023/07/07 change table version_info by run this sql script
+alter table version_info
+add no_of_supported_versions int;
+
+#- 2023/07/10 change table song by run this sql script
+alter table song
+add volume double;
+
+
 
 
 

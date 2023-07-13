@@ -49,4 +49,18 @@ public class User extends BaseEntity {
     private String userAgent;
     @Column("last_signed_in")
     private Timestamp lastSignedIn;
+
+    public String getUsernameId() {
+        if (!StringUtils.isEmpty(getUsername())) {
+            return getUsername();
+        }
+        if (getPhoneNumber() != null) {
+            return getPhoneNumber().toString();
+        }
+        if (userId != null) {
+            return userId.toString();
+        }
+        String socialId = !StringUtils.isEmpty(getFacebookId()) ? getFacebookId() : (!StringUtils.isEmpty(getGoogleId()) ? getGoogleId() : getAppleId());
+        return socialId;
+    }
 }
