@@ -81,28 +81,39 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
         String requestId = exchange.getRequest().getId();
         log.info("requestId = " + requestId);
 
-        if (recentRequests.stream().anyMatch(httpRequestInfo -> httpRequestInfo.getRequestId().equals(requestId))) {
+        try {
+            if (recentRequests.stream().anyMatch(httpRequestInfo -> httpRequestInfo.getRequestId().equals(requestId))) {
+                return chain.filter(exchange).doOnEach(signal -> {
+                    if (signal.isOnComplete() || signal.isOnError()) {
+                        log.info("isOnComplete1 requestId = " + requestId);
+                    }
+                });
+            }
+            long timestamp = System.currentTimeMillis() - cacheRequestsInSeconds * 1000;
+
+            recentRequests.add(0, HttpRequestInfo.builder().requestId(requestId).timestamp(System.currentTimeMillis()).build());
+            recentRequests = recentRequests.stream().filter(httpRequestInfo -> httpRequestInfo.getTimestamp() > timestamp).collect(Collectors.toList());
+
+            CustomSamplingContext context = new CustomSamplingContext();
+            String fullPath = StringUtils.isEmpty(exchange.getRequest().getURI().getQuery()) ? exchange.getRequest().getURI().getPath() :
+                    exchange.getRequest().getURI().getPath() + "?" + exchange.getRequest().getURI().getQuery();
+            ITransaction transaction = Sentry.startTransaction(String.format("%s %s", exchange.getRequest().getMethod().name(), fullPath), exchange.getRequest().getMethod().name(), context);
             return chain.filter(exchange).doOnEach(signal -> {
                 if (signal.isOnComplete() || signal.isOnError()) {
-                    log.info("isOnComplete1 requestId = " + requestId);
+                    log.info("isOnComplete requestId = " + requestId);
+
+                    transaction.finish();
+                }
+            });
+        } catch (Exception ex) {
+            log.warn(ex.toString(), ex);
+            SecurityContextHolder.clearContext();
+            ReactiveSecurityContextHolder.clearContext();
+            return chain.filter(exchange).doOnEach(signal -> {
+                if (signal.isOnComplete() || signal.isOnError()) {
+                    log.info("isOnComplete2 requestId = " + requestId);
                 }
             });
         }
-        long timestamp = System.currentTimeMillis() - cacheRequestsInSeconds * 1000;
-
-        recentRequests.add(0, HttpRequestInfo.builder().requestId(requestId).timestamp(System.currentTimeMillis()).build());
-        recentRequests = recentRequests.stream().filter(httpRequestInfo -> httpRequestInfo.getTimestamp() > timestamp).collect(Collectors.toList());
-
-        CustomSamplingContext context = new CustomSamplingContext();
-        String fullPath = StringUtils.isEmpty(exchange.getRequest().getURI().getQuery()) ? exchange.getRequest().getURI().getPath() :
-                exchange.getRequest().getURI().getPath() + "?" + exchange.getRequest().getURI().getQuery();
-        ITransaction transaction = Sentry.startTransaction(String.format("%s %s", exchange.getRequest().getMethod().name(), fullPath), exchange.getRequest().getMethod().name(), context);
-        return chain.filter(exchange).doOnEach(signal -> {
-            if (signal.isOnComplete() || signal.isOnError()) {
-                log.info("isOnComplete requestId = " + requestId);
-
-                transaction.finish();
-            }
-        });
     }
 }
