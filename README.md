@@ -55,6 +55,18 @@ add volume double;
 alter table song
 add is_preset_list boolean;
 
+#- 2023/08/01 change table sessions by run this sql script
+
+alter table sessions
+add location text;
+
+alter table sessions
+add locationlatitude double;
+
+alter table sessions
+add locationlongitude double;
+
+
 
 
 
