@@ -25,9 +25,6 @@ public class DeviceGroup extends BaseEntity implements Serializable {
     @PrimaryKeyColumn(value = "name", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     private String name;
 
-    @Column(value = "device_batch")
-    private String deviceBatch;
-
     @Column(value = "description")
-    private UUID description;
+    private String description;
 }
