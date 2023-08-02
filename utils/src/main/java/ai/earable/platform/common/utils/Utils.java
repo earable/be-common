@@ -1,4 +1,4 @@
-package ai.earable.platform.common.data.util;
+package ai.earable.platform.common.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
