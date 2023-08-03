@@ -51,6 +51,10 @@ add no_of_supported_versions int;
 alter table song
 add volume double;
 
+#- 2023/07/20 change table song by run this sql script
+alter table song
+add is_preset_list boolean;
+
 
 
 
