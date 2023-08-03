@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.cassandra.core.cql.Ordering;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
@@ -17,6 +19,8 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,7 +29,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Device extends BaseEntity implements Serializable {
+public class Device implements Serializable {
     @PrimaryKeyColumn(value = "serial_no", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     private String serialNo;
 
@@ -35,8 +39,14 @@ public class Device extends BaseEntity implements Serializable {
     @Column(value = "user_id")
     private UUID userId;
 
+    @Column(value = "history_user_ids")
+    private List<UUID> historyUserIds;
+
     @Column(value = "user_name")
     private String userName;
+
+    @Column(value = "history_user_names")
+    private List<String> historyUserNames;
 
     @Column(value = "device_status")
     private DeviceStatus deviceStatus;
@@ -46,6 +56,9 @@ public class Device extends BaseEntity implements Serializable {
 
     @Column(value = "last_location_display")
     private String lastLocationDisplay;
+
+    @Column(value = "last_ip")
+    private String lastIp;
 
     @Column(value = "last_location_latitude")
     private Double lastLocationLatitude;
@@ -80,4 +93,12 @@ public class Device extends BaseEntity implements Serializable {
     @Column(value = "current_pic_id")
     private UUID currentPicId;
 
+    @Column("last_active_at")
+    private Timestamp lastActiveAt;
+
+    @Column("created_at")
+    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
+    @Column("updated_at")
+    private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
 }
