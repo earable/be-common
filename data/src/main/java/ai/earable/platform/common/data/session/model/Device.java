@@ -20,6 +20,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -101,4 +102,17 @@ public class Device implements Serializable {
 
     @Column("updated_at")
     private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
+
+    @Column("warranty_date")
+    private LocalDate warrantyDate;
+
+    @Column("last_handover")
+    private Timestamp lastHandover;
+
+    @Column("color")
+    private String color;
+
+    @Column("model")
+    private String model;
+
 }
