@@ -66,8 +66,17 @@ add locationlatitude double;
 alter table sessions
 add locationlongitude double;
 
+#- 2023/08/10 change table profiling_qa_2 by run this sql script
+
+select * from profiling_qa_2 where id in (8bc24d50-f2d3-11ec-b939-0242ac120002
+,8bc24d52-f2d3-11ec-b939-0242ac120014
+,8bc24d52-f2d3-11ec-b939-0242ac120015
+)
 
 
+select * from profiling_qa_2 where origin_question_id = 8bc24d50-f2d3-11ec-b939-0242ac120002 allow filtering
+select * from profiling_qa_2 where origin_question_id = 8bc24d52-f2d3-11ec-b939-0242ac120014 allow filtering
+select * from profiling_qa_2 where origin_question_id = 8bc24d52-f2d3-11ec-b939-0242ac120015 allow filtering
 
 
 
