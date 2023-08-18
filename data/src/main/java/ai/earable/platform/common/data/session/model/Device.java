@@ -94,6 +94,9 @@ public class Device implements Serializable {
     @Column(value = "current_pic_id")
     private UUID currentPicId;
 
+    @Column(value = "pic_note")
+    private String picNote;
+
     @Column("last_active_at")
     private Timestamp lastActiveAt;
 
