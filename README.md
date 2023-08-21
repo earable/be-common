@@ -80,10 +80,11 @@ select * from profiling_qa_2 where origin_question_id = 8bc24d52-f2d3-11ec-b939-
 
 #- 2023/08/18 add table session_1 by run this sql script
 
-create table sessions_1
+
+create table staging.session_1
 (
-userid            UUID,
-profileid         UUID,
+userid            text,
+profileid         text,
 featurename       text,
 startedtime       bigint,
 clienttimestamp   bigint,
@@ -98,12 +99,11 @@ mode              text,
 sessionid         text,
 sessionsettingid  text,
 timezone          text,
-primary key ((userid, profileid, featurename, sessionid), clienttimestamp)
+primary key (userid, profileid, featurename, startedtime, sessionid)
 )
-with clustering order by (clienttimestamp desc);
 
-create index sessions_1_sessionid_idx
-on sessions_1 (sessionid);
+create index session_1_sessionid_idx
+on staging.session_1 (sessionid);
 
 #- 2023/08/18 add table user_insight by run this sql script
 
