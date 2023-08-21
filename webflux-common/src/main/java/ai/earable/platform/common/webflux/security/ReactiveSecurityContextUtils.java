@@ -8,6 +8,8 @@ import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 /**
  * Created by BinhNH on 6/14/22
  */
@@ -31,8 +33,8 @@ public class ReactiveSecurityContextUtils {
         return getToken().map(token -> getPhoneNumber(token));
     }
 
-    private String getUserId(String token) {
-        return jwtUtils.getAllClaimsFromToken(token).get("user_id").toString(); //TODO: Handle error cases
+    private UUID getUserId(String token) {
+        return UUID.fromString(jwtUtils.getAllClaimsFromToken(token).get("user_id").toString()); //TODO: Handle error cases
     }
 
     private String getUserEmail(String token) {

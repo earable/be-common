@@ -15,27 +15,30 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
-@Table(value = "sessions")
+@Table(value = "session_1")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Session implements Serializable {
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private String userId;
+    private UUID userId;
 
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 1)
-    private String profileId;
+    private UUID profileId;
 
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 2)
     private String featureName;
 
     @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 3, ordering = Ordering.DESCENDING)
-    private long startedTime;
+    private long clientTimestamp;
 
-    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 4, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 4)
     private String sessionId;
+
+    private long startedTime;
 
     private SessionMode mode;
 
@@ -45,7 +48,6 @@ public class Session implements Serializable {
 
     private long endedTime;
 
-    private long clientTimestamp;
 
     private String timezone;
 
