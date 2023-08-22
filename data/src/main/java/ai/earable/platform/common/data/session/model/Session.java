@@ -17,24 +17,24 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 @Data
-@Table(value = "sessions")
+@Table(value = "session_1")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Session implements Serializable {
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 0)
+    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private String userId;
 
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 1)
+    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 1)
     private String profileId;
 
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 2)
+    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 2)
     private String featureName;
 
-    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 3, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 3)
     private long startedTime;
 
-    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 4, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 4)
     private String sessionId;
 
     private SessionMode mode;
