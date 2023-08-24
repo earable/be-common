@@ -55,8 +55,69 @@ add volume double;
 alter table song
 add is_preset_list boolean;
 
+#- 2023/08/01 change table sessions by run this sql script
+
+alter table sessions
+add location text;
+
+alter table sessions
+add locationlatitude double;
+
+alter table sessions
+add locationlongitude double;
+
+#- 2023/08/10 change table profiling_qa_2 by run this sql script
+
+select * from profiling_qa_2 where id in (8bc24d50-f2d3-11ec-b939-0242ac120002
+,8bc24d52-f2d3-11ec-b939-0242ac120014
+,8bc24d52-f2d3-11ec-b939-0242ac120015
+)
 
 
+select * from profiling_qa_2 where origin_question_id = 8bc24d50-f2d3-11ec-b939-0242ac120002 allow filtering
+select * from profiling_qa_2 where origin_question_id = 8bc24d52-f2d3-11ec-b939-0242ac120014 allow filtering
+select * from profiling_qa_2 where origin_question_id = 8bc24d52-f2d3-11ec-b939-0242ac120015 allow filtering
+
+#- 2023/08/18 add table session_1 by run this sql script
+
+
+create table staging.session_1
+(
+userid            text,
+profileid         text,
+featurename       text,
+startedtime       bigint,
+clienttimestamp   bigint,
+createddate       timestamp,
+deviceid          text,
+endedtime         bigint,
+location          text,
+locationlatitude  double,
+locationlongitude double,
+metadata          map<text, text>,
+mode              text,
+sessionid         text,
+sessionsettingid  text,
+timezone          text,
+primary key (userid, profileid, featurename, startedtime, sessionid)
+)
+
+create index session_1_sessionid_idx
+on staging.session_1 (sessionid);
+
+#- 2023/08/18 add table user_insight by run this sql script
+
+create table user_insight
+(
+user_id             uuid primary key,
+created_at          timestamp,
+focus_session_count int,
+last_session_at     timestamp,
+nap_session_count   int,
+sleep_session_count int,
+total_boosts        int,
+updated_at          timestamp
+);
 
 
 
