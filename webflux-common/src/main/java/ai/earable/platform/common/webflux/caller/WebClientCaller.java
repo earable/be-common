@@ -41,6 +41,10 @@ public class WebClientCaller implements SpringCaller {
     private int defaultTimeout;
 
     @Setter
+    @Value(value = "${earable.internal.caller.timeout:30}")
+    private int defaultTimeoutCustom;
+
+    @Setter
     @Value(value = "${earable.internal.caller.retry.times:3}")
     private int defaultRetryTimes;
 
@@ -137,6 +141,18 @@ public class WebClientCaller implements SpringCaller {
                 .body(Mono.just(requestBody), requestBody.getClass())
                 .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
                 .timeout(Duration.ofSeconds(defaultTimeout))
+                .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
+    }
+
+    @Override
+    public <T, V> Mono<V> requestToMonoCustom(HttpMethod method, String uri, String bearerToken, T requestBody, Class<V> responseType, String... pathParams) {
+        return webClient.method(wrap(method))
+                .uri(uri, pathParams)
+                .header("Authorization", bearerToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(requestBody), requestBody.getClass())
+                .exchangeToMono(clientResponse -> convertToMonoResponse(clientResponse, responseType))
+                .timeout(Duration.ofSeconds(defaultTimeoutCustom))
                 .retryWhen(configRetry(method, uri, defaultRetryTimes, defaultRetryDelay));
     }
 
