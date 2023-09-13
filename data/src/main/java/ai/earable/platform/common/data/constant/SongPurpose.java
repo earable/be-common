@@ -6,7 +6,11 @@ public enum SongPurpose {
     BACKGROUND_FOCUS("Background (Focus)"),
     VOICE_COACH_FOCUS("Voice coach (Focus)"),
     BACKGROUND_RELAX("Background (Relax)"),
-    VOICE_COACH_RELAX("Voice coach (Relax)");
+    VOICE_COACH_RELAX("Voice coach (Relax)"),
+    VOICE_COACH_NAP("Voice coach (Nap)"),
+    VOICE_COACH_BACK_TO_SLEEP("Voice coach (Back to sleep)"),
+    BACKGROUND_NAP("Background (Nap)"),
+    BACKGROUND_BACK_TO_SLEEP("Background (Back to sleep)");
 
     private final String label;
 

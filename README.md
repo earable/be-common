@@ -119,6 +119,10 @@ total_boosts        int,
 updated_at          timestamp
 );
 
+#- 2023/09/11 add table song by run this sql script
+
+alter table song
+add versioning text;
 
 
 
