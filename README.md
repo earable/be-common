@@ -124,6 +124,10 @@ updated_at          timestamp
 alter table song
 add versioning text;
 
+alter table song
+add system_admin_score int;
+
+
 
 
 

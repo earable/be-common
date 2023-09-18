@@ -102,4 +102,7 @@ public class Song extends BaseEntity implements Serializable {
     private Double volume;
 
     private String versioning;
+
+    @Column("system_admin_score")
+    private Integer systemAdminScore;
 }
