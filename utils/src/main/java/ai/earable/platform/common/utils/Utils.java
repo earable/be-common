@@ -26,6 +26,7 @@ public class Utils {
             return UUID.randomUUID().toString();
         }
     }
+
     public static String calculateVicQueryWindow(Session session) {
         if (session.getClientTimestamp() > 0) {
             long daysDiff =
@@ -35,6 +36,17 @@ public class Utils {
         } else {
             return "1d";
         }
+    }
+
+    public static boolean stringsEqual(String s1, String s2, Boolean ignoreCase) {
+        if (s1 == null) {
+            s1 = "";
+        }
+        if (s2 == null) {
+            s2 = "";
+        }
+
+        return ignoreCase ? s1.equalsIgnoreCase(s2) : s1.equals(s2);
     }
 
 }
