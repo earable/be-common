@@ -1,11 +1,13 @@
 package ai.earable.platform.common.utils;
 
+import ai.earable.platform.common.data.session.model.Session;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author DungNT
@@ -24,4 +26,27 @@ public class Utils {
             return UUID.randomUUID().toString();
         }
     }
+
+    public static String calculateVicQueryWindow(Session session) {
+        if (session.getClientTimestamp() > 0) {
+            long daysDiff =
+                    TimeUnit.DAYS.convert(System.currentTimeMillis() - session.getClientTimestamp(), TimeUnit.MILLISECONDS);
+            String window = (daysDiff + 2) + "d";
+            return window;
+        } else {
+            return "1d";
+        }
+    }
+
+    public static boolean stringsEqual(String s1, String s2, Boolean ignoreCase) {
+        if (s1 == null) {
+            s1 = "";
+        }
+        if (s2 == null) {
+            s2 = "";
+        }
+
+        return ignoreCase ? s1.equalsIgnoreCase(s2) : s1.equals(s2);
+    }
+
 }
