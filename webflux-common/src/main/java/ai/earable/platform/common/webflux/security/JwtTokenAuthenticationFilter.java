@@ -90,15 +90,12 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                 });
             }
             long timestamp = System.currentTimeMillis() - cacheRequestsInSeconds * 1000;
-
-            recentRequests.add(0, HttpRequestInfo.builder().requestId(requestId).timestamp(System.currentTimeMillis()).build());
-            recentRequests = recentRequests.stream().filter(httpRequestInfo -> {
-                if (httpRequestInfo == null) {
-                    log.info("httpRequestInfo is null" + requestId);
-                }
-                return httpRequestInfo.getTimestamp() > timestamp;
-            }).collect(Collectors.toList());
-
+            synchronized(JwtTokenAuthenticationFilter.this) {
+                recentRequests.add(0, HttpRequestInfo.builder().requestId(requestId).timestamp(System.currentTimeMillis()).build());
+                recentRequests = recentRequests.stream().filter(httpRequestInfo -> {
+                    return httpRequestInfo.getTimestamp() > timestamp;
+                }).collect(Collectors.toList());
+            }
             CustomSamplingContext context = new CustomSamplingContext();
             String fullPath = StringUtils.isEmpty(exchange.getRequest().getURI().getQuery()) ? exchange.getRequest().getURI().getPath() :
                     exchange.getRequest().getURI().getPath() + "?" + exchange.getRequest().getURI().getQuery();
