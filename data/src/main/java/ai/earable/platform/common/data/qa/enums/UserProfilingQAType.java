@@ -6,6 +6,7 @@ package ai.earable.platform.common.data.qa.enums;
  */
 public enum UserProfilingQAType {
     PROFILING,
+    ONBOARDING_QUESTION,
     DELETE_ACCOUNT,
     FAQ
 }
