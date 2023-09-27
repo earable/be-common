@@ -29,7 +29,7 @@ add start_using_band_time timestamp;
 #- 2023/05/30 change table earable_news by run this sql script
 alter table earable_news
 add language text;
-# done on production------------------------------------------------------------
+# need to run on production------------------------------------------------------------
 #- 2023/06/16 change table earable_news by run this sql script
 
 alter table user_profile
@@ -126,6 +126,21 @@ add versioning text;
 
 alter table song
 add system_admin_score int;
+
+#- 2023/09/26 add table song by run this sql script
+
+alter table song
+add audio_versioning text;
+
+alter table song
+add purposes list<text>;
+
+alter table playlist
+add purposes list<text>;
+
+
+
+
 
 
 
