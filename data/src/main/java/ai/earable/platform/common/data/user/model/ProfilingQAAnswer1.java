@@ -16,5 +16,6 @@ import java.io.Serializable;
 public class ProfilingQAAnswer1 implements Serializable {
     private String answerId;
     private String answerContent;
+    private String imageUrl;
     private Boolean inputable;
 }

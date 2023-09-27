@@ -7,18 +7,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
 @UserDefinedType
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfilingQAAnswer2 implements Serializable {
-    private String answerId;
-    private String answerContent;
+public class ProfilingQAAnswerGroup implements Serializable {
     private String groupName;
     private String groupDescription;
     private String groupId;
-    private String imageUrl;
-    private Boolean inputable;
+    private List<ProfilingQAAnswer1> answerList;
 }
