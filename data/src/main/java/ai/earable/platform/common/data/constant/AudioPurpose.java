@@ -1,6 +1,6 @@
 package ai.earable.platform.common.data.constant;
 
-public enum SongPurpose {
+public enum AudioPurpose {
     BACKGROUND_SLEEP("Background (Sleep)"),
     VOICE_COACH_SLEEP("Voice coach (Sleep)"),
     BACKGROUND_FOCUS("Background (Focus)"),
@@ -10,7 +10,9 @@ public enum SongPurpose {
     VOICE_COACH_NAP("Voice coach (Nap)"),
     VOICE_COACH_BACK_TO_SLEEP("Voice coach (Back to sleep)"),
     BACKGROUND_NAP("Background (Nap)"),
-    BACKGROUND_BACK_TO_SLEEP("Background (Back to sleep)");
+    BACKGROUND_BACK_TO_SLEEP("Background (Back to sleep)"),
+    BACKGROUND_SPECIAL_SLEEP("Background (Special sleep)"),
+    VOICE_COACH_SPECIAL_SLEEP("Voice coach (Special sleep)");
 
     private final String label;
 
@@ -18,12 +20,12 @@ public enum SongPurpose {
         return label;
     }
 
-    SongPurpose(String label) {
+    AudioPurpose(String label) {
         this.label = label;
     }
 
-    public static SongPurpose valueOfLabel(String label) {
-        for (SongPurpose e : values()) {
+    public static AudioPurpose valueOfLabel(String label) {
+        for (AudioPurpose e : values()) {
             if (e.label.equals(label)) {
                 return e;
             }
