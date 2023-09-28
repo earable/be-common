@@ -47,4 +47,7 @@ public class Playlist extends BaseEntity implements Serializable {
 
     @Column("purposes")
     private List<AudioPurpose> purposes;
+
+    @Column("is_library")
+    private Boolean isLibrary;
 }

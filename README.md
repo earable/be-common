@@ -138,6 +138,10 @@ add purposes list<text>;
 alter table playlist
 add purposes list<text>;
 
+alter table playlist
+add is_library boolean;
+
+
 
 
 
