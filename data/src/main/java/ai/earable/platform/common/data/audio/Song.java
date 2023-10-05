@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.audio;
 
 import ai.earable.platform.common.data.cassandra.BaseEntity;
+import ai.earable.platform.common.data.constant.AudioPurpose;
 import ai.earable.platform.common.data.user.enums.Language;
 import ai.earable.platform.common.data.user.enums.LayerPreference;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -103,6 +104,12 @@ public class Song extends BaseEntity implements Serializable {
 
     private String versioning;
 
+    @Column("audio_versioning")
+    private String audioVersioning;
+
     @Column("system_admin_score")
     private Integer systemAdminScore;
+
+    @Column("purposes")
+    private List<AudioPurpose> purposes;
 }
