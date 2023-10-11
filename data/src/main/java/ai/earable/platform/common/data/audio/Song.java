@@ -112,4 +112,7 @@ public class Song extends BaseEntity implements Serializable {
 
     @Column("purposes")
     private List<AudioPurpose> purposes;
+
+    @Column("is_offline")
+    private Boolean isOffline;
 }

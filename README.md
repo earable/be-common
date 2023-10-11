@@ -119,7 +119,7 @@ total_boosts        int,
 updated_at          timestamp
 );
 
-#- 2023/09/11 add table song by run this sql script
+#- 2023/09/11 update table song by run this sql script
 
 alter table song
 add versioning text;
@@ -127,7 +127,7 @@ add versioning text;
 alter table song
 add system_admin_score int;
 
-#- 2023/09/26 add table song by run this sql script
+#- 2023/09/26 update table song by run this sql script
 
 alter table song
 add audio_versioning text;
@@ -138,9 +138,32 @@ add purposes list<text>;
 alter table playlist
 add purposes list<text>;
 
+#- 2023/10/11 update table song by run this sql script
+
 alter table playlist
 add is_library boolean;
 
+update song set is_offline=true where id in 
+(6d18c496-e70a-4d24-a877-ed07a81eb90b,
+f2d62876-9087-48fc-ac4c-c11eebc7615f,
+afcf814a-8a1f-490e-bcf1-b2d49a1d0c6c,
+c56cdbea-f85d-475b-bc0a-514c9265c551,
+cb991680-c8c7-4c41-89d1-e57dc1bbd45a,
+33133ebe-59e5-496a-b8cf-597211cdff53,
+98090f94-ab62-4bf0-8e19-8317f4e2c381,
+d63acd6f-b16b-4f3d-af0a-ef86e3e11386,
+2778a8ec-3833-48a8-8ae6-792d0c493012,
+ab292e48-817c-48ab-81e1-edd3f74c5673,
+6f1ccb2e-f27c-40ac-8237-67eabc25f266,
+b38f8c4f-c1b5-4d1f-bf9e-d1e17a5effdf,
+347bbaf9-980d-4756-843a-d9da1f1a7c08,
+b7eef4e8-e9be-40b4-a7e6-f96860672447,
+528f62e6-3031-4cac-a9ef-72a9166859c6,
+e73413e8-86c5-4950-9820-3346cf7079d5,
+ecb611f8-8dd5-417c-bb61-f75785120ccc,
+b61d839c-fc20-47be-a820-2c110becf698,
+565de793-4cfd-4b5a-abea-2abf1ba678ba,
+664c6933-c976-40a5-84a1-73919fec6c11)
 
 
 
