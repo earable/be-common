@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.user.model;
 
 import ai.earable.platform.common.data.cassandra.BaseEntity;
+import ai.earable.platform.common.data.user.enums.AccountType;
 import ai.earable.platform.common.data.user.enums.RoleType;
 import ai.earable.platform.common.data.user.enums.UserStatus;
 import lombok.AllArgsConstructor;
@@ -62,5 +63,16 @@ public class User extends BaseEntity {
         }
         String socialId = !StringUtils.isEmpty(getFacebookId()) ? getFacebookId() : (!StringUtils.isEmpty(getGoogleId()) ? getGoogleId() : getAppleId());
         return socialId;
+    }
+
+    public AccountType getAccountType() {
+        if (StringUtils.isEmpty(password)) {
+            return AccountType.SOCIAL;
+        } else {
+            if (!StringUtils.isEmpty(username)) {
+                return AccountType.EMAIL;
+            }
+            return AccountType.PHONE_NUMBER;
+        }
     }
 }
