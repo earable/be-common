@@ -165,6 +165,13 @@ b61d839c-fc20-47be-a820-2c110becf698,
 565de793-4cfd-4b5a-abea-2abf1ba678ba,
 664c6933-c976-40a5-84a1-73919fec6c11)
 
+#- 2023/10/18 update table user by run this sql script
+
+alter table user
+add last_changed_username_at timestamp;
+
+
+
 
 
 
