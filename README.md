@@ -170,6 +170,14 @@ b61d839c-fc20-47be-a820-2c110becf698,
 alter table user
 add last_changed_username_at timestamp;
 
+alter table profiling_qa_3
+add title text;
+
+alter table profiling_qa_3
+add image_url text;
+
+
+
 
 
 
