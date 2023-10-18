@@ -48,4 +48,5 @@ public class UserProfileResponse {
     private String country;
     private Integer tutorialStatus;
     private AccountType accountType;
+    private Long lastChangedUsernameAt;
 }
