@@ -50,6 +50,8 @@ public class User extends BaseEntity {
     private String userAgent;
     @Column("last_signed_in")
     private Timestamp lastSignedIn;
+    @Column("last_changed_username_at")
+    private Timestamp lastChangedUsernameAt;
 
     public String getUsernameId() {
         if (!StringUtils.isEmpty(getUsername())) {
