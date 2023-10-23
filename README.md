@@ -181,7 +181,7 @@ add image_url text;
 INSERT INTO staging.profiling_qa (id, answer, created_at, language, question, question_type, type, updated_at) VALUES (b20528c2-70df-4032-adb1-da15a12662a9, [I don't have a FRENZ band, I don't want to use FRENZ anymore, I found better applications, The band does not work the way I expected it to], '2022-07-15 09:08:14.000', 'EN', 'Question 1', 'SINGLE_CHOICE', 'DELETE_ACCOUNT', '2022-07-12 16:20:47.000');
 INSERT INTO staging.profiling_qa (id, answer, created_at, language, question, question_type, type, updated_at) VALUES (b20528c2-70df-4032-adb1-da15a12662a3, [Tôi không có vòng đeo FRENZ, Tôi không muốn tiếp tục sử dụng FRENZ, Tôi tìm thấy các ứng dụng tốt hơn, Thông báo không liên quan, Vòng đeo hoạt động không như mong đợi], '2022-07-15 09:08:14.000', 'VN', 'Câu hỏi 1', 'SINGLE_CHOICE', 'DELETE_ACCOUNT', '2022-07-12 16:20:47.000');
 
-
+Move all data of table profiling_qa_3 to Production
 
 
 
