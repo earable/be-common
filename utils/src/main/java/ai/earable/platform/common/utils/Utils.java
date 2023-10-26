@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.server.ServerWebExchange;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -49,4 +53,20 @@ public class Utils {
         return ignoreCase ? s1.equalsIgnoreCase(s2) : s1.equals(s2);
     }
 
+    public static String formatDateTime(Long datetime) {
+        final String DATE_PATTERN = "yyyy/MM/dd HH:mm:ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+        Date result = new Date(datetime);
+        return sdf.format(result);
+    }
+
+    public static String formatDate(LocalDate date) {
+        final String DATE_PATTERN = "yyyy/MM/dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), 0, 0, 0);
+        Date result = new Date(calendar.getTimeInMillis());
+
+        return sdf.format(result);
+    }
 }

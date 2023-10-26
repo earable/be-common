@@ -41,4 +41,7 @@ public class ProfilingQA2 extends BaseEntity {
     private UUID groupId;
     @Column("order")
     private Integer order;
+    private String title;
+    @Column("image_url")
+    private String imageUrl;
 }

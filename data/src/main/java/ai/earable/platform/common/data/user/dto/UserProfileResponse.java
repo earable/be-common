@@ -1,9 +1,6 @@
 package ai.earable.platform.common.data.user.dto;
 
-import ai.earable.platform.common.data.user.enums.Gender;
-import ai.earable.platform.common.data.user.enums.Language;
-import ai.earable.platform.common.data.user.enums.ProfileProgress;
-import ai.earable.platform.common.data.user.enums.UserLevel;
+import ai.earable.platform.common.data.user.enums.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -50,4 +47,6 @@ public class UserProfileResponse {
     private String gender_1;
     private String country;
     private Integer tutorialStatus;
+    private AccountType accountType;
+    private Long lastChangedUsernameAt;
 }
