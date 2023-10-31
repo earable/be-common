@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,13 +22,8 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import org.springframework.web.server.adapter.DefaultServerWebExchange;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,20 +54,6 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             String userAgent = exchange.getRequest().getHeaders().getFirst("User-Agent");
 
-            if (exchange.getRequest().getPath().toString().contains("survey/submit1")) {
-                 final StringBuilder body = new StringBuilder();
-
-                return exchange.getRequest()
-                        .getBody()
-                        .map(dataBuffer -> {
-                            body.append(StandardCharsets.UTF_8.decode(dataBuffer.asByteBuffer()).toString());
-                            return dataBuffer;
-                        }).collectList()
-                        .map(dataBufferList -> {
-                            log.info("body = " + body.toString());
-                            return body;
-                        }).then();
-            }
             boolean isLogged = false;
             if (org.springframework.util.StringUtils.hasText(authHeader) && authHeader.length() > BEARER.length()) {
                 Authentication authentication = jwtUtils.getAuthentication(authHeader.substring(BEARER.length()));
@@ -110,7 +90,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                 });
             }
             long timestamp = System.currentTimeMillis() - cacheRequestsInSeconds * 1000;
-            synchronized (JwtTokenAuthenticationFilter.this) {
+            synchronized(JwtTokenAuthenticationFilter.this) {
                 recentRequests.add(0, HttpRequestInfo.builder().requestId(requestId).timestamp(System.currentTimeMillis()).build());
                 recentRequests = recentRequests.stream().filter(httpRequestInfo -> {
                     return httpRequestInfo.getTimestamp() > timestamp;
