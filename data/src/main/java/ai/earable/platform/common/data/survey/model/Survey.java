@@ -1,5 +1,6 @@
 package ai.earable.platform.common.data.survey.model;
 
+import ai.earable.platform.common.data.survey.enums.SurveyStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +34,9 @@ public class Survey {
 
     @Column(value = "token")
     private String token;
+
+    @Column(value = "status")
+    private SurveyStatus status;
 
     @Column(value = "created_at")
     private Timestamp createdAt;
