@@ -3,6 +3,7 @@ package ai.earable.platform.common.data.survey.model;
 import ai.earable.platform.common.data.survey.model.SurveyQuestionFieldChoice;
 import lombok.*;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -16,11 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SurveyQuestionResponse {
-    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
-    private UUID userId;
-
-    @PrimaryKeyColumn(name = "session_id", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
-    private String sessionId;
+    @PrimaryKeyColumn(name = "survey_id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
+    private UUID surveyId;
 
     @PrimaryKeyColumn(name = "question_id", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
     private String questionId;
@@ -31,11 +29,18 @@ public class SurveyQuestionResponse {
 
     private String title;
 
-    private Boolean allow_multiple_selections = null;
+    @Column(value = "allow_multiple_selections")
+    private Boolean allowMultipleSelections = null;
 
     private List<SurveyQuestionFieldChoice> choices = null;
 
-    private SurveyQuestionAnswerChoice answer = null;
+    private String answerType;
 
-    private List<SurveyQuestionAnswerChoice> answers = null;
+    private Integer answerNumber;
+
+    private String answerText;
+
+    private SurveyAnswerChoice answer = null;
+
+    private List<SurveyAnswerChoice> answers = null;
 }
