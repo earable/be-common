@@ -12,7 +12,7 @@ import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 public class SurveyQuestionFieldChoice {
     private String id;
 
-    private String ref;
-
     private String label;
+
+    private String ref;
 }
