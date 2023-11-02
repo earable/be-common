@@ -22,13 +22,13 @@ public class Survey {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private UUID id;
 
-    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
+    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
     private UUID userId;
 
-    @PrimaryKeyColumn(name = "session_id", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
+    @PrimaryKeyColumn(name = "session_id", type = PrimaryKeyType.PARTITIONED, ordinal = 2)
     private String sessionId;
 
-    @PrimaryKeyColumn(name = "form_Id", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
+    @PrimaryKeyColumn(name = "form_Id", type = PrimaryKeyType.PARTITIONED, ordinal = 3)
     private String formId;
 
     @Column(value = "token")

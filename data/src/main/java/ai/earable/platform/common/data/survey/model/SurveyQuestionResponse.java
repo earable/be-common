@@ -43,4 +43,6 @@ public class SurveyQuestionResponse {
     private SurveyAnswerChoice answer = null;
 
     private List<SurveyAnswerChoice> answers = null;
+
+    private Integer order;
 }
