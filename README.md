@@ -183,6 +183,19 @@ INSERT INTO staging.profiling_qa (id, answer, created_at, language, question, qu
 
 Move all data of table profiling_qa_3 to Production
 
+#- 2023/11/03 change user_profile table
+
+alter table user_profile
+add survey_type int;
+
+alter table user_profile
+add survey_reminder_count int;
+
+alter table user_profile
+add survey_reminder_disabled boolean;
+
+
+
 
 
 

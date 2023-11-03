@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.survey.model;
 
 import ai.earable.platform.common.data.survey.enums.SurveyStatus;
+import ai.earable.platform.common.data.survey.enums.SurveyType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,4 +47,13 @@ public class Survey {
 
     @Column(value = "updated_at")
     private Timestamp updatedAt;
+
+    @Column(value = "type")
+    private SurveyType type;
+
+    @Column(value = "started_time")
+    private Long startedTime;
+
+    @Column(value = "ended_time")
+    private Long endedTime;
 }
