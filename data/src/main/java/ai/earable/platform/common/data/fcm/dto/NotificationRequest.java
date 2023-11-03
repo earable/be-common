@@ -30,4 +30,5 @@ public class NotificationRequest {
     private String description;
     @NotBlank(message = "itemDetailId is required")
     private String itemDetailId;
+    private boolean pushNow;
 }
