@@ -3,6 +3,7 @@ package ai.earable.platform.common.data.user.dto;
 import ai.earable.platform.common.data.user.enums.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import org.springframework.data.cassandra.core.mapping.Column;
 
 import java.util.UUID;
 
@@ -49,4 +50,6 @@ public class UserProfileResponse {
     private Integer tutorialStatus;
     private AccountType accountType;
     private Long lastChangedUsernameAt;
+    private Integer surveyType;
+    private Integer surveyReminderCount;
 }
