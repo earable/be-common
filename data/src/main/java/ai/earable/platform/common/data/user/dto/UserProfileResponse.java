@@ -52,4 +52,7 @@ public class UserProfileResponse {
     private Long lastChangedUsernameAt;
     private Integer surveyType;
     private Integer surveyReminderCount;
+    private Boolean surveyReminderDisabled;
+    private Integer voiceCoachReminderCount;
+    private Boolean voiceCoachReminderDisabled;
 }
