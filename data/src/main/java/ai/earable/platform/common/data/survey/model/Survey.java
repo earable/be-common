@@ -36,6 +36,9 @@ public class Survey {
     @Column(value = "token")
     private String token;
 
+    @Column(value = "title")
+    private String title;
+
     @Column(value = "status")
     private SurveyStatus status;
 
