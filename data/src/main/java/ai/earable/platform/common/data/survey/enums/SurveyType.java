@@ -1,7 +1,7 @@
 package ai.earable.platform.common.data.survey.enums;
 
 public enum SurveyType {
-    None,
+    NA,
     S1,
     S2,
     S3,
