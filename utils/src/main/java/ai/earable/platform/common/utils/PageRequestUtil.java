@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PageRequestUtil {
     public static final String NEXT_PAGE_DATA_URL = "nextPageDataURL";
+    public static final String NUMBER_OF_ELEMENTS = "numberOfElements";
+    public static final String NUMBER_OF_ELEMENTS_UNREAD = "numberOfElementsUnread";
 
 
     public static String headerValue(ServerWebExchange exchange,
