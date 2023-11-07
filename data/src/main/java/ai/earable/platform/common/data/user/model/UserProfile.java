@@ -83,6 +83,8 @@ public class UserProfile extends BaseEntity {
     private Integer surveyReminderCount;
     @Column("survey_reminder_disabled")
     private Boolean surveyReminderDisabled;
+    @Column("session_reminder_disabled")
+    private Boolean sessionReminderDisabled;
     @Column("voice_coach_reminder_count")
     private Integer voiceCoachReminderCount;
     @Column("voice_coach_reminder_disabled")
