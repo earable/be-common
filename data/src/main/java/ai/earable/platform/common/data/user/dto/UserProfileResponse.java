@@ -53,6 +53,7 @@ public class UserProfileResponse {
     private Integer surveyType;
     private Integer surveyReminderCount;
     private Boolean surveyReminderDisabled;
+    private Boolean sessionReminderDisabled;
     private Integer voiceCoachReminderCount;
     private Boolean voiceCoachReminderDisabled;
 }

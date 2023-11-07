@@ -24,4 +24,5 @@ public class UserSurveyRequest {
     private Integer surveyType;
     private Integer surveyReminderCount;
     private Boolean surveyReminderDisabled;
+    private Boolean sessionReminderDisabled;
 }
