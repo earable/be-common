@@ -200,6 +200,9 @@ add voice_coach_reminder_count int;
 alter table user_profile
 add voice_coach_reminder_disabled boolean;
 
+alter table user_profile
+add session_reminder_disabled boolean;
+
 
 
 
