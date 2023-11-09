@@ -53,7 +53,10 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
 
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             String userAgent = exchange.getRequest().getHeaders().getFirst("User-Agent");
+            exchange.getRequest().getHeaders().entrySet().forEach(authHeader1 -> {
+                log.info("header key = " + authHeader1.getKey() + " value = " + authHeader1.getValue());
 
+            });
             boolean isLogged = false;
             if (org.springframework.util.StringUtils.hasText(authHeader) && authHeader.length() > BEARER.length()) {
                 Authentication authentication = jwtUtils.getAuthentication(authHeader.substring(BEARER.length()));
@@ -90,7 +93,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
                 });
             }
             long timestamp = System.currentTimeMillis() - cacheRequestsInSeconds * 1000;
-            synchronized(JwtTokenAuthenticationFilter.this) {
+            synchronized (JwtTokenAuthenticationFilter.this) {
                 recentRequests.add(0, HttpRequestInfo.builder().requestId(requestId).timestamp(System.currentTimeMillis()).build());
                 recentRequests = recentRequests.stream().filter(httpRequestInfo -> {
                     return httpRequestInfo.getTimestamp() > timestamp;
