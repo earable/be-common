@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.session.model;
 
 import ai.earable.platform.common.data.feature.model.SessionMode;
+import ai.earable.platform.common.data.session.SessionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -60,4 +61,7 @@ public class Session implements Serializable {
 
     @Column(value = "createddate")
     private Timestamp createddate;
+
+    @Column(value = "type")
+    private SessionType type;
 }
