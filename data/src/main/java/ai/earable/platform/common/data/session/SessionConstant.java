@@ -17,5 +17,6 @@ public class SessionConstant {
     public static String FWVERSION = "fwVersion";
 
     public static String MLVERSION = "mlVersion";
+    public static String SESSIONTYPE = "sessionType";
 
 }
