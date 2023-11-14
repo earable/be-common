@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
  * @date 05/06/2022
  */
 @Data
-@Builder
 public class UserLevelRequest {
     @NotNull(message = "userLevel is required")
     private UserLevel userLevel;
