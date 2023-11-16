@@ -208,6 +208,8 @@ add session_reminder_disabled boolean;
 alter table session_1
 add type text;
 
+alter table song
+add membership_type text;
 
 
 
