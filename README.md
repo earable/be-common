@@ -211,6 +211,10 @@ add type text;
 alter table song
 add membership_type text;
 
+#- 2023/11/21 change user_profile table
+
+alter table user_profile
+add serial_no_updated boolean;
 
 
 

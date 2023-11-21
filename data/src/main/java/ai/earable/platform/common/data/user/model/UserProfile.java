@@ -89,4 +89,6 @@ public class UserProfile extends BaseEntity {
     private Integer voiceCoachReminderCount;
     @Column("voice_coach_reminder_disabled")
     private Boolean voiceCoachReminderDisabled;
+    @Column("serial_no_updated")
+    private Boolean serialNoUpdated;
 }
