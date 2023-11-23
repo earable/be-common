@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.user.dto;
 
 import ai.earable.platform.common.data.user.enums.UserLevel;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

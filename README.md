@@ -203,6 +203,18 @@ add voice_coach_reminder_disabled boolean;
 alter table user_profile
 add session_reminder_disabled boolean;
 
+#- 2023/11/13 change session_1 table
+
+alter table session_1
+add type text;
+
+alter table song
+add membership_type text;
+
+#- 2023/11/21 change user_profile table
+
+alter table user_profile
+add serial_no_updated boolean;
 
 
 

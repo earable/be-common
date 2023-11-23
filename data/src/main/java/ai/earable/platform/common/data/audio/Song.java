@@ -2,6 +2,7 @@ package ai.earable.platform.common.data.audio;
 
 import ai.earable.platform.common.data.cassandra.BaseEntity;
 import ai.earable.platform.common.data.constant.AudioPurpose;
+import ai.earable.platform.common.data.constant.MembershipType;
 import ai.earable.platform.common.data.user.enums.Language;
 import ai.earable.platform.common.data.user.enums.LayerPreference;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -115,4 +116,7 @@ public class Song extends BaseEntity implements Serializable {
 
     @Column("is_offline")
     private Boolean isOffline;
+
+    @Column("membership_type")
+    private MembershipType membershipType;
 }
