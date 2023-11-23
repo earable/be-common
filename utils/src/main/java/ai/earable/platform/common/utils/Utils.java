@@ -69,4 +69,13 @@ public class Utils {
 
         return sdf.format(result);
     }
+    public static String formatDate1(LocalDate date) {
+        final String DATE_PATTERN = "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), 0, 0, 0);
+        Date result = new Date(calendar.getTimeInMillis());
+
+        return sdf.format(result);
+    }
 }
