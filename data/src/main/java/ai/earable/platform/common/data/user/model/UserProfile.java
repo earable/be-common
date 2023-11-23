@@ -77,6 +77,8 @@ public class UserProfile extends BaseEntity {
     private Timestamp startUsingBandTime;
     @Column("tutorial_status")
     private Integer tutorialStatus;
+    @Column("serial_no_updated")
+    private Boolean serialNoUpdated;
     @Column("survey_type")
     private Integer surveyType;
     @Column("survey_reminder_count")
