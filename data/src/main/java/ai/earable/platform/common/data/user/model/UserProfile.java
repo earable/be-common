@@ -91,4 +91,6 @@ public class UserProfile extends BaseEntity {
     private Boolean voiceCoachReminderDisabled;
     @Column("serial_no_updated")
     private Boolean serialNoUpdated;
+    @Column("restore_id")
+    private String restoreId;
 }

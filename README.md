@@ -216,6 +216,12 @@ add membership_type text;
 alter table user_profile
 add serial_no_updated boolean;
 
+#- 2023/11/27 change user_profile table
+
+alter table user_profile
+add restore_id text;
+
+
 
 
 

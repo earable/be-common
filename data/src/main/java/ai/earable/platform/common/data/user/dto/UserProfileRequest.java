@@ -21,7 +21,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserProfileRequest {
     @Size(max = 100, message = "{USER_PROFILE_NAME_MAX_LENGTH_ERROR}")
-    @NotBlank(message = "{USER_PROFILE_NAME_REQUIRED}")
     private String name;
     @Size(min = 6, max = 20, message = "{USER_PROFILE_PHONE_LENGTH_ERROR}")
     private String phone;
@@ -36,4 +35,5 @@ public class UserProfileRequest {
     private Integer weight;
     private Gender gender;
     private String gender_1;
+    private String restoreId;
 }
