@@ -56,4 +56,5 @@ public class UserProfileResponse {
     private Boolean sessionReminderDisabled;
     private Integer voiceCoachReminderCount;
     private Boolean voiceCoachReminderDisabled;
+    private String restoreId;
 }
