@@ -221,6 +221,24 @@ add serial_no_updated boolean;
 alter table user_profile
 add restore_id text;
 
+#- 2023/11/28 create activity_log table
+
+create table activity_log
+(
+user_id        uuid,
+id             uuid,
+action_name    text,
+activity_level text,
+created_at     timestamp,
+metadata       map<text, text>,
+parent_id      uuid,
+screen_name    text,
+time_zone      text,
+client_timestamp      timestamp,
+primary key (id, client_timestamp, user_id)
+)
+WITH CLUSTERING ORDER BY (client_timestamp DESC);
+
 
 
 
