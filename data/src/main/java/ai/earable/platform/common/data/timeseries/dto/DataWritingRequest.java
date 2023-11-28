@@ -26,7 +26,6 @@ public class DataWritingRequest implements Serializable, Cloneable {
     private String monthOfYear;
     private String weekOfYear;
     private String dayOfYear;
-    private String data;
 
     /**
      * List of metrics, tags and data value.
