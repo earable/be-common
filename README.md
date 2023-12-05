@@ -239,6 +239,13 @@ primary key (id, client_timestamp, user_id)
 )
 WITH CLUSTERING ORDER BY (client_timestamp DESC);
 
+#- 2023/12/05 alter notification table
+
+alter table notification
+add event_name text;
+
+
+
 
 
 
