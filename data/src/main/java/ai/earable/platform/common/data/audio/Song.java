@@ -119,4 +119,7 @@ public class Song extends BaseEntity implements Serializable {
 
     @Column("membership_type")
     private MembershipType membershipType;
+
+    @Column("check_sha256_sum")
+    private String checkSha256Sum;
 }

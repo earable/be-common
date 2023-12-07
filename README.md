@@ -244,6 +244,18 @@ WITH CLUSTERING ORDER BY (client_timestamp DESC);
 alter table notification
 add event_name text;
 
+#- 2023/12/07 alter song table
+
+alter table song
+add check_sha256_sum text;
+
+alter table resources
+add checksha256sum text;
+
+
+
+
+
 
 
 
