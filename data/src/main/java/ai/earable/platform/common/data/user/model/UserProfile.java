@@ -7,12 +7,14 @@ import ai.earable.platform.common.data.user.enums.ProfileProgress;
 import ai.earable.platform.common.data.user.enums.UserLevel;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -93,4 +95,7 @@ public class UserProfile extends BaseEntity {
     private Boolean serialNoUpdated;
     @Column("restore_id")
     private String restoreId;
+    @Column("meta_data_setting")
+    @CassandraType( type = CassandraType.Name.MAP, typeArguments = {CassandraType.Name.TEXT, CassandraType.Name.TEXT})
+    private Map<String, String> metaDataSetting;
 }

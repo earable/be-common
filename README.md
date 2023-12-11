@@ -252,6 +252,10 @@ add check_sha256_sum text;
 alter table resources
 add checksha256sum text;
 
+#- 2023/12/11 alter user_profile table
+
+alter table user_profile
+add meta_data_setting map<text, text>;
 
 
 
