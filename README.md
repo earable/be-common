@@ -257,6 +257,13 @@ add checksha256sum text;
 alter table user_profile
 add meta_data_setting map<text, text>;
 
+#- 2023/12/12 alter survey table
+
+alter table survey
+add last_reminded_at timestamp;
+
+alter table survey
+add remind_count int;
 
 
 

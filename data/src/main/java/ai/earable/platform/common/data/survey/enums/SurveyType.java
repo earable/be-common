@@ -5,5 +5,7 @@ public enum SurveyType {
     S1,
     S2,
     S3,
-    S4
+    S4,
+    S1_V2,
+    S4_V2
 }
