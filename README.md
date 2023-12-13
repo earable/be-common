@@ -265,6 +265,16 @@ add last_reminded_at timestamp;
 alter table survey
 add remind_count int;
 
+#- 2023/12/13 alter device table
+
+alter table device
+add mac_id text;
+
+alter table device
+add device_update_status text;
+
+
+
 
 
 
