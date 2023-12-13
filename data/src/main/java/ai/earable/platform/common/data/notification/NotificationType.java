@@ -4,5 +4,6 @@ import javax.print.attribute.standard.MediaSize;
 
 public enum NotificationType {
     SURVEY,
+    SURVEY_REMINDER,
     OTHER
 }
