@@ -3,6 +3,7 @@ package ai.earable.platform.common.data.session.model;
 import ai.earable.platform.common.data.cassandra.BaseEntity;
 import ai.earable.platform.common.data.feature.model.SessionMode;
 import ai.earable.platform.common.data.session.DeviceStatus;
+import ai.earable.platform.common.data.session.DeviceUpdateStatus;
 import ai.earable.platform.common.data.session.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,12 @@ public class Device implements Serializable {
 
     @Column(value = "device_batch")
     private String deviceBatch;
+
+    @Column(value = "mac_id")
+    private String macId;
+
+    @Column(value = "device_update_status")
+    private DeviceUpdateStatus deviceUpdateStatus;
 
     @Column(value = "user_id")
     private UUID userId;
