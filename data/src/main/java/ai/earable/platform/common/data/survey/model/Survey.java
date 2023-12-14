@@ -39,6 +39,9 @@ public class Survey {
     @Column(value = "title")
     private String title;
 
+    @Column(value = "content_message")
+    private String contentMessage;
+
     @Column(value = "status")
     private SurveyStatus status;
 

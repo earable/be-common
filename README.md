@@ -273,6 +273,11 @@ add mac_id text;
 alter table device
 add device_update_status text;
 
+#- 2023/12/14 alter device table
+
+alter table survey
+add content_message text;
+
 
 
 
