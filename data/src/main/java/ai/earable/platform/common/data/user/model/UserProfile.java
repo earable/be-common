@@ -79,6 +79,8 @@ public class UserProfile extends BaseEntity {
     private Timestamp startUsingBandTime;
     @Column("tutorial_status")
     private Integer tutorialStatus;
+    @Column("serial_no_updated")
+    private Boolean serialNoUpdated;
     @Column("survey_type")
     private Integer surveyType;
     @Column("survey_reminder_count")
@@ -91,8 +93,6 @@ public class UserProfile extends BaseEntity {
     private Integer voiceCoachReminderCount;
     @Column("voice_coach_reminder_disabled")
     private Boolean voiceCoachReminderDisabled;
-    @Column("serial_no_updated")
-    private Boolean serialNoUpdated;
     @Column("restore_id")
     private String restoreId;
     @Column("meta_data_setting")
