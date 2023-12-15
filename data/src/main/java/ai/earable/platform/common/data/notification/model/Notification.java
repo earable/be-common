@@ -38,4 +38,6 @@ public class Notification extends BaseEntity {
     private Boolean isPushedSuccess;
     @Column("is_read")
     private Boolean isRead;
+    @Column("event_name")
+    private String eventName;
 }

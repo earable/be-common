@@ -216,6 +216,53 @@ add membership_type text;
 alter table user_profile
 add serial_no_updated boolean;
 
+#- 2023/11/27 change user_profile table
+
+alter table user_profile
+add restore_id text;
+
+#- 2023/11/28 create activity_log table
+
+create table activity_log
+(
+user_id        uuid,
+id             uuid,
+action_name    text,
+activity_level text,
+created_at     timestamp,
+metadata       map<text, text>,
+parent_id      uuid,
+screen_name    text,
+time_zone      text,
+client_timestamp      timestamp,
+primary key (id, client_timestamp, user_id)
+)
+WITH CLUSTERING ORDER BY (client_timestamp DESC);
+
+#- 2023/12/05 alter notification table
+
+alter table notification
+add event_name text;
+
+#- 2023/12/07 alter song table
+
+alter table song
+add check_sha256_sum text;
+
+alter table resources
+add checksha256sum text;
+
+#- 2023/12/11 alter user_profile table
+
+alter table user_profile
+add meta_data_setting map<text, text>;
+
+
+
+
+
+
+
 
 
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.data.cassandra.core.mapping.Column;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -56,4 +57,6 @@ public class UserProfileResponse {
     private Boolean sessionReminderDisabled;
     private Integer voiceCoachReminderCount;
     private Boolean voiceCoachReminderDisabled;
+    private String restoreId;
+    private Map<String, String> metaDataSetting;
 }
