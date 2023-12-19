@@ -12,6 +12,7 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
@@ -34,4 +35,14 @@ public class Group {
 
     @Column("description")
     private String description;
+
+    @Column("note")
+    private String note;
+
+    @Column("created_at")
+    private Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
+    @Column("updated_at")
+    private Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
+
 }

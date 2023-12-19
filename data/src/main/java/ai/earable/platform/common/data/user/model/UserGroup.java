@@ -34,4 +34,7 @@ public class UserGroup extends BaseEntity implements Serializable {
 
     @Column("group_name")
     private String groupName;
+
+    @Column(value = "order")
+    private Integer order;
 }
