@@ -279,7 +279,19 @@ alter table survey
 add content_message text;
 
 
+#- 2023/12/18 alter group table
 
+alter table group
+add note text;
+
+alter table user_group
+add "order" int;
+
+alter table group
+add created_at timestamp;
+
+alter table group
+add updated_at timestamp;
 
 
 
