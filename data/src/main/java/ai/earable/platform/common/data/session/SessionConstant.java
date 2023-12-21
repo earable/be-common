@@ -23,6 +23,7 @@ public class SessionConstant {
     public static final String DEEPSLEEPBOOTING = "deepSleepBooting";
     public static final String TOTALUNDEFINEDTIME = "totalUndefinedTime";
     public static final String BATTERYCONSUMED = "batteryConsumed";
+    public static final String ENDSESSIONBY = "endSessionBy";
 
     public static final String SLEEPONSET = "sleepOnset";
 }
