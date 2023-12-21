@@ -8,12 +8,19 @@ public enum RawDataType {
     PPG2,
     IMU2,
     DEEP_SLEEP,
+    HR,
     SLEEP_ANALYZER_DATA,
+    SPO2,
+    EEG3,
+    IMU3,
+    PPG3,
+    HR3,
+    SPO23,
+    LOG,
     SLEEP_STAGES,
     POAS,
     DELTA_SCORE,
     HEART_RATE,
-    SPO2,
     DEEP_SLEEP_BOOTING,
     POSTURE,
     WEARING_BAND,
@@ -22,4 +29,4 @@ public enum RawDataType {
     BETA_SCORE,
     GAMMA_SCORE,
     THETA_SCORE
-}
+    }
