@@ -294,6 +294,13 @@ alter table group
 add updated_at timestamp;
 
 
+#- 2023/12/27 alter activity_log table
+
+alter table activity_log
+add content_details map<text, text>;
+
+alter table activity_log
+add type text;
 
 
 
