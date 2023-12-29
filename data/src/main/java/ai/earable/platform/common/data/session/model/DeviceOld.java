@@ -19,24 +19,19 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@Table(value = "device_1")
+@Table(value = "device")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Device implements Serializable {
-
-    @PrimaryKeyColumn(value = "id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    private UUID id;
-
-    @Column(value = "mac_id")
-    private String macId;
-
-    @Column(value = "serial_no")
+public class DeviceOld implements Serializable {
+    @PrimaryKeyColumn(value = "serial_no", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
     private String serialNo;
 
     @Column(value = "device_batch")
     private String deviceBatch;
 
+    @Column(value = "mac_id")
+    private String macId;
 
     @Column(value = "device_update_status")
     private DeviceUpdateStatus deviceUpdateStatus;

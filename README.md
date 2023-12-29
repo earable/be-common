@@ -257,9 +257,50 @@ add checksha256sum text;
 alter table user_profile
 add meta_data_setting map<text, text>;
 
+#- 2023/12/12 alter survey table
+
+alter table survey
+add last_reminded_at timestamp;
+
+alter table survey
+add remind_count int;
+
+#- 2023/12/13 alter device table
+
+alter table device
+add mac_id text;
+
+alter table device
+add device_update_status text;
+
+#- 2023/12/14 alter device table
+
+alter table survey
+add content_message text;
 
 
+#- 2023/12/18 alter group table
 
+alter table group
+add note text;
+
+alter table user_group
+add "order" int;
+
+alter table group
+add created_at timestamp;
+
+alter table group
+add updated_at timestamp;
+
+
+#- 2023/12/27 alter activity_log table
+
+alter table activity_log
+add content_details map<text, text>;
+
+alter table activity_log
+add type text;
 
 
 

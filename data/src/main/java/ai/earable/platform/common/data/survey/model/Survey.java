@@ -24,7 +24,7 @@ public class Survey {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private UUID id;
 
-    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
+    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.CLUSTERED, ordinal = 1)
     private UUID userId;
 
     @PrimaryKeyColumn(name = "session_id", type = PrimaryKeyType.PARTITIONED, ordinal = 2)
@@ -39,6 +39,9 @@ public class Survey {
     @Column(value = "title")
     private String title;
 
+    @Column(value = "content_message")
+    private String contentMessage;
+
     @Column(value = "status")
     private SurveyStatus status;
 
@@ -50,6 +53,12 @@ public class Survey {
 
     @Column(value = "updated_at")
     private Timestamp updatedAt;
+
+    @Column(value = "last_reminded_at")
+    private Timestamp lastRemindedAt;
+
+    @Column(value = "remind_count")
+    private Integer remindCount;
 
     @Column(value = "type")
     private SurveyType type;
