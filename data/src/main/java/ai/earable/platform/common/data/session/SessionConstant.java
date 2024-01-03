@@ -26,4 +26,6 @@ public class SessionConstant {
     public static final String ENDSESSIONBY = "endSessionBy";
 
     public static final String SLEEPONSET = "sleepOnset";
+
+    public static final String PHONENAME = "phoneName";
 }
