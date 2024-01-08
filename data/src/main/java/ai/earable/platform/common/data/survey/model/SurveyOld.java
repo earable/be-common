@@ -16,11 +16,11 @@ import java.util.UUID;
 
 
 @Data
-@Table(value = "survey_1")
+@Table(value = "survey")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Survey {
+public class SurveyOld {
     @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.CLUSTERED, ordinal = 0)
     private UUID id;
 
@@ -30,7 +30,7 @@ public class Survey {
     @PrimaryKeyColumn(name = "session_id", type = PrimaryKeyType.PARTITIONED, ordinal = 2)
     private String sessionId;
 
-    @Column(value = "form_Id")
+    @PrimaryKeyColumn(name = "form_Id", type = PrimaryKeyType.PARTITIONED, ordinal = 3)
     private String formId;
 
     @Column(value = "token")
