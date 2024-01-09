@@ -68,5 +68,8 @@ public class SessionConstant {
     public static final String BLECONNECTIONFAILTIME = "bleConnectionFailTime";
     public static final String AUDIOCONNECTIONFAILTIME = "audioConnectionFailTime";
     public static final String BACKTOSLEEPEVENT = "backToSleepEvent";
+    public static final String STARTED_TIME = "startedTime";
+    public static final String ENDED_TIME = "endedTime";
+    public static final String NA = "NA";
 
 }
