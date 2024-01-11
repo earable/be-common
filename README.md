@@ -303,7 +303,7 @@ alter table activity_log
 add type text;
 
 
-
+#- 2024/01/08 migrate data from survey -> survey_1
 
 
 
