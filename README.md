@@ -306,11 +306,53 @@ add type text;
 #- 2024/01/08 migrate data from survey -> survey_1
 
 
+#- 2024/01/15 migrate data from survey -> survey_1
+
+alter table session_1
+add duration int;
+
+alter table session_1
+add sleep_rating int;
+
+alter table session_1
+add total_undefined_time int;
+
+alter table session_1
+add end_session_by text;
+
+alter table session_1
+add deep_sleep_booting int;
+
+alter table session_1
+add battery_consumed int;
+
+alter table session_1
+add time_to_fall_as_sleep int;
+
+alter table session_1
+add deep_sleep_time int;
+
+alter table session_1
+add session_ended_time bigint;
+
+alter table session_1
+add light_sleep_time     int;
 
 
+alter table session_1
+add rem_sleep_time       int;
 
+alter table session_1
+add sleep_efficiency     float;
 
+alter table session_1
+add total_sleep_time     int;
 
+alter table session_1
+add total_sleep_time     int;
+
+alter table session_1
+add total_undefined_percentage float;
 
 
 
