@@ -64,4 +64,49 @@ public class Session implements Serializable {
 
     @Column(value = "type")
     private SessionType type;
+
+    @Column(value = "duration")
+    private Integer duration;
+
+    @Column(value = "sleep_rating")
+    private Integer sleepRating;
+
+    @Column(value = "total_undefined_time")
+    private Integer totalUndefinedTime;
+
+    @Column(value = "total_undefined_percentage")
+    private Float totalUndefinedPercentage;
+
+    @Column(value = "end_session_by")
+    private String endSessionBy;
+
+    @Column(value = "deep_sleep_booting")
+    private Integer deepSleepBooting;
+
+    @Column(value = "battery_consumed")
+    private Integer batteryConsumed;
+
+    @Column(value = "time_to_fall_as_sleep")
+    private Integer timeToFallAsSleep;
+
+    @Column(value = "sleep_efficiency")
+    private Float sleepEfficiency;
+
+    @Column(value = "total_sleep_time")
+    private Integer totalSleepTime;
+
+    @Column(value = "deep_sleep_time")
+    private Integer deepSleepTime;
+
+    @Column(value = "rem_sleep_time")
+    private Integer remSleepTime;
+
+    @Column(value = "light_sleep_time")
+    private Integer lightSleepTime;
+
+    @Column(value = "session_ended_time")
+    private Long sessionEndedTime;
+
+    @Column(value = "is_data_processed")
+    private Boolean isDataProcessed;
 }
