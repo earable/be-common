@@ -306,7 +306,7 @@ add type text;
 #- 2024/01/08 migrate data from survey -> survey_1
 
 
-#- 2024/01/15 migrate data from survey -> survey_1
+#- 2024/01/15 update table session_1
 
 alter table session_1
 add duration int;
@@ -354,9 +354,37 @@ add total_sleep_time     int;
 alter table session_1
 add total_undefined_percentage float;
 
+#- 2024/01/15 update table session_1
 
-
-
+create materialized view staging.session_view
+as
+select userid,
+profileid,
+featurename,
+startedtime,
+sessionid,
+clienttimestamp,
+createddate,
+deviceid,
+endedtime,
+location,
+locationlatitude,
+locationlongitude,
+metadata,
+mode,
+sessionsettingid,
+timezone,
+type
+from session_1
+where clienttimestamp IS NOT NULL
+AND featurename IS NOT NULL
+AND sessionid IS NOT NULL
+AND startedtime IS NOT NULL
+AND userid IS NOT NULL
+AND profileid IS NOT NULL
+AND endedtime IS NOT NULL
+primary key ((userid, profileid, featurename, startedtime, sessionid), clienttimestamp)
+with clustering order by (clienttimestamp desc);
 
 
 
