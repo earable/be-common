@@ -109,4 +109,7 @@ public class Session implements Serializable {
 
     @Column(value = "is_data_processed")
     private Boolean isDataProcessed;
+
+    @Column(value = "serial_no")
+    private String serialNo;
 }

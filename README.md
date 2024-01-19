@@ -354,6 +354,10 @@ add total_sleep_time     int;
 alter table session_1
 add total_undefined_percentage float;
 
+alter table session_1
+add serial_no text;
+
+
 #- 2024/01/15 update table session_1
 
 create materialized view staging.session_view
