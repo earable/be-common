@@ -390,6 +390,12 @@ AND endedtime IS NOT NULL
 primary key ((userid, profileid, featurename, startedtime, sessionid), clienttimestamp)
 with clustering order by (clienttimestamp desc);
 
+#- 2024/02/19 update table ticket_freshdesk
+
+alter table ticket_freshdesk
+add note text;
+
+
 
 
 
