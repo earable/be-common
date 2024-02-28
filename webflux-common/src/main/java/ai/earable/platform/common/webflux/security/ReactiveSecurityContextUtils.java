@@ -2,11 +2,15 @@ package ai.earable.platform.common.webflux.security;
 
 import ai.earable.platform.common.data.security.UserIdToTokenMap;
 import ai.earable.platform.common.webflux.utils.RedisUtils;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BinhNH on 6/14/22
@@ -35,12 +39,29 @@ public class ReactiveSecurityContextUtils {
         return jwtUtils.getAllClaimsFromToken(token).get("user_id").toString(); //TODO: Handle error cases
     }
 
+    private String getUserId(Claims claims) {
+        return claims.get("user_id").toString(); //TODO: Handle error cases
+    }
+
     private String getUserEmail(String token) {
         String sub = jwtUtils.getAllClaimsFromToken(token).get("sub").toString();
         if (sub.contains("@")) {
             return sub;
         }
         return null;
+    }
+
+    private String getUserEmail(Claims claims) {
+        String sub = claims.get("sub").toString();
+        if (sub.contains("@")) {
+            return sub;
+        }
+        return null;
+    }
+
+    private List<String> getRoles(Claims claims) {
+        List<String> sub = (List<String>) claims.get("role");
+        return sub;
     }
 
     private Long getPhoneNumber(String token) {
@@ -54,6 +75,18 @@ public class ReactiveSecurityContextUtils {
             return null;
         }
     }
+    private Long getPhoneNumber(Claims claims) {
+        String sub = claims.get("sub").toString();
+        if (sub.contains("@")) {
+            return null;
+        }
+        try {
+            return Long.parseLong(sub);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     private String getSub(String token) {
         String sub = jwtUtils.getAllClaimsFromToken(token).get("sub").toString();
         return sub;
@@ -66,7 +99,11 @@ public class ReactiveSecurityContextUtils {
     }
 
     public Mono<UserIdToTokenMap> getUserId2TokenMap() {
-        return getToken().map(token -> UserIdToTokenMap.builder().userId(getUserId(token)).token(token).phoneNumber(getPhoneNumber(token)).email(getUserEmail(token)).build());
+
+        return getToken().map(token -> {
+            Claims claims = jwtUtils.getAllClaimsFromToken(token);
+            return UserIdToTokenMap.builder().userId(getUserId(claims)).token(token).phoneNumber(getPhoneNumber(claims)).email(getUserEmail(claims)).roles(getRoles(claims)).build();
+        });
     }
 
     public Mono<String> getLanguageByUserName(String token) {
