@@ -97,8 +97,8 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String hierarchy = new StringBuilder(RoleType.ROLE_ADMIN.name()).append(" > ").append(RoleType.ROLE_MANAGER.name()).append(" \n ")
-                .append(RoleType.ROLE_MANAGER.name()).append(" > ").append(RoleType.ROLE_USER.name()).append(" \n ")
+        String hierarchy = new StringBuilder(RoleType.ROLE_ADMIN.name()).append(" > ").append(RoleType.ROLE_SUB_ADMIN.name()).append(" \n ")
+                .append(RoleType.ROLE_SUB_ADMIN.name()).append(" > ").append(RoleType.ROLE_USER.name()).append(" \n ")
                 .append(RoleType.ROLE_USER.name()).append(" > ").append(RoleType.ROLE_CUSTOMER_ADMIN.name())
                 .append(RoleType.ROLE_CUSTOMER_ADMIN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER.name()).toString();
         roleHierarchy.setHierarchy(hierarchy);

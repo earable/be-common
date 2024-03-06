@@ -99,7 +99,7 @@ public final class TimeUtils {
     public static int getDayOfYearFrom(long timestamp, String timezone) {
         int length = (int) (Math.log10(timestamp) + 1);
         Date dateTime = length > 10 ? new Date(timestamp) : new Date(timestamp * 1000);
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+        Calendar cal = StringUtils.isEmpty(timezone) ? Calendar.getInstance() : Calendar.getInstance(TimeZone.getTimeZone(timezone));
         cal.setTime(dateTime);
         return cal.get(Calendar.DAY_OF_YEAR);
     }
@@ -122,7 +122,7 @@ public final class TimeUtils {
      */
     public static int getWeekOfYearFrom(int dayOfYear, int year) {
         LocalDate localDate = LocalDate.ofYearDay(year, dayOfYear);
-        int weekOfYear = localDate.get(WeekFields.ISO.weekOfYear()) + 1;
+        int weekOfYear = localDate.get(WeekFields.ISO.weekOfYear());
         return weekOfYear == 53 ? 1 : weekOfYear;
     }
 
