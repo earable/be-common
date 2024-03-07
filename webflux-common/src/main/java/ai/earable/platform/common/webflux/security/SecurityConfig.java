@@ -98,9 +98,11 @@ public class SecurityConfig {
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         String hierarchy = new StringBuilder(RoleType.ROLE_ADMIN.name()).append(" > ").append(RoleType.ROLE_SUB_ADMIN.name()).append(" \n ")
-                .append(RoleType.ROLE_SUB_ADMIN.name()).append(" > ").append(RoleType.ROLE_USER.name()).append(" \n ")
-                .append(RoleType.ROLE_USER.name()).append(" > ").append(RoleType.ROLE_CUSTOMER_ADMIN.name())
-                .append(RoleType.ROLE_CUSTOMER_ADMIN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER.name()).toString();
+                .append(RoleType.ROLE_SUB_ADMIN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER_SUPER_ADMIN.name()).append(" \n ")
+                .append(RoleType.ROLE_CUSTOMER_SUPER_ADMIN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER_ADMIN.name()).append(" \n ")
+                .append(RoleType.ROLE_CUSTOMER_SUPER_ADMIN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER_TECHNICIAN.name()).append(" \n ")
+                .append(RoleType.ROLE_CUSTOMER_ADMIN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER.name()).append(" \n ")
+                .append(RoleType.ROLE_CUSTOMER_TECHNICIAN.name()).append(" > ").append(RoleType.ROLE_CUSTOMER.name()).toString();
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
     }
