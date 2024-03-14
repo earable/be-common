@@ -64,7 +64,7 @@ public class EarableExceptionMapper {
                     })
                     .collect(Collectors.toList());
             ErrorDetails errorDetails = ErrorDetails.builder().httpStatusCode(HttpStatus.BAD_REQUEST.value())
-                    .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).build();
+                    .earableErrorCode(INPUT_INVALID.name()).details(errMessages.toString()).errMessages(errMessages).build();
             log.error("Return error to client with details {}", errorDetails.getDetails());
             return ResponseEntity.status(errorDetails.getHttpStatusCode()).body(errorDetails);
         }
