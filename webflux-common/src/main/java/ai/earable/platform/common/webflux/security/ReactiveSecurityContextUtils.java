@@ -111,4 +111,10 @@ public class ReactiveSecurityContextUtils {
         String userName = StringUtils.isEmpty(email) ? getSub(token) : email;
         return redisUtils.getLanguageByUserName(userName);
     }
+
+    public Boolean hasRole(String token, String roleName) {
+        Claims claims = jwtUtils.getAllClaimsFromToken(token);
+        List<String> roles = getRoles(claims);
+        return roles.contains(roleName);
+    }
 }
