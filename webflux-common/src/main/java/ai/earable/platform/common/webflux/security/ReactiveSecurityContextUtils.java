@@ -59,6 +59,10 @@ public class ReactiveSecurityContextUtils {
         return null;
     }
 
+    private String getSub(Claims claims) {
+        return claims.get("sub").toString();
+    }
+
     private List<String> getRoles(Claims claims) {
         List<String> sub = (List<String>) claims.get("role");
         return sub;
@@ -102,7 +106,7 @@ public class ReactiveSecurityContextUtils {
 
         return getToken().map(token -> {
             Claims claims = jwtUtils.getAllClaimsFromToken(token);
-            return UserIdToTokenMap.builder().userId(getUserId(claims)).token(token).phoneNumber(getPhoneNumber(claims)).email(getUserEmail(claims)).roles(getRoles(claims)).build();
+            return UserIdToTokenMap.builder().userId(getUserId(claims)).token(token).phoneNumber(getPhoneNumber(claims)).sub(getSub(claims)).email(getUserEmail(claims)).roles(getRoles(claims)).build();
         });
     }
 
