@@ -19,6 +19,7 @@ public class UserIdToTokenMap {
     private String userId;
     private String token;
     private String email;
+    private String sub;
     private Long phoneNumber;
     private List<String> roles;
 }

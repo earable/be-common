@@ -395,6 +395,19 @@ with clustering order by (clienttimestamp desc);
 alter table ticket_freshdesk
 add note text;
 
+#- 2024/03/19 update table ticket_freshdesk
+
+alter table sleep_configuration
+add background_ai_selected boolean;
+
+alter table sleep_configuration
+add voice_ai_selected boolean;
+
+alter table nap_configuration
+add background_ai_selected boolean;
+
+alter table nap_configuration
+add voice_ai_selected boolean;
 
 
 
