@@ -409,6 +409,16 @@ add background_ai_selected boolean;
 alter table nap_configuration
 add voice_ai_selected boolean;
 
+#- 2024/04/27 update table song
+
+alter table song
+add song_type text;
+
+alter table song
+add origin_id uuid;
+
+
+
 
 
 

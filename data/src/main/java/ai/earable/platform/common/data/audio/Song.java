@@ -1,6 +1,7 @@
 package ai.earable.platform.common.data.audio;
 
 import ai.earable.platform.common.data.cassandra.BaseEntity;
+import ai.earable.platform.common.data.common.SongType;
 import ai.earable.platform.common.data.constant.AudioPurpose;
 import ai.earable.platform.common.data.constant.MembershipType;
 import ai.earable.platform.common.data.user.enums.Language;
@@ -122,4 +123,10 @@ public class Song extends BaseEntity implements Serializable {
 
     @Column("check_sha256_sum")
     private String checkSha256Sum;
+
+    @Column("song_type")
+    private SongType songType;
+
+    @Column("origin_id")
+    private UUID originId;
 }
