@@ -417,6 +417,12 @@ add song_type text;
 alter table song
 add origin_id uuid;
 
+#- 2024/06/08 update table song
+alter table user_insight
+add first_session_at timestamp;
+
+alter table user_insight
+add timezone_offset int;
 
 
 
