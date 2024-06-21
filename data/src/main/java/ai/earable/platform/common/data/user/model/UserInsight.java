@@ -47,4 +47,10 @@ public class UserInsight extends BaseEntity {
 
     @Column(value = "last_session_at")
     private Timestamp lastSessionAt;
+
+    @Column(value = "first_session_at")
+    private Timestamp firstSessionAt;
+    
+    @Column(value = "timezone_offset")
+    private Integer timezoneOffset;
 }
