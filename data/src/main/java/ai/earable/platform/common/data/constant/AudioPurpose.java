@@ -12,8 +12,7 @@ public enum AudioPurpose {
     BACKGROUND_NAP("Background (Nap)"),
     BACKGROUND_BACK_TO_SLEEP("Background (Back to sleep)"),
     BACKGROUND_SPECIAL_SLEEP("Background (Special sleep)"),
-    VOICE_COACH_SPECIAL_SLEEP("Voice coach (Special sleep)"),
-    VOICE_COACH_V3_SLEEP_PREFACE("Voice coaching Preface (Sleep_V3.0)");
+    VOICE_COACH_SPECIAL_SLEEP("Voice coach (Special sleep)");
 
     private final String label;
 
