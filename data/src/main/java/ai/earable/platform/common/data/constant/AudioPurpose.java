@@ -15,6 +15,7 @@ public enum AudioPurpose {
     VOICE_COACH_SPECIAL_SLEEP("Voice coach (Special sleep)"),
     
     VOICE_COACH_V3_SLEEP_PREFACE("Voice coaching Preface (Sleep V3)"),
+    VOICE_COACH_V3_SLEEP_AFTER_PREFACE("Voice coaching After Preface (Sleep_V3.0)"),
     VOICE_COACH_V3_SLEEP_COGNITIVE_RESTRUCTURING("Voice coaching Cognitive Restructuring (Sleep V3)"),
     VOICE_COACH_V3_SLEEP_BREATH_COACHING("Voice coaching Breath Coaching (Sleep V3)"),
     VOICE_COACH_V3_SLEEP_RELAXATION_TRAINING("Voice coaching Relaxation Training (Sleep V3)"),
