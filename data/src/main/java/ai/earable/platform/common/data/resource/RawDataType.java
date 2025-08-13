@@ -28,5 +28,11 @@ public enum RawDataType {
     ALPHA_SCORE,
     BETA_SCORE,
     GAMMA_SCORE,
-    THETA_SCORE
+    THETA_SCORE,
+    LABEL,
+    EEG_RAW,
+    PPG_RAW,
+    IMU_RAW,
+    SPO2_RAW,
+    HR_RAW
     }
