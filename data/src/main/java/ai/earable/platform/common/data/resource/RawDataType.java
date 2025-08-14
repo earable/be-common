@@ -30,6 +30,8 @@ public enum RawDataType {
     GAMMA_SCORE,
     THETA_SCORE,
     LABEL,
+    COGNITIVE,
+    SESSION_DETAIL,
     EEG_RAW,
     PPG_RAW,
     IMU_RAW,
